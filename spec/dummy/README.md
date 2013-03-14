@@ -1,3 +1,3 @@
 ## Dummy
 
-A dummy application used for testing the fine print engine.
+A dummy application used to test the Fine Print engine.
