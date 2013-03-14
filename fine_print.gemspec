@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Dante Soares"]
   s.email       = ["dms3@rice.edu"]
   s.homepage    = "http://github.com/lml/fine_print"
-  s.summary     = "Manages site agreements and terms of use with versioning."
-  s.description = "FinePrint allows site admins to easily create, update and ask users to sign site agreements and terms of use, keeping a record of when users signed a certain version of the agreement."
+  s.summary     = "Manages site agreements with versioning."
+  s.description = "FinePrint allows site admins to easily create, update and ask users to sign site agreements, keeping a record of when users signed a certain version of each agreement."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
