@@ -1,6 +1,20 @@
 COPY_TASKS = ['assets/stylesheets', 'views', 'helpers', 'controllers', 'models']
 
 namespace :fine_print do
+  namespace :install do
+    desc "Copy initializers from fine_print to application"
+    task :initializers do
+      Dir.glob(File.expand_path('../../../config/initializers/*.rb', __FILE__)) do |file|
+        if File.exists?(File.expand_path(File.basename(file), 'config/initializers'))
+          print "NOTE: Initializer #{File.basename(file)} from fine_print has been skipped. Initializer with the same name already exists.\n"
+        else
+          cp file, 'config/initializers', :verbose => false
+          print "Copied initializer #{File.basename(file)} from fine_print\n"
+        end
+      end
+    end
+  end
+
   namespace :copy do
     COPY_TASKS.each do |path|
       name = File.basename(path)
@@ -14,6 +28,7 @@ namespace :fine_print do
   
   desc "Copy migrations from fine_print to application"
   task :install do
+    Rake::Task["fine_print:install:initializers"].invoke
     Rake::Task["fine_print:install:migrations"].invoke
   end
   
