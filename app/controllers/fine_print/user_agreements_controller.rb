@@ -5,6 +5,7 @@ module FinePrint
     # GET /user_agreements
     # GET /user_agreements.json
     def index
+      raise SecurityTransgression unless UserAgreement.can_be_listed_by?(@user)
       @user_agreements = UserAgreement.all
   
       respond_to do |format|
@@ -33,6 +34,7 @@ module FinePrint
     # DELETE /user_agreements/1.json
     def destroy
       @user_agreement = UserAgreement.find(params[:id])
+      raise SecurityTransgression unless @user_agreement.can_be_destroyed_by?(@user)
       @user_agreement.destroy
   
       respond_to do |format|

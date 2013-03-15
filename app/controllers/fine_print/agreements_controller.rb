@@ -5,6 +5,7 @@ module FinePrint
     # GET /agreements
     # GET /agreements.json
     def index
+      raise SecurityTransgression unless Agreement.can_be_listed_by?(@user)
       @agreements = Agreement.all
   
       respond_to do |format|
@@ -28,6 +29,7 @@ module FinePrint
     # GET /agreements/new.json
     def new
       @agreement = Agreement.new
+      raise SecurityTransgression unless @agreement.can_be_created_by?(@user)
   
       respond_to do |format|
         format.html # new.html.erb
@@ -38,13 +40,14 @@ module FinePrint
     # GET /agreements/1/edit
     def edit
       @agreement = Agreement.find(params[:id])
-      raise SecurityTransgression unless @agreement.user_agreements.empty?
+      raise SecurityTransgression unless @agreement.can_be_edited_by?(@user)
     end
   
     # POST /agreements
     # POST /agreements.json
     def create
       @agreement = Agreement.new(params[:agreement])
+      raise SecurityTransgression unless @agreement.can_be_created_by?(@user)
       @agreement.version = (Agreement.maximum(:version, :conditions => ["name = ?", @agreement.name]) || 0) + 1
   
       respond_to do |format|
@@ -62,7 +65,7 @@ module FinePrint
     # PUT /agreements/1.json
     def update
       @agreement = Agreement.find(params[:id])
-      raise SecurityTransgression unless @agreement.user_agreements.empty?
+      raise SecurityTransgression unless @agreement.can_be_edited_by?(@user)
       if params[:agreement][:name] != @agreement.name
         @agreement.version = (Agreement.maximum(:version, :conditions => ["name = ?", params[:agreement][:name]]) || 0) + 1
       end
@@ -83,7 +86,7 @@ module FinePrint
     # DELETE /agreements/1.json
     def destroy
       @agreement = Agreement.find(params[:id])
-      raise SecurityTransgression unless @agreement.user_agreements.empty?
+      raise SecurityTransgression unless @agreement.can_be_destroyed_by?(@user)
       @agreement.destroy
   
       respond_to do |format|

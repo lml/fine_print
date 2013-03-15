@@ -9,7 +9,7 @@ FinePrint.configure do |config|
   config.current_user_method = 'current_user'
 
   # Proc called with user as argument that should return true if and only if the user is an admin
-  # Admins can create and edit agreements and terminate signed agreements
+  # Admins can create and edit agreements and terminate accepted agreements
   # Note: user can be nil
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
@@ -28,6 +28,6 @@ FinePrint.configure do |config|
 
   # If set to true, the grace period will only apply if the user already accepted a previous version of the same agreement
   # Default: true
-  config.grace_period_new_version_only = true
+  config.grace_period_on_new_version_only = true
   
 end

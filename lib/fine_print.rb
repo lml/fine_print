@@ -6,12 +6,15 @@ module FinePrint
 
   # Can be set in initializer only
   ENGINE_OPTIONS = [
-    :current_user_method
+    :current_user_method,
+    :user_admin_proc
   ]
 
   # Can be set in initializer or passed as an option to fine_print_agreement
   AGREEMENT_OPTIONS = [
-    :test
+    :read_checkbox,
+    :grace_period,
+    :grace_period_on_new_version_only
   ]
   
   (ENGINE_OPTIONS + AGREEMENT_OPTIONS).each do |option|
@@ -27,5 +30,9 @@ module FinePrint
       print(name)
     end
     controller.redirect_to :root
+  end
+
+  def self.is_admin?(user)
+    user_admin_proc.call(user)
   end
 end

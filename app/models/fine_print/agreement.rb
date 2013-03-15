@@ -8,10 +8,18 @@ module FinePrint
 
     default_scope order(:name, :version)
 
-    def can_be_edited?
-      user_agreements.empty?
+    def self.can_be_listed_by?(user)
+      FinePrint.is_admin?(user)
     end
 
-    alias_method :can_be_destroyed?, :can_be_edited?
+    def can_be_created_by?(user)
+      FinePrint.is_admin?(user)
+    end
+
+    def can_be_edited_by?(user)
+      FinePrint.is_admin?(user) && user_agreements.empty?
+    end
+
+    alias_method :can_be_destroyed_by?, :can_be_edited_by?
   end
 end
