@@ -38,12 +38,14 @@ module FinePrint
     # GET /agreements/1/edit
     def edit
       @agreement = Agreement.find(params[:id])
+      raise SecurityTransgression unless @agreement.user_agreements.empty?
     end
   
     # POST /agreements
     # POST /agreements.json
     def create
       @agreement = Agreement.new(params[:agreement])
+      @agreement.version = (Agreement.maximum(:version, :conditions => ["name = ?", @agreement.name]) || 0) + 1
   
       respond_to do |format|
         if @agreement.save
@@ -60,9 +62,14 @@ module FinePrint
     # PUT /agreements/1.json
     def update
       @agreement = Agreement.find(params[:id])
+      raise SecurityTransgression unless @agreement.user_agreements.empty?
+      if params[:agreement][:name] != @agreement.name
+        @agreement.version = (Agreement.maximum(:version, :conditions => ["name = ?", params[:agreement][:name]]) || 0) + 1
+      end
   
       respond_to do |format|
         if @agreement.update_attributes(params[:agreement])
+          @agreement.update_attribute(:version, @agreement.version)
           format.html { redirect_to @agreement, notice: 'Agreement was successfully updated.' }
           format.json { head :no_content }
         else
@@ -76,6 +83,7 @@ module FinePrint
     # DELETE /agreements/1.json
     def destroy
       @agreement = Agreement.find(params[:id])
+      raise SecurityTransgression unless @agreement.user_agreements.empty?
       @agreement.destroy
   
       respond_to do |format|

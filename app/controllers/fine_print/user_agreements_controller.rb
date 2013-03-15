@@ -13,33 +13,6 @@ module FinePrint
       end
     end
   
-    # GET /user_agreements/1
-    # GET /user_agreements/1.json
-    def show
-      @user_agreement = UserAgreement.find(params[:id])
-  
-      respond_to do |format|
-        format.html # show.html.erb
-        format.json { render json: @user_agreement }
-      end
-    end
-  
-    # GET /user_agreements/new
-    # GET /user_agreements/new.json
-    def new
-      @user_agreement = UserAgreement.new
-  
-      respond_to do |format|
-        format.html # new.html.erb
-        format.json { render json: @user_agreement }
-      end
-    end
-  
-    # GET /user_agreements/1/edit
-    def edit
-      @user_agreement = UserAgreement.find(params[:id])
-    end
-  
     # POST /user_agreements
     # POST /user_agreements.json
     def create
@@ -51,22 +24,6 @@ module FinePrint
           format.json { render json: @user_agreement, status: :created, location: @user_agreement }
         else
           format.html { render action: "new" }
-          format.json { render json: @user_agreement.errors, status: :unprocessable_entity }
-        end
-      end
-    end
-  
-    # PUT /user_agreements/1
-    # PUT /user_agreements/1.json
-    def update
-      @user_agreement = UserAgreement.find(params[:id])
-  
-      respond_to do |format|
-        if @user_agreement.update_attributes(params[:user_agreement])
-          format.html { redirect_to @user_agreement, notice: 'User agreement was successfully updated.' }
-          format.json { head :no_content }
-        else
-          format.html { render action: "edit" }
           format.json { render json: @user_agreement.errors, status: :unprocessable_entity }
         end
       end

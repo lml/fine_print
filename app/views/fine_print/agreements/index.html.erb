@@ -1,9 +1,8 @@
-<h1>Listing agreements</h1>
+<h1>FinePrint agreements</h1>
 
 <table>
   <tr>
     <th>Name</th>
-    <th>Content</th>
     <th>Version</th>
     <th></th>
     <th></th>
@@ -13,11 +12,10 @@
 <% @agreements.each do |agreement| %>
   <tr>
     <td><%= agreement.name %></td>
-    <td><%= agreement.content %></td>
     <td><%= agreement.version %></td>
     <td><%= link_to 'Show', agreement %></td>
-    <td><%= link_to 'Edit', edit_agreement_path(agreement) %></td>
-    <td><%= link_to 'Destroy', agreement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to (agreement.can_be_edited? ? 'Edit' : 'New Version'), edit_agreement_path(agreement) %></td>
+    <td><% if agreement.can_be_destroyed? %><%= link_to 'Destroy', agreement, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
   </tr>
 <% end %>
 </table>
