@@ -14,8 +14,8 @@
     <td><%= agreement.name %></td>
     <td><%= agreement.version %></td>
     <td><%= link_to 'Show', agreement %></td>
-    <td><%= link_to (agreement.can_be_edited? ? 'Edit' : 'New Version'), edit_agreement_path(agreement) %></td>
-    <td><% if agreement.can_be_destroyed? %><%= link_to 'Destroy', agreement, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+    <td><%= link_to (agreement.can_be_edited_by?(@user) ? 'Edit' : 'New Version'), edit_agreement_path(agreement) %></td>
+    <td><% if agreement.can_be_destroyed_by?(@user) %><%= link_to 'Destroy', agreement, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
   </tr>
 <% end %>
 </table>

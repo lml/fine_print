@@ -14,7 +14,7 @@ module FinePrint
         end
       end
 
-      alias_method :fine_print, :fine_print_agreement
+      #alias_method :fine_print, :fine_print_agreement
       alias_method :fine_print_agreements, :fine_print_agreement
     end
   end

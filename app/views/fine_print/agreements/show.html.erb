@@ -8,5 +8,21 @@
   <%= @agreement.content %>
 </p>
 
-<%= link_to 'Edit', edit_agreement_path(@agreement) %> |
-<%= link_to 'Back', agreements_path %>
+<%= form_tag user_agreements_path, :method => :post do %>
+  <%= hidden_field_tag :referer, request.referer %>
+  <%= hidden_field_tag :agreement_id, @agreement.id %>
+  <div class="field">
+    <%= hidden_field_tag :read_checkbox_present, true %>
+    <%= label_tag 'I have read and agree to the terms and conditions above.' %><br/>
+    <%= check_box_tag :read_checkbox %><br/>
+  </div>
+  <div class="actions">
+    <%= submit_tag :OK %>
+    <%= submit_tag :Cancel, :name => 'cancel' %>
+  </div>
+<% end %>
+
+<% if @agreement.can_be_edited_by?(@user) %>
+  <%= link_to 'Edit', edit_agreement_path(@agreement) %> |
+  <%= link_to 'Back', agreements_path %>
+<% end %>

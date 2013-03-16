@@ -18,6 +18,8 @@ module FinePrint
     # GET /agreements/1.json
     def show
       @agreement = Agreement.find(params[:id])
+      raise SecurityTransgression unless @agreement.can_be_accepted_by?(@user)
+      @user_agreement = UserAgreement.new(:agreement => @agreement)
   
       respond_to do |format|
         format.html # show.html.erb
@@ -48,7 +50,7 @@ module FinePrint
     def create
       @agreement = Agreement.new(params[:agreement])
       raise SecurityTransgression unless @agreement.can_be_created_by?(@user)
-      @agreement.version = (Agreement.maximum(:version, :conditions => ["name = ?", @agreement.name]) || 0) + 1
+      @agreement.version = Agreement.next_version(@agreement.name)
   
       respond_to do |format|
         if @agreement.save
@@ -66,13 +68,12 @@ module FinePrint
     def update
       @agreement = Agreement.find(params[:id])
       raise SecurityTransgression unless @agreement.can_be_edited_by?(@user)
-      if params[:agreement][:name] != @agreement.name
-        @agreement.version = (Agreement.maximum(:version, :conditions => ["name = ?", params[:agreement][:name]]) || 0) + 1
+      if params[:agreement][:name].try(:downcase) != @agreement.name.downcase
+        params[:agreement][:version] = Agreement.next_version(params[:agreement][:name])
       end
   
       respond_to do |format|
         if @agreement.update_attributes(params[:agreement])
-          @agreement.update_attribute(:version, @agreement.version)
           format.html { redirect_to @agreement, notice: 'Agreement was successfully updated.' }
           format.json { head :no_content }
         else

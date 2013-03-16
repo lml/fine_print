@@ -26,10 +26,14 @@ module FinePrint
   end
 
   def self.require_agreements(controller, names, options)
+    user = controller.send FinePrint.current_user_method
     names.each do |name|
-      print(name)
+      agreement = Agreement.latest(name)
+      unless agreement.accepted_by?(user)
+        controller.redirect_to controller.fine_print.agreement_path(agreement)
+        return false
+      end
     end
-    controller.redirect_to :root
   end
 
   def self.is_admin?(user)

@@ -17,14 +17,21 @@ module FinePrint
     # POST /user_agreements
     # POST /user_agreements.json
     def create
-      @user_agreement = UserAgreement.new(params[:user_agreement])
+      if params[:cancel] || (params[:read_checkbox_present] && !params[:read_checkbox])
+        redirect_to params[:referer]
+        return
+      end
+      @agreement = Agreement.find(params[:agreement_id])
+      @user_agreement = UserAgreement.new
+      @user_agreement.agreement = @agreement
+      @user_agreement.user = @user
   
       respond_to do |format|
         if @user_agreement.save
-          format.html { redirect_to @user_agreement, notice: 'User agreement was successfully created.' }
+          format.html { redirect_to params[:referer], notice: "#{@user_agreement.agreement.name} accepted." }
           format.json { render json: @user_agreement, status: :created, location: @user_agreement }
         else
-          format.html { render action: "new" }
+          format.html { redirect_to params[:referer], notice: "You have already accepted this agreement." }
           format.json { render json: @user_agreement.errors, status: :unprocessable_entity }
         end
       end
