@@ -12,9 +12,14 @@ module FinePrint
 
   # Can be set in initializer or passed as an option to fine_print_agreement
   AGREEMENT_OPTIONS = [
-    :read_checkbox,
+    :agreement_notice,
+    :display_version,
+    :display_last_updated,
     :grace_period,
-    :grace_period_on_new_version_only
+    :grace_period_on_new_version_only,
+    :use_referers,
+    :redirect_path,
+    :require_checkbox
   ]
   
   (ENGINE_OPTIONS + AGREEMENT_OPTIONS).each do |option|
@@ -28,15 +33,20 @@ module FinePrint
   def self.require_agreements(controller, names, options)
     user = controller.send FinePrint.current_user_method
     names.each do |name|
-      agreement = Agreement.latest(name)
+      agreement = Agreement.latest_ready(name)
       unless agreement.accepted_by?(user)
-        controller.redirect_to controller.fine_print.agreement_path(agreement)
+        if FinePrint.use_referers
+          controller.session[:fine_print_request_url] = controller.request.url
+          controller.session[:fine_print_request_referer] = controller.request.referer
+        end
+        controller.redirect_to controller.fine_print.agreement_path(agreement),
+          :notice => FinePrint.agreement_notice
         return false
       end
     end
   end
 
   def self.is_admin?(user)
-    user_admin_proc.call(user)
+    !user.nil? && user_admin_proc.call(user)
   end
 end

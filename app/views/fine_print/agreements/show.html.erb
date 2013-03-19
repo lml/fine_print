@@ -1,28 +1,50 @@
-<p id="notice"><%= notice %></p>
+<p id="notice" class = "fine_print notice"><%= notice %></p>
 
-<p>
+<h1 class="fine_print agreement name">
   <%= @agreement.name %>
-</p>
+</h1>
 
-<p>
-  <%= @agreement.content %>
-</p>
-
-<%= form_tag user_agreements_path, :method => :post do %>
-  <%= hidden_field_tag :referer, request.referer %>
-  <%= hidden_field_tag :agreement_id, @agreement.id %>
-  <div class="field">
-    <%= hidden_field_tag :read_checkbox_present, true %>
-    <%= label_tag 'I have read and agree to the terms and conditions above.' %><br/>
-    <%= check_box_tag :read_checkbox %><br/>
-  </div>
-  <div class="actions">
-    <%= submit_tag :OK %>
-    <%= submit_tag :Cancel, :name => 'cancel' %>
-  </div>
+<% if FinePrint.display_version %>
+  <h3 class="fine_print agreement version">
+    Version: <%= @agreement.version %>
+  </h3>
 <% end %>
 
+<% if FinePrint.display_last_updated %>
+  <h3 class="fine_print agreement updated">
+    Last updated: <%= @agreement.updated_at %>
+  </h3>
+<% end %>
+
+<pre class="fine_print agreement content">
+  <%= @agreement.content %>
+</pre>
+
+<% if @agreement.can_be_accepted_by?(@user) %>
+  <%= form_tag user_agreements_path, :method => :post do %>
+    <%= hidden_field_tag :agreement_id, @agreement.id %>
+    <% if FinePrint.require_checkbox %>
+      <div class="field">
+        <%= label_tag :read_checkbox, 'I have read and agree to the terms and conditions above.', :class => "fine_print label" %>
+        <%= check_box_tag :read_checkbox, 1, false, :class => "fine_print checkbox" %><br/>
+      </div>
+    <% else %>
+      <%= hidden_field_tag :read_checkbox, 1 %>
+    <% end %>
+    <div class="actions">
+      <%= submit_tag :OK, :class => "fine_print submit ok" %>
+      <%= submit_tag :Cancel, :name => 'cancel', :class => "fine_print submit cancel" %>
+    </div>
+  <% end %>
+<% elsif !@agreement.ready %>
+  This agreement is not yet ready to be used.<br/>
+<% else %>
+  Please login to accept this agreement.<br/>
+<% end %>
+
+<br/>
+
 <% if @agreement.can_be_edited_by?(@user) %>
-  <%= link_to 'Edit', edit_agreement_path(@agreement) %> |
-  <%= link_to 'Back', agreements_path %>
+  <%= link_to 'Edit', edit_agreement_path(@agreement), :class => "fine_print link" %> |
+  <%= link_to 'Back', agreements_path, :class => "fine_print link" %>
 <% end %>

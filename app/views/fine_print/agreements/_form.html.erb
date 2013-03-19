@@ -1,7 +1,7 @@
 <%= form_for(@agreement) do |f| %>
   <% if @agreement.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@agreement.errors.count, "error") %> prohibited this agreement from being saved:</h2>
+    <div id="error_explanation" class="fine_print errors">
+      <h2 class="fine_print heading"><%= pluralize(@agreement.errors.count, "error") %> prohibited this agreement from being saved:</h2>
 
       <ul>
       <% @agreement.errors.full_messages.each do |msg| %>
@@ -12,15 +12,19 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br/>
-    <%= f.text_field :name %><br/>
+    <%= f.label :name, :class => "fine_print label" %><br/>
+    <%= f.text_field :name, :class => "fine_print text_field" %><br/>
     (e.g. "Terms of Use")<br/><br/>
   </div>
   <div class="field">
-    <%= f.label :content %><br/>
-    <%= f.text_area :content %><br/><br/>
+    <%= f.label :content, :class => "fine_print label" %><br/>
+    <%= f.text_area :content, :class => "fine_print text_field" %><br/><br/>
+  </div>
+  <div class="field">
+    <%= f.label :ready, 'Ready to be used?', :class => "fine_print label" %>
+    <%= f.check_box :ready, :class => "fine_print checkbox" %><br/><br/>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit nil, :class => "fine_print submit" %>
   </div>
 <% end %>

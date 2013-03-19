@@ -4,6 +4,7 @@ class Install < ActiveRecord::Migration
       t.string :name
       t.integer :version
       t.text :content
+      t.boolean :ready
 
       t.timestamps
     end

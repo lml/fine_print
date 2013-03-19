@@ -17,21 +17,26 @@ module FinePrint
     # POST /user_agreements
     # POST /user_agreements.json
     def create
-      if params[:cancel] || (params[:read_checkbox_present] && !params[:read_checkbox])
-        redirect_to params[:referer]
+pp session
+      if params[:cancel] || !params[:read_checkbox]
+        session.delete(:fine_print_request_url)
+        redirect_to session.delete(:fine_print_request_referer) || FinePrint.redirect_path
         return
       end
       @agreement = Agreement.find(params[:agreement_id])
+      raise SecurityTransgression unless @agreement.can_be_accepted_by?(@user)
       @user_agreement = UserAgreement.new
       @user_agreement.agreement = @agreement
       @user_agreement.user = @user
   
+      session.delete(:fine_print_request_referer)
+  
       respond_to do |format|
         if @user_agreement.save
-          format.html { redirect_to params[:referer], notice: "#{@user_agreement.agreement.name} accepted." }
+          format.html { redirect_to session.delete(:fine_print_request_url) || FinePrint.redirect_path, notice: "#{@user_agreement.agreement.name} accepted." }
           format.json { render json: @user_agreement, status: :created, location: @user_agreement }
         else
-          format.html { redirect_to params[:referer], notice: "You have already accepted this agreement." }
+          format.html { redirect_to session.delete(:fine_print_request_url) || FinePrint.redirect_path, notice: "You have already accepted this agreement." }
           format.json { render json: @user_agreement.errors, status: :unprocessable_entity }
         end
       end

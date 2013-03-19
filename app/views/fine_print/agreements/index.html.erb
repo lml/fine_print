@@ -1,6 +1,6 @@
-<h1>FinePrint agreements</h1>
+<h1 class="fine_print heading">FinePrint agreements</h1>
 
-<table>
+<table class="fine_print index">
   <tr>
     <th>Name</th>
     <th>Version</th>
@@ -13,13 +13,13 @@
   <tr>
     <td><%= agreement.name %></td>
     <td><%= agreement.version %></td>
-    <td><%= link_to 'Show', agreement %></td>
-    <td><%= link_to (agreement.can_be_edited_by?(@user) ? 'Edit' : 'New Version'), edit_agreement_path(agreement) %></td>
-    <td><% if agreement.can_be_destroyed_by?(@user) %><%= link_to 'Destroy', agreement, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+    <td><%= link_to 'Show', agreement, :class => "fine_print link" %></td>
+    <td><%= link_to (agreement.can_be_edited_by?(@user) ? 'Edit' : 'New Version'), edit_agreement_path(agreement), :class => "fine_print link" %></td>
+    <td><% if agreement.can_be_destroyed_by?(@user) %><%= link_to 'Delete', agreement, method: :delete, data: { confirm: 'Are you sure?' }, :class => "fine_print link" %><% end %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Agreement', new_agreement_path %>
+<%= link_to 'New Agreement', new_agreement_path, :class => "fine_print link" %>

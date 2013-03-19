@@ -18,8 +18,8 @@ module FinePrint
     # GET /agreements/1.json
     def show
       @agreement = Agreement.find(params[:id])
-      raise SecurityTransgression unless @agreement.can_be_accepted_by?(@user)
-      @user_agreement = UserAgreement.new(:agreement => @agreement)
+      raise SecurityTransgression unless @agreement.can_be_read_by?(@user)
+      @user_agreement = UserAgreement.new(:agreement => @agreement) if @agreement.can_be_accepted_by?(@user)
   
       respond_to do |format|
         format.html # show.html.erb

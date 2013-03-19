@@ -1,25 +1,21 @@
-<h1>Listing user_agreements</h1>
+<h1 class="fine_print heading">Accepted FinePrint agreements</h1>
 
-<table>
+<table class="fine_print index">
   <tr>
-    <th>User</th>
-    <th>Agreement</th>
-    <th></th>
-    <th></th>
+    <th>User ID</th>
+    <th>Agreement name</th>
+    <th>Agreement version</th>
+    <th>Date accepted</th>
     <th></th>
   </tr>
 
 <% @user_agreements.each do |user_agreement| %>
   <tr>
-    <td><%= user_agreement.user_id %></td>
-    <td><%= user_agreement.agreement_id %></td>
-    <td><%= link_to 'Show', user_agreement %></td>
-    <td><%= link_to 'Edit', edit_user_agreement_path(user_agreement) %></td>
-    <td><%= link_to 'Destroy', user_agreement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= user_agreement.user.id %></td>
+    <td><%= user_agreement.agreement.name %></td>
+    <td><%= user_agreement.agreement.version %></td>
+    <td><%= user_agreement.created_at %></td>
+    <td><%= link_to 'Terminate', user_agreement, method: :delete, data: { confirm: 'Are you sure?' }, :class => "fine_print link" %></td>
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New User agreement', new_user_agreement_path %>

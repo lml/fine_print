@@ -1,6 +1,6 @@
 module FinePrint
   class Agreement < ActiveRecord::Base
-    attr_accessible :name, :version, :content
+    attr_accessible :name, :version, :content, :ready
 
     has_many :user_agreements
 
@@ -17,16 +17,24 @@ module FinePrint
       (latest(name).try(:version) || 0) + 1
     end
 
+    def self.latest_ready(name)
+      where(:ready => true).find(:last, :conditions => ["LOWER(name) = ?", name.try(:downcase)])
+    end
+
     def accepted_by?(user)
-      !user_agreements.where(:user_type => user.class.to_s, :user_id => user.id).empty?
+      !user.nil? && !user_agreements.where(:user_type => user.class.to_s, :user_id => user.id).empty?
     end
 
     def self.can_be_listed_by?(user)
       FinePrint.is_admin?(user)
     end
 
+    def can_be_read_by?(user)
+      ready || FinePrint.is_admin?(user)
+    end
+
     def can_be_accepted_by?(user)
-      !user.nil?
+      ready && !user.nil?
     end
 
     def can_be_created_by?(user)
