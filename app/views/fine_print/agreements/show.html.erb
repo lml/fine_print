@@ -4,13 +4,13 @@
   <%= @agreement.name %>
 </h1>
 
-<% if FinePrint.display_version %>
+<% if FinePrint.get_option(@options, :display_version) %>
   <h3 class="fine_print agreement version">
     Version: <%= @agreement.version %>
   </h3>
 <% end %>
 
-<% if FinePrint.display_last_updated %>
+<% if FinePrint.get_option(@options, :display_last_updated) %>
   <h3 class="fine_print agreement updated">
     Last updated: <%= @agreement.updated_at %>
   </h3>
@@ -23,7 +23,7 @@
 <% if @agreement.can_be_accepted_by?(@user) %>
   <%= form_tag user_agreements_path, :method => :post do %>
     <%= hidden_field_tag :agreement_id, @agreement.id %>
-    <% if FinePrint.require_checkbox %>
+    <% if FinePrint.get_option(@options, :require_checkbox) %>
       <div class="field">
         <%= label_tag :read_checkbox, 'I have read and agree to the terms and conditions above.', :class => "fine_print label" %>
         <%= check_box_tag :read_checkbox, 1, false, :class => "fine_print checkbox" %><br/>

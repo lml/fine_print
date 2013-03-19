@@ -2,7 +2,7 @@
 # All settings are initially set to their default values
 FinePrint.configure do |config|
 
-  # Engine Configuration
+  # Engine Options (initializer only)
 
   # Name of the ApplicationController helper method that returns the current user
   # Default: 'current_user'
@@ -15,20 +15,12 @@ FinePrint.configure do |config|
 
 
 
-  # Agreement Configuration
+  # Agreement Options (initializer or inline)
 
   # Message to be displayed to the user explaining that they need to accept an agreement
   # Set to nil to disable
   # Default: "You must accept the following agreement to proceed."
   config.agreement_notice = "You must accept the following agreement to proceed."
-
-  # Whether or not to display the version of the agreement
-  # Default: true
-  config.display_version = true
-
-  # Whether or not to display the last updated date for the agreement
-  # Default: true
-  config.display_last_updated = true
 
   # Grace period for accepting new agreements (set to 0 to disable)
   # Default: 0
@@ -41,6 +33,18 @@ FinePrint.configure do |config|
   # Whether or not referer information should be used to redirect users after accepting an agreement
   # Default: true
   config.use_referers = true
+
+
+
+  # Session Options (initializer or inline; stored in user session)
+
+  # Whether or not to display the version of the agreement
+  # Default: true
+  config.display_version = true
+
+  # Whether or not to display the last updated date for the agreement
+  # Default: true
+  config.display_last_updated = true
 
   # Path to redirect users to when referer information is unavailable
   # Default: "/"
