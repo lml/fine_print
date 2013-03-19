@@ -1,3 +1,7 @@
-input.checkbox {
+pre.fine_print.agreement.content {
+  background-color: white;
+}
+
+input.fine_print.checkbox {
   float: left;
 }

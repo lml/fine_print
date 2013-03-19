@@ -44,6 +44,17 @@ module FinePrint
       @agreement = Agreement.find(params[:id])
       raise SecurityTransgression unless @agreement.can_be_edited_by?(@user)
     end
+
+    # GET /agreements/1/new_version
+    def new_version
+      @agreement = Agreement.find(params[:agreement_id]).dup
+      raise SecurityTransgression unless @agreement.can_be_created_by?(@user)
+
+      respond_to do |format|
+        format.html # new_version.html.erb
+        format.json { render json: @agreement }
+      end
+    end
   
     # POST /agreements
     # POST /agreements.json

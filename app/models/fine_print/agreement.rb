@@ -1,6 +1,6 @@
 module FinePrint
   class Agreement < ActiveRecord::Base
-    attr_accessible :name, :version, :content, :ready
+    attr_accessible :name, :version, :content, :confirmation_text, :display_name, :display_version, :display_updated, :display_confirmation, :ready
 
     has_many :user_agreements
 

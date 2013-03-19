@@ -1,4 +1,7 @@
 FinePrint::Engine.routes.draw do
-  resources :agreements
+  resources :agreements do
+    get :new_version
+  end
   resources :user_agreements, :only => [:index, :create, :destroy]
+  root :to => 'agreements#index'
 end

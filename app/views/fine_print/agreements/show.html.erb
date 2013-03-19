@@ -1,16 +1,18 @@
 <p id="notice" class = "fine_print notice"><%= notice %></p>
 
-<h1 class="fine_print agreement name">
-  <%= @agreement.name %>
-</h1>
+<% if @agreement.display_name %>
+  <h1 class="fine_print agreement name">
+    <%= @agreement.name %>
+  </h1>
+<% end %>
 
-<% if FinePrint.get_option(@options, :display_version) %>
+<% if @agreement.display_version %>
   <h3 class="fine_print agreement version">
     Version: <%= @agreement.version %>
   </h3>
 <% end %>
 
-<% if FinePrint.get_option(@options, :display_last_updated) %>
+<% if @agreement.display_updated %>
   <h3 class="fine_print agreement updated">
     Last updated: <%= @agreement.updated_at %>
   </h3>
@@ -23,17 +25,15 @@
 <% if @agreement.can_be_accepted_by?(@user) %>
   <%= form_tag user_agreements_path, :method => :post do %>
     <%= hidden_field_tag :agreement_id, @agreement.id %>
-    <% if FinePrint.get_option(@options, :require_checkbox) %>
+    <% if @agreement.display_confirmation %>
       <div class="field">
-        <%= label_tag :read_checkbox, 'I have read and agree to the terms and conditions above.', :class => "fine_print label" %>
-        <%= check_box_tag :read_checkbox, 1, false, :class => "fine_print checkbox" %><br/>
+        <%= label_tag :confirmation_checkbox, @agreement.confirmation_text, :class => "fine_print label" %>
+        <%= check_box_tag :confirmation_checkbox, 1, false, :id => "fine_print_confirmation_checkbox", :class => "fine_print checkbox" %><br/>
       </div>
-    <% else %>
-      <%= hidden_field_tag :read_checkbox, 1 %>
     <% end %>
     <div class="actions">
-      <%= submit_tag :OK, :class => "fine_print submit ok" %>
-      <%= submit_tag :Cancel, :name => 'cancel', :class => "fine_print submit cancel" %>
+      <%= submit_tag (@agreement.display_confirmation ? 'OK' : @agreement.confirmation_text), :id => "fine_print_submit_ok", :class => "fine_print submit" %>
+      <%= submit_tag :Cancel, :name => 'cancel', :id => "fine_print_submit_cancel", :class => "fine_print submit" %>
     </div>
   <% end %>
 <% elsif !@agreement.ready %>

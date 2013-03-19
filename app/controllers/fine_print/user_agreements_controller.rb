@@ -17,15 +17,16 @@ module FinePrint
     # POST /user_agreements
     # POST /user_agreements.json
     def create
-      if params[:cancel] || !params[:read_checkbox]
+      @agreement = Agreement.find(params[:agreement_id])
+      raise SecurityTransgression unless @agreement.can_be_accepted_by?(@user)
+
+      if params[:cancel] || (@agreement.display_confirmation && !params[:confirmation_checkbox])
         session.delete(:fine_print_request_url)
         redirect_to session.delete(:fine_print_request_referer) || FinePrint.redirect_path
         return
       end
       session.delete(:fine_print_request_referer)
 
-      @agreement = Agreement.find(params[:agreement_id])
-      raise SecurityTransgression unless @agreement.can_be_accepted_by?(@user)
       @user_agreement = UserAgreement.new
       @user_agreement.agreement = @agreement
       @user_agreement.user = @user

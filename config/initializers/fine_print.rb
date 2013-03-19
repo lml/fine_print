@@ -13,6 +13,10 @@ FinePrint.configure do |config|
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
 
+  # Path to redirect users to when referer information is unavailable
+  # Default: "/"
+  config.redirect_path = "/"
+
 
 
   # Agreement Options (initializer or inline)
@@ -33,25 +37,5 @@ FinePrint.configure do |config|
   # Whether or not referer information should be used to redirect users after accepting an agreement
   # Default: true
   config.use_referers = true
-
-
-
-  # Session Options (initializer or inline; stored in user session)
-
-  # Whether or not to display the version of the agreement
-  # Default: true
-  config.display_version = true
-
-  # Whether or not to display the last updated date for the agreement
-  # Default: true
-  config.display_last_updated = true
-
-  # Path to redirect users to when referer information is unavailable
-  # Default: "/"
-  config.redirect_path = "/"
-
-  # Whether or not to display a checkbox that has to be clicked before the user can accept the agreement
-  # Default: true
-  config.require_checkbox = true
   
 end

@@ -7,7 +7,8 @@ module FinePrint
   # Can be set in initializer only
   ENGINE_OPTIONS = [
     :current_user_method,
-    :user_admin_proc
+    :user_admin_proc,
+    :redirect_path
   ]
 
   # Can be set in initializer or passed as an option to fine_print_agreement
@@ -15,7 +16,6 @@ module FinePrint
     :agreement_notice,
     :grace_period,
     :grace_period_on_new_version_only,
-    :redirect_path,
     :use_referers
   ]
   
@@ -35,6 +35,7 @@ module FinePrint
     user = controller.send current_user_method
     names.each do |name|
       agreement = Agreement.latest_ready(name)
+      next if agreement.nil?
       unless agreement.accepted_by?(user)
         if get_option(options, :use_referers)
           controller.session[:fine_print_request_url] = controller.request.url

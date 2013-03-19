@@ -1,17 +1,22 @@
 class Install < ActiveRecord::Migration
   def change
     create_table :fine_print_agreements do |t|
-      t.string :name
-      t.integer :version
-      t.text :content
-      t.boolean :ready
+      t.string :name, :null => false
+      t.integer :version, :null => false
+      t.text :content, :null => false
+      t.string :confirmation_text, :default => 'I have read and agree to the terms and conditions above', :null => false
+      t.boolean :display_name, :default => true
+      t.boolean :display_version, :default => false
+      t.boolean :display_updated, :default => false
+      t.boolean :display_confirmation, :default => true
+      t.boolean :ready, :default => false
 
       t.timestamps
     end
 
     create_table :fine_print_user_agreements do |t|
-      t.integer :agreement_id
-      t.references :user, :polymorphic => true
+      t.integer :agreement_id, :null => false
+      t.references :user, :polymorphic => true, :null => false
 
       t.timestamps
     end
