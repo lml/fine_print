@@ -1,48 +1,9 @@
-<p id="notice" class = "fine_print notice"><%= notice %></p>
-
-<% if @agreement.display_name %>
-  <h1 class="fine_print agreement name">
-    <%= @agreement.name %>
-  </h1>
-<% end %>
-
-<% if @agreement.display_version %>
-  <h3 class="fine_print agreement version">
-    Version: <%= @agreement.version %>
-  </h3>
-<% end %>
-
-<% if @agreement.display_updated %>
-  <h3 class="fine_print agreement updated">
-    Last updated: <%= @agreement.updated_at %>
-  </h3>
-<% end %>
-
-<pre class="fine_print agreement content">
-  <%= @agreement.content %>
-</pre>
-
-<% if @agreement.can_be_accepted_by?(@user) %>
-  <%= form_tag user_agreements_path, :method => :post do %>
-    <%= hidden_field_tag :agreement_id, @agreement.id %>
-    <%= hidden_field_tag :url, @url %>
-    <%= hidden_field_tag :ref, @ref %>
-    <% if @agreement.display_confirmation %>
-      <div class="field">
-        <%= label_tag :confirmation_checkbox, @agreement.confirmation_text, :class => "fine_print label" %>
-        <%= check_box_tag :confirmation_checkbox, 1, false, :id => "fine_print_confirmation_checkbox", :class => "fine_print checkbox" %><br/>
-      </div>
-    <% end %>
-    <div class="actions">
-      <%= submit_tag (@agreement.display_confirmation ? 'OK' : @agreement.confirmation_text), :id => "fine_print_submit_ok", :class => "fine_print submit" %>
-      <%= submit_tag :Cancel, :name => 'cancel', :id => "fine_print_submit_cancel", :class => "fine_print submit" %>
-    </div>
-  <% end %>
-<% elsif !@agreement.ready %>
-  This agreement is not yet ready to be used.<br/>
-<% else %>
-  Please <%= FinePrint.sign_in_path.nil? ? 'sign in' : link_to('sign in', FinePrint.sign_in_path) %> to accept this agreement.<br/>
-<% end %>
+<%= render :partial => 'agreement', :locals => {
+      :agreement => @agreement,
+      :user => @user,
+      :notice => @notice,
+      :url => @url,
+      :ref => @ref } %>
 
 <br/>
 

@@ -38,6 +38,11 @@ FinePrint.configure do |config|
   # Default: true
   config.grace_period_on_new_version_only = true
 
+  # If set to true, modal javascript dialogs will be used instead of redirecting the user to the agreement page
+  # Note: users with javascript disabled will not even see the agreement and will be able to proceed without accepting it
+  # Default: false
+  config.use_modal_js = false
+
   # Whether or not referer information should be used to redirect users after accepting an agreement
   # Default: true
   config.use_referers = true

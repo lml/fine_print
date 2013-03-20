@@ -1,0 +1,34 @@
+<%# Clients of this partial must supply the following variables:
+    agreements
+    user
+    notice %>
+
+<style>
+  .no-close .ui-dialog-titlebar-close {
+    display: none;
+  }
+</style>
+
+<script>
+  $(function() {
+    $( "#fine_print_dialog" ).dialog({
+      dialogClass: "no-close",
+      draggable: false,
+      modal: true,
+      resizable: false,
+      width: 640,
+      height: 480
+    });
+  });
+</script>
+
+<% agreements.each do |agreement| %>
+  <div id="fine_print_dialog" title="<%= agreement.name %>">
+    <%= render :partial => 'fine_print/agreements/agreement', :locals => {
+        :agreement => agreement,
+        :user => user,
+        :notice => notice,
+        :remote => true } %>
+  </div>
+<% end %>
+

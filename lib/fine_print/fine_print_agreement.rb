@@ -1,6 +1,9 @@
+require 'fine_print/agreements_helper'
+
 module FinePrint
   module FinePrintAgreement
     def self.included(base)
+      base.helper FinePrint::AgreementsHelper
       base.extend(ClassMethods)
     end
 

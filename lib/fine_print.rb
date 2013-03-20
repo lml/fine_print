@@ -17,6 +17,7 @@ module FinePrint
     :agreement_notice,
     :grace_period,
     :grace_period_on_new_version_only,
+    :use_modal_js,
     :use_referers
   ]
   
@@ -34,10 +35,13 @@ module FinePrint
 
   def self.require_agreements(controller, names, options)
     user = controller.send current_user_method
+    fine_print_dialog_agreements = []
     names.each do |name|
       agreement = Agreement.latest_ready(name)
-      next if agreement.nil?
-      unless agreement.accepted_by?(user)
+      next if agreement.nil? || agreement.accepted_by?(user)
+      if get_option(options, :use_modal_js)
+        fine_print_dialog_agreements << agreement
+      else
         if get_option(options, :use_referers)
           controller.session[:fine_print_request_url] = controller.request.url
           controller.session[:fine_print_request_ref] = controller.request.referer
@@ -46,6 +50,9 @@ module FinePrint
           :notice => get_option(options, :agreement_notice)
       end
     end
+    controller.instance_variable_set(:@fine_print_dialog_agreements, fine_print_dialog_agreements)
+    controller.instance_variable_set(:@fine_print_user, user)
+    controller.instance_variable_set(:@fine_print_dialog_notice, get_option(options, :agreement_notice))
   end
 
   def self.is_admin?(user)
