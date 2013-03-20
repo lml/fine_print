@@ -8,6 +8,7 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_method,
     :user_admin_proc,
+    :sign_in_path,
     :redirect_path
   ]
 
@@ -39,11 +40,10 @@ module FinePrint
       unless agreement.accepted_by?(user)
         if get_option(options, :use_referers)
           controller.session[:fine_print_request_url] = controller.request.url
-          controller.session[:fine_print_request_referer] = controller.request.referer
+          controller.session[:fine_print_request_ref] = controller.request.referer
         end
         controller.redirect_to controller.fine_print.agreement_path(agreement),
           :notice => get_option(options, :agreement_notice)
-        return false
       end
     end
   end

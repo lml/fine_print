@@ -25,6 +25,8 @@
 <% if @agreement.can_be_accepted_by?(@user) %>
   <%= form_tag user_agreements_path, :method => :post do %>
     <%= hidden_field_tag :agreement_id, @agreement.id %>
+    <%= hidden_field_tag :url, @url %>
+    <%= hidden_field_tag :ref, @ref %>
     <% if @agreement.display_confirmation %>
       <div class="field">
         <%= label_tag :confirmation_checkbox, @agreement.confirmation_text, :class => "fine_print label" %>
@@ -39,7 +41,7 @@
 <% elsif !@agreement.ready %>
   This agreement is not yet ready to be used.<br/>
 <% else %>
-  Please login to accept this agreement.<br/>
+  Please <%= FinePrint.sign_in_path.nil? ? 'sign in' : link_to('sign in', FinePrint.sign_in_path) %> to accept this agreement.<br/>
 <% end %>
 
 <br/>

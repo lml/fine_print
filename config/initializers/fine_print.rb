@@ -5,13 +5,17 @@ FinePrint.configure do |config|
   # Engine Options (initializer only)
 
   # Name of the ApplicationController helper method that returns the current user
-  # Default: 'current_user'
-  config.current_user_method = 'current_user'
+  # Default: "current_user"
+  config.current_user_method = "current_user"
 
   # Proc called with user as argument that should return true if and only if the user is an admin
   # Admins can create and edit agreements and terminate accepted agreements
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
+
+  # Path to link users to if they need to sign in
+  # Default: nil (link disabled)
+  config.sign_in_path = nil
 
   # Path to redirect users to when referer information is unavailable
   # Default: "/"

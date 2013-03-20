@@ -21,16 +21,14 @@ module FinePrint
       raise SecurityTransgression unless @agreement.can_be_accepted_by?(@user)
 
       if params[:cancel] || (@agreement.display_confirmation && !params[:confirmation_checkbox])
-        session.delete(:fine_print_request_url)
-        redirect_to session.delete(:fine_print_request_referer) || FinePrint.redirect_path
+        redirect_to params[:ref] || FinePrint.redirect_path
         return
       end
-      session.delete(:fine_print_request_referer)
 
       @user_agreement = UserAgreement.new
       @user_agreement.agreement = @agreement
       @user_agreement.user = @user
-      redirect_path = session.delete(:fine_print_request_url) || FinePrint.redirect_path
+      redirect_path = params[:url] || FinePrint.redirect_path
   
       respond_to do |format|
         if @user_agreement.save
