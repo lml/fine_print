@@ -1,11 +1,11 @@
-function fine_print_init_dialog(index) {
+function fine_print_init_dialog(index, width, height) {
   $("#fine_print_dialog_" + index).dialog({
     autoOpen: false,
     draggable: false,
     modal: true,
     resizable: false,
-    width: 640,
-    height: 480
+    width: width,
+    height: height
   }).on("dialogbeforeclose", function(event, ui) {
     window.history.back();
     return false;

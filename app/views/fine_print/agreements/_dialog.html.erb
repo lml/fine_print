@@ -1,7 +1,11 @@
-<%# Clients of this partial must supply the following variables:
-    agreements
-    user
-    notice %>
+<% # Clients of this partial must supply the following variables:
+   # agreements
+   # user
+   # notice
+   #
+   # Additionally, they can override the following variables:
+   width ||= 640
+   height ||= 480 %>
 
 <%= stylesheet_link_tag 'fine_print/application' %>
 <%= javascript_include_tag 'fine_print/dialog' %>
@@ -17,7 +21,7 @@
   </div>
 
   <script>
-    fine_print_init_dialog(<%= index %>);
+    fine_print_init_dialog(<%= index %>, <%= width %>, <%= height %>);
   </script>
 <% end %>
 
