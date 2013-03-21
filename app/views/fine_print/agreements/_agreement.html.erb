@@ -3,6 +3,7 @@
    # user
    #
    # Additionally, they can override the following variables:
+   index ||= 0
    notice ||= nil
    url ||= nil
    ref ||= nil
@@ -37,18 +38,24 @@
 <% if agreement.can_be_accepted_by?(user) %>
   <%= form_tag fine_print.user_agreements_path, :remote => remote do %>
     <%= hidden_field_tag :agreement_id, agreement.id %>
+    <%= hidden_field_tag :index, index %>
     <%= hidden_field_tag :url, url %>
     <%= hidden_field_tag :ref, ref %>
     <% if agreement.display_confirmation %>
       <div class="field">
         <%= label_tag :confirmation_checkbox, agreement.confirmation_text, :class => "fine_print label" %>
-        <%= check_box_tag :confirmation_checkbox, 1, false, :id => "fine_print_confirmation_checkbox", :class => "fine_print checkbox" %><br/>
+        <%= check_box_tag :confirmation_checkbox, 1, false, :id => "fine_print_confirmation_checkbox_#{index}", :class => "fine_print checkbox" %><br/>
       </div>
     <% end %>
     <div class="actions">
-      <%= submit_tag (agreement.display_confirmation ? 'OK' : agreement.confirmation_text), :id => "fine_print_submit_ok", :class => "fine_print submit" %>
-      <%= submit_tag :Cancel, :name => 'cancel', :id => "fine_print_submit_cancel", :class => "fine_print submit" %>
+      <%= submit_tag (agreement.display_confirmation ? 'OK' : agreement.confirmation_text), :id => "fine_print_submit_ok_#{index}", :class => "fine_print submit" %>
+      <%= submit_tag :Cancel, :name => 'cancel', :class => "fine_print submit" %>
     </div>
+  <% end %>
+  <% if agreement.display_confirmation %>
+    <script>
+      fine_print_agreement_checkbox(<%= index %>);
+    </script>
   <% end %>
 <% elsif !agreement.ready %>
   This agreement is not yet ready to be used.<br/>

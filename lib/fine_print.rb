@@ -2,6 +2,8 @@ require "fine_print/engine"
 require "fine_print/fine_print_agreement"
 
 module FinePrint
+  ASSET_FILES = %w(dialog.js)
+
   # Attributes
 
   # Can be set in initializer only
@@ -17,12 +19,16 @@ module FinePrint
     :agreement_notice,
     :grace_period,
     :grace_period_on_new_version_only,
-    :use_modal_js,
+    :use_modal_dialogs,
     :use_referers
   ]
   
   (ENGINE_OPTIONS + AGREEMENT_OPTIONS).each do |option|
     mattr_accessor option
+  end
+
+  ActiveSupport.on_load(:before_initialize) do
+    Rails.configuration.assets.precompile += ASSET_FILES
   end
   
   def self.configure
@@ -39,7 +45,7 @@ module FinePrint
     names.each do |name|
       agreement = Agreement.latest_ready(name)
       next if agreement.nil? || agreement.accepted_by?(user)
-      if get_option(options, :use_modal_js)
+      if get_option(options, :use_modal_dialogs)
         fine_print_dialog_agreements << agreement
       else
         if get_option(options, :use_referers)

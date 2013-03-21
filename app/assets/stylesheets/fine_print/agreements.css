@@ -2,6 +2,10 @@ pre.fine_print.agreement.content {
   background-color: white;
 }
 
+div.fine_print.agreement.dialog {
+  display: none;
+}
+
 input.fine_print.checkbox {
   float: left;
 }

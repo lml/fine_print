@@ -3,32 +3,21 @@
     user
     notice %>
 
-<style>
-  .no-close .ui-dialog-titlebar-close {
-    display: none;
-  }
-</style>
+<%= stylesheet_link_tag 'fine_print/application' %>
+<%= javascript_include_tag 'fine_print/dialog' %>
 
-<script>
-  $(function() {
-    $( "#fine_print_dialog" ).dialog({
-      dialogClass: "no-close",
-      draggable: false,
-      modal: true,
-      resizable: false,
-      width: 640,
-      height: 480
-    });
-  });
-</script>
-
-<% agreements.each do |agreement| %>
-  <div id="fine_print_dialog" title="<%= agreement.name %>">
+<% agreements.each_with_index do |agreement, index| %>
+  <div id="<%= "fine_print_dialog_#{index}" %>" title="<%= agreement.name %>" class="fine_print agreement dialog">
     <%= render :partial => 'fine_print/agreements/agreement', :locals => {
         :agreement => agreement,
+        :index => index,
         :user => user,
         :notice => notice,
         :remote => true } %>
   </div>
+
+  <script>
+    fine_print_init_dialog(<%= index %>);
+  </script>
 <% end %>
 
