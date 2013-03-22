@@ -115,7 +115,7 @@ Here are some important notes about managing your agreements with FinePrint:
 
 ## Customization
 
-You can customize FinePrint's stylesheets, javascripts, views, controllers and even models to suit your needs.
+You can customize FinePrint's stylesheets, javascripts, views and even controllers to suit your needs.
 
 Run the following command to copy a part of FinePrint into your main application:
 
@@ -123,7 +123,7 @@ Run the following command to copy a part of FinePrint into your main application
 $ rake fine_print:copy:folder
 ```
 
-Where folder is one of `stylesheets`, `javascripts`, `layouts`, `views`, `controllers` or `models`.
+Where folder is one of `stylesheets`, `javascripts`, `layouts`, `views` or `controllers`.
 
 Example:
 

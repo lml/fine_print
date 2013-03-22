@@ -1,4 +1,4 @@
-COPY_TASKS = ['assets/stylesheets', 'assets/javascripts', 'views/layouts', 'views', 'controllers', 'models']
+COPY_TASKS = ['assets/stylesheets', 'assets/javascripts', 'views/layouts', 'views', 'controllers']
 
 namespace :fine_print do
   namespace :install do
@@ -32,7 +32,7 @@ namespace :fine_print do
     Rake::Task["fine_print:install:migrations"].invoke
   end
   
-  desc "Copy assets, views, helpers, controllers and models from fine_print to application"
+  desc "Copy assets, layouts, views and controllers from fine_print to application"
   task :copy do
     COPY_TASKS.each do |path|
       Rake::Task["fine_print:copy:#{File.basename(path)}"].invoke
