@@ -3,5 +3,5 @@ FinePrint::Engine.routes.draw do
     get :new_version
   end
   resources :user_agreements, :only => [:index, :create, :destroy]
-  root :to => 'agreements#index'
+  root :to => 'home#index'
 end
