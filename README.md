@@ -113,6 +113,30 @@ Here are some important notes about managing your agreements with FinePrint:
 - Agreements cannot be modified after at least one user has accepted them, but you can always create new versions
 - When a new version is present, users will be asked to accept it the next time they visit a controller action that calls `fine_print_agreement`
 
+## Customization
+
+You can customize FinePrint's stylesheets, javascripts, views, controllers and even models to suit your needs.
+
+Run the following command to copy a part of FinePrint into your main application:
+
+```sh
+$ rake fine_print:copy:folder
+```
+
+Where folder is one of `stylesheets`, `javascripts`, `layouts`, `views`, `controllers` or `models`.
+
+Example:
+
+```sh
+$ rake fine_print:copy:views
+```
+
+Alternatively, you can run the following command to copy all of the above into your main application:
+
+```sh
+$ rake fine_print:copy
+```
+
 ## Contributing
 
 1. Fork it
