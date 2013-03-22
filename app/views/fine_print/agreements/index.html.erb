@@ -20,7 +20,7 @@
           <%= link_to 'New version', agreement_new_version_path(agreement), :class => "fine_print link" %>
         <% end %></td>
     <td><% if agreement.can_be_destroyed_by?(@user) %>
-          <%= link_to 'Delete', agreement, method: :delete, data: { confirm: 'Are you sure?' }, :class => "fine_print link" %>
+          <%= link_to 'Delete', agreement, method: :delete, data: { confirm: 'Are you sure you wish to delete this agreement?' }, :class => "fine_print link" %>
         <% end %></td>
   </tr>
 <% end %>
@@ -28,4 +28,5 @@
 
 <br />
 
-<%= link_to 'New Agreement', new_agreement_path, :class => "fine_print link" %>
+<%= link_to 'New Agreement', new_agreement_path, :class => "fine_print link" %> |
+<%= link_to 'Back', root_path, :class => "fine_print link" %>

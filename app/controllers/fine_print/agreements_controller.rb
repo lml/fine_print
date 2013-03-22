@@ -20,6 +20,8 @@ module FinePrint
       @agreement = Agreement.find(params[:id])
       raise SecurityTransgression unless @agreement.can_be_read_by?(@user)
       @user_agreement = UserAgreement.new(:agreement => @agreement) if @agreement.can_be_accepted_by?(@user)
+      @accept_path = session.delete(:fine_print_accept_path)
+      @cancel_path = session.delete(:fine_print_cancel_path)
       @url = session.delete(:fine_print_request_url)
       @ref = session.delete(:fine_print_request_ref)
   

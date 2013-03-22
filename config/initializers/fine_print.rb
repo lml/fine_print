@@ -13,13 +13,14 @@ FinePrint.configure do |config|
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
 
-  # Path to link users to if they need to sign in
-  # Default: nil (link disabled)
-  config.sign_in_path = nil
-
-  # Path to redirect users to when referer information is unavailable
+  # Path to redirect users to when an error occurs (e.g. permission denied on admin pages)
   # Default: "/"
   config.redirect_path = "/"
+
+  # Path to link users to if they need to sign in
+  # Set to nil to disable the link
+  # Default: "/"
+  config.sign_in_path = "/"
 
 
 
@@ -30,13 +31,17 @@ FinePrint.configure do |config|
   # Default: "You must accept the following agreement to proceed."
   config.agreement_notice = "You must accept the following agreement to proceed."
 
-  # Grace period for accepting new agreements (set to 0 to disable)
-  # Default: 0
-  config.grace_period = 0
+  # Path to redirect users to when an agreement is accepted and referer information is unavailable
+  # Default: "/"
+  config.accept_path = "/"
 
-  # If set to true, the grace period will only apply if the user already accepted a previous version of the same agreement
+  # Path to redirect users to when an agreement is not accepted and referer information is unavailable
+  # Default: "/"
+  config.cancel_path = "/"
+
+  # Whether to use referer information to redirect users after (not) accepting an agreement
   # Default: true
-  config.grace_period_on_new_version_only = true
+  config.use_referers = true
 
   # If set to true, modal jQuery UI dialogs will be used instead of redirecting the user to the agreement page
   # Note: users with javascript disabled will not even see the agreement and will be able to proceed without accepting it
@@ -44,9 +49,5 @@ FinePrint.configure do |config|
   #       disable this option for that particular controller action
   # Default: false
   config.use_modal_dialogs = false
-
-  # Whether or not referer information should be used to redirect users after accepting an agreement
-  # Default: true
-  config.use_referers = true
   
 end

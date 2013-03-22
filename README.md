@@ -75,11 +75,14 @@ This method takes an agreement name and an options hash.
 Accepted options are (see initializer for more explanation):
 
 - `only` and `except` just like a before_filter
+
 - `agreement_notice` notice to be shown to the user above the agreement
-- `grace_period`
-- `grace_period_on_new_version_only`
+
+- `accept_path` path to redirect users to when an agreement is accepted and no referer information is available
+- `cancel_path` path to redirect users to when an agreement is not accepted and no referer information is available
+- `use_referers` false if you want users to always be redirected to the above paths
+
 - `use_modal_dialogs` true if you want to use FinePrint's modal dialogs
-- `use_referers` false if you want users to always be redirected to the redirect_path set in the initializer
 
 Example:
 

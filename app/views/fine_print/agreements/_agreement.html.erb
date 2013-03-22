@@ -5,11 +5,13 @@
    # Additionally, they can override the following variables:
    index ||= 0
    notice ||= nil
+   accept_path ||= nil
+   cancel_path ||= nil
    url ||= nil
    ref ||= nil
    remote ||= false %>
 
-<% if notice %>
+<% unless notice.nil? %>
   <p id="notice" class = "fine_print notice"><%= notice %></p>
 <% end %>
 
@@ -39,8 +41,18 @@
   <%= form_tag fine_print.user_agreements_path, :remote => remote do %>
     <%= hidden_field_tag :agreement_id, agreement.id %>
     <%= hidden_field_tag :index, index %>
-    <%= hidden_field_tag :url, url %>
-    <%= hidden_field_tag :ref, ref %>
+    <% unless accept_path.nil? %>
+      <%= hidden_field_tag :accept_path, accept_path %>
+    <% end %>
+    <% unless cancel_path.nil? %>
+      <%= hidden_field_tag :cancel_path, cancel_path %>
+    <% end %>
+    <% unless url.nil? %>
+      <%= hidden_field_tag :url, url %>
+    <% end %>
+    <% unless ref.nil? %>
+      <%= hidden_field_tag :ref, ref %>
+    <% end %>
     <% if agreement.display_confirmation %>
       <div class="field">
         <%= label_tag :confirmation_checkbox, agreement.confirmation_text, :class => "fine_print label" %>

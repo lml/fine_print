@@ -15,7 +15,11 @@
     <td><%= user_agreement.agreement.name %></td>
     <td><%= user_agreement.agreement.version %></td>
     <td><%= user_agreement.created_at %></td>
-    <td><%= link_to 'Terminate', user_agreement, method: :delete, data: { confirm: 'Are you sure?' }, :class => "fine_print link" %></td>
+    <td><%= link_to 'Terminate', user_agreement, method: :delete, data: { confirm: 'User will be asked to accept the agreement again. Are you sure?' }, :class => "fine_print link" %></td>
   </tr>
 <% end %>
 </table>
+
+<br />
+
+<%= link_to 'Back', root_path, :class => "fine_print link" %>

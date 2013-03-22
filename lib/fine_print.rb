@@ -10,17 +10,17 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_method,
     :user_admin_proc,
-    :sign_in_path,
-    :redirect_path
+    :redirect_path,
+    :sign_in_path
   ]
 
   # Can be set in initializer or passed as an option to fine_print_agreement
   AGREEMENT_OPTIONS = [
     :agreement_notice,
-    :grace_period,
-    :grace_period_on_new_version_only,
-    :use_modal_dialogs,
-    :use_referers
+    :accept_path,
+    :cancel_path,
+    :use_referers,
+    :use_modal_dialogs
   ]
   
   (ENGINE_OPTIONS + AGREEMENT_OPTIONS).each do |option|
@@ -48,6 +48,8 @@ module FinePrint
       if get_option(options, :use_modal_dialogs)
         fine_print_dialog_agreements << agreement
       else
+        controller.session[:fine_print_accept_path] = options[:accept_path]
+        controller.session[:fine_print_cancel_path] = options[:cancel_path]
         if get_option(options, :use_referers)
           controller.session[:fine_print_request_url] = controller.request.url
           controller.session[:fine_print_request_ref] = controller.request.referer

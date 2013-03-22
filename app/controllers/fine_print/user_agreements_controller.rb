@@ -22,7 +22,7 @@ module FinePrint
 
       if params[:cancel] || (@agreement.display_confirmation && !params[:confirmation_checkbox])
         respond_to do |format|
-          format.html { redirect_to params[:ref] || FinePrint.redirect_path }
+          format.html { redirect_to params[:ref] || FinePrint.get_option(params, :cancel_path) }
           format.js { render 'cancel' }
         end
         return
@@ -32,7 +32,7 @@ module FinePrint
       @user_agreement = UserAgreement.new
       @user_agreement.agreement = @agreement
       @user_agreement.user = @user
-      redirect_path = params[:url] || FinePrint.redirect_path
+      redirect_path = params[:url] || FinePrint.get_option(params, :accept_path)
   
       respond_to do |format|
         if @user_agreement.save
