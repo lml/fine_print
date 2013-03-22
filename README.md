@@ -40,7 +40,7 @@ Also add FinePrint to your application's routes:
 mount FinePrint::Engine => "/fine_print"
 ```
 
-And provide a link on your site for administrators to access the fine_print engine to manage agreements.
+And provide a link on your site for administrators to access the FinePrint engine to manage agreements.
 
 ```erb
 <%= link_to 'FinePrint', fine_print_path %>
