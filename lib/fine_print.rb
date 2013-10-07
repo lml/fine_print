@@ -11,7 +11,8 @@ module FinePrint
     :current_user_method,
     :user_admin_proc,
     :redirect_path,
-    :sign_in_path
+    :sign_in_path,
+    :controller_base_class
   ]
 
   # Can be set in initializer or passed as an option to fine_print_agreement

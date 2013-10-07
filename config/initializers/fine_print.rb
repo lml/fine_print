@@ -49,5 +49,12 @@ FinePrint.configure do |config|
   #       disable this option for that particular controller action
   # Default: false
   config.use_modal_dialogs = false
+
+  # FinePrint's ApplicationController inherits from ActionController::Base by
+  # default.  If you'd rather hook FinePrint's controllers into your app's
+  # setup, you can set this value to ::ApplicationController.  This lets
+  # you more easily use the main app's layouts and helpers.
+  #
+  config.controller_base_class = ActionController::Base
   
 end
