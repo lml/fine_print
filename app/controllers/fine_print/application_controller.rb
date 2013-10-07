@@ -1,5 +1,5 @@
 module FinePrint
-  class ApplicationController < ActionController::Base
+  class ApplicationController < (controller_base_class || ActionController::Base)
     before_filter :get_user
     
     rescue_from SecurityTransgression, :with => lambda { redirect_to FinePrint.redirect_path }
