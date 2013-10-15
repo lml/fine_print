@@ -137,6 +137,10 @@ Alternatively, you can run the following command to copy all of the above into y
 $ rake fine_print:copy
 ```
 
+## Testing
+
+Run `bundle exec rake db:migrate` then `bundle exec rake app:db:test:prepare`.  Then call the specs.
+
 ## Contributing
 
 1. Fork it

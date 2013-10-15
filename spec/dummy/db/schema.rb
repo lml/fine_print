@@ -14,23 +14,30 @@
 ActiveRecord::Schema.define(:version => 0) do
 
   create_table "fine_print_agreements", :force => true do |t|
-    t.string   "name"
-    t.text     "content"
-    t.integer  "version"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "name",                                                                                        :null => false
+    t.integer  "version",                                                                                     :null => false
+    t.text     "content",                                                                                     :null => false
+    t.string   "confirmation_text",    :default => "I have read and agree to the terms and conditions above", :null => false
+    t.boolean  "display_name",         :default => true
+    t.boolean  "display_version",      :default => false
+    t.boolean  "display_updated",      :default => false
+    t.boolean  "display_confirmation", :default => true
+    t.boolean  "ready",                :default => false
+    t.datetime "created_at",                                                                                  :null => false
+    t.datetime "updated_at",                                                                                  :null => false
   end
 
   add_index "fine_print_agreements", ["name", "version"], :name => "index_fine_print_agreements_on_name_and_version"
 
   create_table "fine_print_user_agreements", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "agreement_id"
+    t.integer  "agreement_id", :null => false
+    t.integer  "user_id",      :null => false
+    t.string   "user_type",    :null => false
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
 
   add_index "fine_print_user_agreements", ["agreement_id"], :name => "index_fine_print_user_agreements_on_agreement_id"
-  add_index "fine_print_user_agreements", ["user_id", "agreement_id"], :name => "index_fine_print_user_agreements_on_user_id_and_agreement_id"
+  add_index "fine_print_user_agreements", ["user_id", "user_type", "agreement_id"], :name => "index_fine_print_u_a_on_u_id_and_u_type_and_a_id"
 
 end

@@ -1,4 +1,6 @@
 #!/usr/bin/env rake
+# http://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl
+
 begin
   require 'bundler/setup'
 rescue LoadError
@@ -10,6 +12,14 @@ load 'rails/tasks/engine.rake'
 
 Bundler::GemHelper.install_tasks
 
+Dir[File.join(File.dirname(__FILE__), 'tasks/**/*.rake')].each {|f| load f }
+
+require 'rspec/core'
+require 'rspec/core/rake_task'
+
+desc "Run all specs in spec directory (excluding plugin specs)"
+RSpec::Core::RakeTask.new(:spec => 'app:db:test:prepare')
+
 require 'rake/testtask'
 
 Rake::TestTask.new(:test => 'app:db:test:prepare') do |t|
@@ -19,5 +29,5 @@ Rake::TestTask.new(:test => 'app:db:test:prepare') do |t|
   t.verbose = false
 end
 
-task :default => :test
+task :default => :spec
 

@@ -4,10 +4,21 @@ module FinePrint
 
     has_many :user_agreements
 
+    before_validation :init_version, on: :create
+
+    validate :can_update?, on: :update
+
     validates_presence_of :name, :content, :version
     validates_uniqueness_of :name, :scope => :version, :case_sensitive => false
-
+    
     default_scope order(:name, :version)
+
+    # def update_with(params)
+    #   if params[:name].try(:downcase) != name.downcase
+    #     params[:version] = Agreement.next_version(params[:name])
+    #   end
+    #   update_attributes(params)
+    # end
 
     def self.latest(name)
       find(:last, :conditions => ["LOWER(name) = ?", name.try(:downcase)])
@@ -25,10 +36,6 @@ module FinePrint
       !user.nil? && !user_agreements.where(:user_type => user.class.to_s, :user_id => user.id).empty?
     end
 
-    def self.can_be_listed_by?(user)
-      FinePrint.is_admin?(user)
-    end
-
     def can_be_read_by?(user)
       ready || FinePrint.is_admin?(user)
     end
@@ -43,6 +50,17 @@ module FinePrint
 
     def can_be_edited_by?(user)
       FinePrint.is_admin?(user) && user_agreements.empty?
+    end
+
+    def init_version
+      self.version ||= Agreement.next_version(name)
+    end
+
+    def can_update?
+      errors.add(:base, "Cannot change an agreement that users have agreed to") \
+        if user_agreements.any?
+      errors.add(:name, "cannot be changed in this version") if name_changed?
+      errors.none?
     end
 
     alias_method :can_be_destroyed_by?, :can_be_edited_by?

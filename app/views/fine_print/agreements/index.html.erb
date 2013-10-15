@@ -1,7 +1,7 @@
-<h1 class="fine_print heading">FinePrint agreements</h1>
+<h1 class="fine_print heading">FinePrint Agreements</h1>
 
 <table class="fine_print index">
-  <tr>
+  <tr class="fine_print heading-row">
     <th>Name</th>
     <th>Version</th>
     <th></th>
@@ -10,7 +10,7 @@
   </tr>
 
 <% @agreements.each do |agreement| %>
-  <tr>
+  <tr class="fine_print data-row <%= cycle('even', 'odd') %>">
     <td><%= agreement.name %></td>
     <td><%= agreement.version %></td>
     <td><%= link_to 'Show', agreement, :class => "fine_print link" %></td>

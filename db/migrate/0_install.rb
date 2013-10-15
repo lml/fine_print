@@ -3,12 +3,8 @@ class Install < ActiveRecord::Migration
     create_table :fine_print_agreements do |t|
       t.string :name, :null => false
       t.integer :version, :null => false
+      t.string :title, :null => false
       t.text :content, :null => false
-      t.string :confirmation_text, :default => 'I have read and agree to the terms and conditions above', :null => false
-      t.boolean :display_name, :default => true
-      t.boolean :display_version, :default => false
-      t.boolean :display_updated, :default => false
-      t.boolean :display_confirmation, :default => true
       t.boolean :ready, :default => false
 
       t.timestamps

@@ -1,5 +1,6 @@
 require "fine_print/engine"
 require "fine_print/fine_print_agreement"
+require "fine_print/security_transgression"
 
 module FinePrint
   ASSET_FILES = %w(dialog.js)

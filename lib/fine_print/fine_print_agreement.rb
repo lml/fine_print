@@ -22,5 +22,3 @@ module FinePrint
   end
 end
 
-ActionController::Base.send :include, FinePrint::FinePrintAgreement
-
