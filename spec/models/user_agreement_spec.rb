@@ -6,7 +6,7 @@ describe FinePrint::UserAgreement do
     ua = FactoryGirl.create(:user_agreement)
     agreement = ua.agreement
 
-    expect(agreement.update_attributes(:content, "foo")).to be_false
+    expect(agreement.update_attributes(content: "foo")).to be_false
   end
 
 end

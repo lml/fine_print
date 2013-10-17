@@ -64,7 +64,7 @@ module FinePrint
   #   controller.instance_variable_set(:@fine_print_dialog_notice, get_option(options, :agreement_notice))
   # end
 
-  def self.unsigned_agreement_names(options={})
+  def self.get_unsigned_agreement_names(options={})
     return [] if options[:names].blank? || options[:user].nil?
     options[:names] = [options[:names]].flatten
 

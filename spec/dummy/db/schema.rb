@@ -23,7 +23,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "updated_at",                    :null => false
   end
 
-  add_index "fine_print_agreements", ["name", "version"], :name => "index_fine_print_agreements_on_name_and_version"
+  add_index "fine_print_agreements", ["name", "is_latest"], :name => "index_fine_print_agreements_on_name_and_is_latest"
+  add_index "fine_print_agreements", ["name"], :name => "index_fine_print_agreements_on_name"
 
   create_table "fine_print_user_agreements", :force => true do |t|
     t.integer  "agreement_id", :null => false

@@ -10,19 +10,9 @@ module FinePrint
 
     validates_presence_of :name, :title, :content
     validates_uniqueness_of :version, :scope => :name, :case_sensitive => false
-    
-    default_scope order(:name, :version)
 
-    def self.latest(name)
-      where(name: name.downcase).last
-    end
-
-    def self.next_version(name)
-      (latest(name).try(:version) || 0) + 1
-    end
-
-    def self.latest_ready(name)
-      latest.where(ready: true)
+    def self.latest
+      Agreement.where(is_latest: true)
     end
 
     def all_versions
@@ -45,8 +35,8 @@ module FinePrint
       !version.nil?
     end
 
-    def any_published_versions?
-      !latest.nil?
+    def is_latest?
+      is_latest
     end
 
     def publish

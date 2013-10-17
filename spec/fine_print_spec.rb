@@ -14,7 +14,7 @@ describe FinePrint do
     alpha_2.update_attributes(content: "foo")
     alpha_2.publish
 
-    expect(FinePrint.unsigned_agreement_names(names: ['beta', 'alpha'], user: user)).to include 'alpha'
+    expect(FinePrint.get_unsigned_agreement_names(names: ['beta', 'alpha'], user: user)).to eq ['alpha']
   end
 
 end

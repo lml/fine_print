@@ -10,7 +10,8 @@ class Install < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :fine_print_agreements, [:name, :version]
+    add_index :fine_print_agreements, :name
+    add_index :fine_print_agreements, [:name, :is_latest]
 
     create_table :fine_print_user_agreements do |t|
       t.integer :agreement_id, :null => false
