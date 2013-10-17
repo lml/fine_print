@@ -14,17 +14,13 @@
 ActiveRecord::Schema.define(:version => 0) do
 
   create_table "fine_print_agreements", :force => true do |t|
-    t.string   "name",                                                                                        :null => false
-    t.integer  "version",                                                                                     :null => false
-    t.text     "content",                                                                                     :null => false
-    t.string   "confirmation_text",    :default => "I have read and agree to the terms and conditions above", :null => false
-    t.boolean  "display_name",         :default => true
-    t.boolean  "display_version",      :default => false
-    t.boolean  "display_updated",      :default => false
-    t.boolean  "display_confirmation", :default => true
-    t.boolean  "ready",                :default => false
-    t.datetime "created_at",                                                                                  :null => false
-    t.datetime "updated_at",                                                                                  :null => false
+    t.string   "name",                          :null => false
+    t.integer  "version"
+    t.string   "title",                         :null => false
+    t.text     "content",                       :null => false
+    t.boolean  "is_latest",  :default => false, :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   add_index "fine_print_agreements", ["name", "version"], :name => "index_fine_print_agreements_on_name_and_version"

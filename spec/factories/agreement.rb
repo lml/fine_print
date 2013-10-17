@@ -2,15 +2,16 @@ FactoryGirl.define do
   factory :agreement, class: FinePrint::Agreement do
 
     name { "Terms_#{SecureRandom.hex(4)}" }
+    title { Faker::Lorem.sentence(3) }
     content { Faker::Lorem.paragraphs(2) }
-    confirmation_text "I have read and agree to the terms and conditions above" 
-    ready false
 
-    trait :ready do
-      ready true
+    factory :published_agreement do
+      after(:create) {|instance| instance.publish }
     end
 
     factory :agreement_agreed_to do
+      after(:build) {|instance| instance.save; instance.publish }
+
       ignore do
         count 2
       end
