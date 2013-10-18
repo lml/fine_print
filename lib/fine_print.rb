@@ -40,30 +40,6 @@ module FinePrint
     (!options.nil? && !options[name].nil?) ? options[name] : self.send(name)
   end
 
-  # def self.require_agreements(controller, names, options)
-  #   user = controller.send current_user_method
-  #   fine_print_dialog_agreements = []
-  #   names.each do |name|
-  #     agreement = Agreement.latest_ready(name)
-  #     next if agreement.nil? || agreement.accepted_by?(user)
-  #     if get_option(options, :use_modal_dialogs)
-  #       fine_print_dialog_agreements << agreement
-  #     else
-  #       controller.session[:fine_print_accept_path] = options[:accept_path]
-  #       controller.session[:fine_print_cancel_path] = options[:cancel_path]
-  #       if get_option(options, :use_referers)
-  #         controller.session[:fine_print_request_url] = controller.request.url
-  #         controller.session[:fine_print_request_ref] = controller.request.referer
-  #       end
-  #       controller.redirect_to controller.fine_print.agreement_path(agreement),
-  #         :notice => get_option(options, :agreement_notice)
-  #     end
-  #   end
-  #   controller.instance_variable_set(:@fine_print_dialog_agreements, fine_print_dialog_agreements)
-  #   controller.instance_variable_set(:@fine_print_user, user)
-  #   controller.instance_variable_set(:@fine_print_dialog_notice, get_option(options, :agreement_notice))
-  # end
-
   def self.get_unsigned_agreement_names(options={})
     return [] if options[:names].blank? || options[:user].nil?
     options[:names] = [options[:names]].flatten
@@ -78,6 +54,16 @@ module FinePrint
     signed_agreement_names = signed_agreements.collect{|sa| sa.name}
 
     return options[:names] - signed_agreement_names
+  end
+
+  def self.record_user_agreement(user, agreement_or_id)
+    agreement = agreement_or_id
+    agreement = FinePrint::Agreement.find(agreement) if agreement.is_a? Integer
+
+    UserAgreement.create do |ua|
+      ua.user = user
+      ua.agreement = agreement
+    end
   end
 
   def self.is_admin?(user)

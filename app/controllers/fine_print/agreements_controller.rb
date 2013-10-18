@@ -3,7 +3,7 @@ require_dependency "fine_print/application_controller"
 module FinePrint
   class AgreementsController < ApplicationController
 
-    before_filter :get_agreement, only: [:show, :edit, :new_version, :update, :destroy]
+    before_filter :get_agreement, only: [:show, :edit, :new_version, :update, :destroy, :publish, :unpublish]
 
     def index
       @agreements = Agreement.all
@@ -44,6 +44,20 @@ module FinePrint
       else
         render action: "edit"
       end
+    end
+
+    def publish
+      @agreement.publish
+      redirect_to request.referrer
+    end
+
+    def unpublish
+      @agreement.unpublish
+      redirect_to request.referrer
+    end
+
+    def agree(user)
+      UserAgreement.create(user: user, agreement: self)
     end
   
     def destroy

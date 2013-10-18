@@ -1,32 +1,38 @@
 <h1 class="fine_print heading">FinePrint Agreements</h1>
 
-<table class="fine_print index">
-  <tr class="fine_print heading-row">
-    <th>Name</th>
-    <th>Version</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<% @agreements.group_by(&:name).each do |name, agreements| %>
 
-<% @agreements.each do |agreement| %>
-  <tr class="fine_print data-row <%= cycle('even', 'odd') %>">
-    <td><%= agreement.name %></td>
-    <td><%= agreement.version %></td>
-    <td><%= link_to 'Show', agreement, :class => "fine_print link" %></td>
-    <td><% if agreement.can_be_edited_by?(@user) %>
-          <%= link_to 'Edit', edit_agreement_path(agreement), :class => "fine_print link" %>
-        <% else %>
-          <%= link_to 'New version', agreement_new_version_path(agreement), :class => "fine_print link" %>
-        <% end %></td>
-    <td><% if agreement.can_be_destroyed_by?(@user) %>
-          <%= link_to 'Delete', agreement, method: :delete, data: { confirm: 'Are you sure you wish to delete this agreement?' }, :class => "fine_print link" %>
-        <% end %></td>
-  </tr>
+  <ul class="fine_print">
+    <li><%= name %></li>
+    
+      <ul class="fine_print">
+        <% agreements.each do |agreement| %>
+          <li><%= link_to agreement.title, agreement %> 
+            (<%= agreement.version.nil? ? 'draft' : "v.#{agreement.version}" %>)
+            <% if agreement.can_be_edited_by?(@user) %>
+              [<%= link_to 'Edit', edit_agreement_path(agreement), :class => "fine_print link" %>]
+            <% else %>
+              [<%= link_to 'New version', agreement_new_version_path(agreement), :class => "fine_print link" %>]
+            <% end %>
+            <% if !agreement.published? %>
+              [<%= link_to 'Publish', publish_agreement_path(agreement), method: :put, data: {confirm: 'Are you sure you want to publish this agreement?'} %>]
+            <% else %>
+              <% if agreement.is_latest? && agreement.no_user_agreements? %>
+                [<%= link_to 'Unpublish', unpublish_agreement_path(agreement), method: :put, data: {confirm: 'Are you sure you want to unpublish this agreement?'} %>]
+              <% end %>
+            <% end %>
+            <% if agreement.can_be_destroyed_by?(@user) %>
+              [<%= link_to 'Delete', agreement, method: :delete, data: { confirm: 'Are you sure you wish to delete this agreement?' }, :class => "fine_print link" %>]
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    
+  </ul>
+
 <% end %>
-</table>
 
 <br />
 
 <%= link_to 'New Agreement', new_agreement_path, :class => "fine_print link" %> |
-<%= link_to 'Back', root_path, :class => "fine_print link" %>
+<%= link_to 'Overview', root_path, :class => "fine_print link" %>

@@ -1,6 +1,6 @@
 module FinePrint
   class Agreement < ActiveRecord::Base
-    attr_accessible :content, :title
+    attr_accessible :content, :title, :name
 
     has_many :user_agreements
 
@@ -10,9 +10,15 @@ module FinePrint
 
     validates_presence_of :name, :title, :content
     validates_uniqueness_of :version, :scope => :name, :case_sensitive => false
+    validates_format_of :name, with: /^\w+$/
 
     def self.latest
       Agreement.where(is_latest: true)
+    end
+
+    def self.latest_named(name)
+      name = name.to_s if name.is_a? Symbol
+      latest.where(name: name).first
     end
 
     def all_versions
@@ -97,6 +103,10 @@ module FinePrint
 
     def can_be_edited_by?(user)
       FinePrint.is_admin?(user) && user_agreements.empty?
+    end
+
+    def no_user_agreements?
+      user_agreements.empty?
     end
 
     def can_update?

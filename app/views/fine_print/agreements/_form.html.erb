@@ -14,36 +14,16 @@
   <div class="field">
     <%= f.label :name, :class => "fine_print label" %><br/>
     <%= f.text_field :name, :size => 40, :class => "fine_print text_field" %><br/>
-    (e.g., "Terms of Use"; changing this will reset the version count)<br/><br/>
+    (used internally by your code, only letters, numbers, underscores; changing this will start a new agreement with new version counts)<br/><br/>
+  </div>
+  <div class="field">
+    <%= f.label :title, :class => "fine_print label" %><br/>
+    <%= f.text_field :title, :size => 40, :class => "fine_print text_field" %><br/>
+    (e.g., "Terms of Use")<br/><br/>
   </div>
   <div class="field">
     <%= f.label :content, :class => "fine_print label" %><br/>
     <%= f.text_area :content, :cols => 56, :class => "fine_print text_area" %><br/><br/>
-  </div>
-  <div class="field">
-    <%= f.label :confirmation_text, :class => "fine_print label" %><br/>
-    <%= f.text_field :confirmation_text, :size => 40, :class => "fine_print text_field" %><br/>
-    (e.g., "I have read and agree to the terms and conditions above")<br/><br/>
-  </div>
-  <div class="field">
-    <%= f.label :ready, "Display the agreement's name to users as a heading?", :class => "fine_print label" %>
-    <%= f.check_box :display_name, :class => "fine_print checkbox" %><br/><br/>
-  </div>
-  <div class="field">
-    <%= f.label :ready, "Display the agreement's version to users?", :class => "fine_print label" %>
-    <%= f.check_box :display_version, :class => "fine_print checkbox" %><br/><br/>
-  </div>
-  <div class="field">
-    <%= f.label :ready, "Display the agreement's last updated date to users?", :class => "fine_print label" %>
-    <%= f.check_box :display_updated, :class => "fine_print checkbox" %><br/><br/>
-  </div>
-  <div class="field">
-    <%= f.label :ready, "Display a confirmation checkbox that users have to click?", :class => "fine_print label" %>
-    <%= f.check_box :display_confirmation, :class => "fine_print checkbox" %><br/><br/>
-  </div>
-  <div class="field">
-    <%= f.label :ready, "Ready to be used?", :class => "fine_print label" %>
-    <%= f.check_box :ready, :class => "fine_print checkbox" %><br/><br/>
   </div>
   <div class="actions">
     <%= f.submit nil, :class => "fine_print submit" %>

@@ -1,7 +1,7 @@
 <h1 class="fine_print heading">Accepted FinePrint agreements</h1>
 
 <table class="fine_print index">
-  <tr>
+  <tr class="fine_print heading-row">
     <th>User ID</th>
     <th>Agreement name</th>
     <th>Agreement version</th>
@@ -10,7 +10,7 @@
   </tr>
 
 <% @user_agreements.each do |user_agreement| %>
-  <tr>
+  <tr class="fine_print data-row <%= cycle('even', 'odd') %>">
     <td><%= user_agreement.user.id %></td>
     <td><%= user_agreement.agreement.name %></td>
     <td><%= user_agreement.agreement.version %></td>

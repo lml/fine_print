@@ -1,15 +1,13 @@
-<%= render :partial => 'agreement', :locals => {
-      :agreement => @agreement,
-      :user => @user,
-      :notice => @notice,
-      :accept_path => @accept_path,
-      :cancel_path => @cancel_path,
-      :url => @url,
-      :ref => @ref } %>
 
-<br/>
+<p>Name: <%= @agreement.name %></p>
+<p>Title: <%= @agreement.title %></p>
+<p>Version: <%= @agreement.version.nil? ? 'draft' : @agreement.version %></p>
+<p>Updated at: <%= @agreement.updated_at %></p>
+<p>Content:</p>
+
+<p><%= @agreement.content.html_safe %></p>
 
 <% if @agreement.can_be_edited_by?(@user) %>
   <%= link_to 'Edit', edit_agreement_path(@agreement), :class => "fine_print link" %> |
-  <%= link_to 'Back', agreements_path, :class => "fine_print link" %>
 <% end %>
+<%= link_to 'List', agreements_path, :class => "fine_print link" %>
