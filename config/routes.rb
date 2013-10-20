@@ -4,6 +4,6 @@ FinePrint::Engine.routes.draw do
     put :publish, on: :member
     put :unpublish, on: :member
   end
-  resources :user_agreements, :only => [:index, :create, :destroy]
+  resources :user_agreements, :only => [:index, :destroy]
   root :to => 'home#index'
 end

@@ -1,6 +1,6 @@
 # FinePrint
 
-FinePrint is a Rails gem that makes managing web site agreements (terms, privacy policy, etc) simple and easy.
+FinePrint is a Rails gem (engine) that makes managing web site agreements (terms, privacy policy, etc) simple and easy.
 
 ## Installation
 
@@ -46,26 +46,11 @@ And provide a link on your site for administrators to access the FinePrint engin
 <%= link_to 'FinePrint', fine_print_path %>
 ```
 
-Finally, make sure your `application.js` requires jquery and jquery_ujs (it usually does by default):
-
-```js
-//= require jquery
-//= require jquery_ujs
-```
-
-**Note:** FinePrint will **automatically** add the fine_print/dialog.js file to your asset precompilation list.
-
 ## Configuration
 
 After installation, the initializer for FinePrint will be located under `config/initializers/fine_print.rb`.
 Make sure to configure it to suit your needs.
 Pay particular attention to `user_admin_proc`, as you will be unable to manage your agreements unless you set up this proc to return true for your admins.
-
-If you want to use FinePrint's modal dialogs, then make sure `application.js` also requires jquery-ui:
-
-```js
-//= require jquery-ui
-```
 
 ## Usage
 

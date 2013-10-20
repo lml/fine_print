@@ -55,10 +55,6 @@ module FinePrint
       @agreement.unpublish
       redirect_to request.referrer
     end
-
-    def agree(user)
-      UserAgreement.create(user: user, agreement: self)
-    end
   
     def destroy
       raise SecurityTransgression unless @agreement.can_be_destroyed_by?(@user)

@@ -1,5 +1,4 @@
 require "fine_print/engine"
-require "fine_print/fine_print_agreement"
 require "fine_print/security_transgression"
 
 module FinePrint
@@ -11,20 +10,10 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_method,
     :user_admin_proc,
-    :redirect_path,
-    :sign_in_path
-  ]
-
-  # Can be set in initializer or passed as an option to fine_print_agreement
-  AGREEMENT_OPTIONS = [
-    :agreement_notice,
-    :accept_path,
-    :cancel_path,
-    :use_referers,
-    :use_modal_dialogs
+    :redirect_path
   ]
   
-  (ENGINE_OPTIONS + AGREEMENT_OPTIONS).each do |option|
+  (ENGINE_OPTIONS).each do |option|
     mattr_accessor option
   end
 
@@ -54,6 +43,14 @@ module FinePrint
     signed_agreement_names = signed_agreements.collect{|sa| sa.name}
 
     return options[:names] - signed_agreement_names
+  end
+
+  def self.get_signature_for(names)
+    
+  end
+  
+  def self.require_agreement_signature(names)
+
   end
 
   def self.record_user_agreement(user, agreement_or_id)

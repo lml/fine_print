@@ -22,6 +22,7 @@ class Install < ActiveRecord::Migration
 
     add_index :fine_print_user_agreements, :agreement_id
     add_index :fine_print_user_agreements, [:user_id, :user_type, :agreement_id], 
-                                           :name => 'index_fine_print_u_a_on_u_id_and_u_type_and_a_id'
+                                           :name => 'index_fine_print_u_a_on_u_id_and_u_type_and_a_id',
+                                           :unique => true
   end
 end

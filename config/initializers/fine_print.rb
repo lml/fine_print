@@ -16,38 +16,5 @@ FinePrint.configure do |config|
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages)
   # Default: "/"
   config.redirect_path = "/"
-
-  # Path to link users to if they need to sign in
-  # Set to nil to disable the link
-  # Default: "/"
-  config.sign_in_path = "/"
-
-
-
-  # Agreement Options (initializer or inline)
-
-  # Message to be displayed to the user explaining that they need to accept an agreement
-  # Set to nil to disable
-  # Default: "You must accept the following agreement to proceed."
-  config.agreement_notice = "You must accept the following agreement to proceed."
-
-  # Path to redirect users to when an agreement is accepted and referer information is unavailable
-  # Default: "/"
-  config.accept_path = "/"
-
-  # Path to redirect users to when an agreement is not accepted and referer information is unavailable
-  # Default: "/"
-  config.cancel_path = "/"
-
-  # Whether to use referer information to redirect users after (not) accepting an agreement
-  # Default: true
-  config.use_referers = true
-
-  # If set to true, modal jQuery UI dialogs will be used instead of redirecting the user to the agreement page
-  # Note: users with javascript disabled will not even see the agreement and will be able to proceed without accepting it
-  #       if users are not supposed to ever see or interact with a certain page without accepting the agreement,
-  #       disable this option for that particular controller action
-  # Default: false
-  config.use_modal_dialogs = false
   
 end

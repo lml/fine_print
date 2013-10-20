@@ -1,4 +1,8 @@
-FINE_PRINT_COPY_TASKS = ['assets/stylesheets', 'assets/javascripts', 'views/layouts', 'views', 'controllers']
+FINE_PRINT_COPY_TASKS = ['assets/stylesheets', 
+                         # 'assets/javascripts', 
+                         'views/layouts', 
+                         'views', 
+                         'controllers']
 
 namespace :fine_print do
   namespace :install do
