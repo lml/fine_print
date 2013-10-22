@@ -13,6 +13,8 @@ FinePrint.configure do |config|
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
 
+  # config.pose_contracts_proc = lambda { |contract_names| ... }
+
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages)
   # Default: "/"
   config.redirect_path = "/"

@@ -1,10 +1,10 @@
-<%= form_for(@agreement) do |f| %>
-  <% if @agreement.errors.any? %>
+<%= form_for(@contract) do |f| %>
+  <% if @contract.errors.any? %>
     <div id="error_explanation" class="fine_print errors">
-      <h2 class="fine_print heading"><%= pluralize(@agreement.errors.count, "error") %> prohibited this agreement from being saved:</h2>
+      <h2 class="fine_print heading"><%= pluralize(@contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
 
       <ul>
-      <% @agreement.errors.full_messages.each do |msg| %>
+      <% @contract.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
@@ -14,7 +14,7 @@
   <div class="field">
     <%= f.label :name, :class => "fine_print label" %><br/>
     <%= f.text_field :name, :size => 40, :class => "fine_print text_field" %><br/>
-    (used internally by your code, only letters, numbers, underscores; changing this will start a new agreement with new version counts)<br/><br/>
+    (used internally by your code, only letters, numbers, underscores; changing this will start a new contract with new version counts)<br/><br/>
   </div>
   <div class="field">
     <%= f.label :title, :class => "fine_print label" %><br/>

@@ -1,3 +1,4 @@
+# This migration comes from fine_print (originally 0)
 class Install < ActiveRecord::Migration
   def change
     create_table :fine_print_contracts do |t|

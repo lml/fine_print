@@ -1,8 +1,8 @@
 module FinePrint
-  class Agreement < ActiveRecord::Base
+  class Contract < ActiveRecord::Base
     attr_accessible :content, :title, :name
 
-    has_many :user_agreements
+    has_many :signatures
 
     before_validation :downcase_name
 
@@ -13,7 +13,7 @@ module FinePrint
     validates_format_of :name, with: /^\w+$/
 
     def self.latest
-      Agreement.where(is_latest: true)
+      Contract.where(is_latest: true)
     end
 
     def self.latest_named(name)
@@ -22,7 +22,7 @@ module FinePrint
     end
 
     def all_versions
-      Agreement.where(name: self.name)
+      Contract.where(name: self.name)
     end
 
     def latest
@@ -30,11 +30,11 @@ module FinePrint
     end
 
     def draft_copy
-      dup.tap {|agreement| agreement.is_latest = false; agreement.version = nil}
+      dup.tap {|contract| contract.is_latest = false; contract.version = nil}
     end
 
     def accepted_by?(user)
-      !user.nil? && !user_agreements.where(:user_type => user.class.to_s, :user_id => user.id).empty?
+      !user.nil? && !signatures.where(:user_type => user.class.to_s, :user_id => user.id).empty?
     end
 
     def published?
@@ -48,10 +48,10 @@ module FinePrint
     def publish
       # Set version, move 'latest' from current latest to this.  Can't publish already published
 
-      errors.add(:base, "Cannot publish an agreement that is already published") if published?
+      errors.add(:base, "Cannot publish an contract that is already published") if published?
       return false if errors.any?
 
-      Agreement.transaction do 
+      Contract.transaction do 
         new_version = 1
         current_latest = latest
 
@@ -68,14 +68,14 @@ module FinePrint
     end
 
     def unpublish
-      # Can only unpublish latest without agreements. Clear version, remove 'is_latest'.
+      # Can only unpublish latest without contracts. Clear version, remove 'is_latest'.
       # Apply is_latest to most recent published version if available.
 
       errors.add(:base, "Cannot unpublish a non-latest version") if !is_latest
-      errors.add(:base, "Cannot unpublish an agreement that users have agreed to") if user_agreements.any?
+      errors.add(:base, "Cannot unpublish an contract that users have signed") if signatures.any?
       return false if errors.any?
 
-      Agreement.transaction do
+      Contract.transaction do
         last_latest_version = all_versions.where(version: self.version - 1).first
 
         if last_latest_version.present?
@@ -102,15 +102,15 @@ module FinePrint
     end
 
     def can_be_edited_by?(user)
-      FinePrint.is_admin?(user) && user_agreements.empty?
+      FinePrint.is_admin?(user) && signatures.empty?
     end
 
-    def no_user_agreements?
-      user_agreements.empty?
+    def no_signatures?
+      signatures.empty?
     end
 
     def can_update?
-      errors.add(:base, "Cannot change an agreement that users have agreed to") if user_agreements.any?
+      errors.add(:base, "Cannot change an contract that users have signed") if signatures.any?
       errors.none?
     end
 

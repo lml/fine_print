@@ -1,8 +1,8 @@
 require 'rspec-rails'
 
 FactoryGirl.define do
-  factory :user_agreement, class: FinePrint::UserAgreement do
-    association :agreement, factory: :published_agreement
+  factory :signature, class: FinePrint::Signature do
+    association :contract, factory: :published_contract
 
     ignore do
       user nil

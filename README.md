@@ -2,6 +2,12 @@
 
 FinePrint is a Rails gem (engine) that makes managing web site agreements (terms, privacy policy, etc) simple and easy.
 
+As the meaning of 'agreement' can be somewhat ambiguous (meaning either the thing someone agrees to or the record of the agreement between that thing and the user) we have call a set of terms a 'contract' and a user's agreement to that contract a 'signature'.
+
+A version history of all contracts is maintained.  Once a particular version of a contract is published, it becomes available for users to sign.  Once a version has been signed it cannot be changed (to effect a change a new version must be created and published).  
+
+FinePrint provides views for admins to manage contracts and signatures, but does not provide views for the application to display contracts to end users; that functionality is too specific to particular applications.  FinePrint does provide convenience methods for finding unsigned agreements and for recording when a user signs a contract.  
+
 ## Installation
 
 Add this line to your application's Gemfile:
