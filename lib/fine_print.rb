@@ -11,7 +11,7 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_method,
     :user_admin_proc,
-    :sign_contract_proc,
+    :pose_contracts_path,
     :user_signed_in_proc,
     :redirect_path
   ]
@@ -33,7 +33,7 @@ module FinePrint
     options[:names] = [options[:names]].flatten
 
     signed_contracts = FinePrint::Contract
-      .where(name: options[:names])
+      .where(name: options[:names].collect{|name| name.to_s})
       .where(is_latest:true)
       .joins('LEFT OUTER JOIN fine_print_signatures ON fine_print_signatures.contract_id = fine_print_contracts.id')
       .where("fine_print_signatures.user_id = #{options[:user].id}")

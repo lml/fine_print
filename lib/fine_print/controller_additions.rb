@@ -40,9 +40,24 @@ module FinePrint
               fine_print_options[:names].delete(name.to_sym)
             end
 
+            return true if fine_print_options[:names].blank?
+
             fine_print_options[:user] = self.send FinePrint.current_user_method
 
-            FinePrint.get_signatures(fine_print_options)
+            raise IllegalState, "Cannot get signatures from a user who is not signed in" \
+              if !FinePrint.user_signed_in_proc.call(fine_print_options[:user])
+
+            unsigned_contract_names = 
+              FinePrint.get_unsigned_contract_names(names: fine_print_options[:names], 
+                                                    user: fine_print_options[:user])
+
+            return true if unsigned_contract_names.empty?
+
+            session[:fine_print_return_to] = request.referrer
+            redirect_to FinePrint.pose_contracts_path + '/?' +  {terms: unsigned_contract_names}.to_query
+
+
+            # FinePrint.get_signatures(fine_print_options)
           end
         end
       end

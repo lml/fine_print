@@ -21,7 +21,13 @@ FinePrint.configure do |config|
   # contracts; without this, developers would get a cryptic SQL error.
   config.user_signed_in_proc = lambda { |user| !user.nil? }
 
-  # config.pose_contracts_proc = lambda { |contract_names| ... }
+  # A path to redirect users to when they need to agree to a contract(s).
+  # A "terms" parameter will be passed along containing a list of contract
+  # names that must be agreed to.  Your code doesn't have to deal with all
+  # of them at once, e.g. you can get the user to agree to the first one and
+  # then they'll just eventually be redirected back to this page with the
+  # remaining contract names.
+  config.pose_contracts_path = '/some/path/here'
 
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages)
   # Default: "/"

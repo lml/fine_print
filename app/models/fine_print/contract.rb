@@ -37,6 +37,14 @@ module FinePrint
       !user.nil? && !signatures.where(:user_type => user.class.to_s, :user_id => user.id).empty?
     end
 
+    def any_version_accepted_by?(user)
+      !user.nil? && Signature.joins(:contract)
+                             .where(:'fine_print_contracts.name' => self.name)
+                             .where(:user_type => user.class.to_s)
+                             .where(:user_id => user.id)
+                             .any?
+    end
+
     def published?
       !version.nil?
     end
