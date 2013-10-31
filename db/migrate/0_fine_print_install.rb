@@ -1,4 +1,4 @@
-class Install < ActiveRecord::Migration
+class FinePrintInstall < ActiveRecord::Migration
   def change
     create_table :fine_print_contracts do |t|
       t.string :name, :null => false

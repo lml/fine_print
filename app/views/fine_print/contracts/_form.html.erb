@@ -1,4 +1,4 @@
-<%= form_for(@contract) do |f| %>
+<%= form_for(@contract, html: {class: 'fine_print'}) do |f| %>
   <% if @contract.errors.any? %>
     <div id="error_explanation" class="fine_print errors">
       <h2 class="fine_print heading"><%= pluralize(@contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
@@ -12,18 +12,22 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name, :class => "fine_print label" %><br/>
-    <%= f.text_field :name, :size => 40, :class => "fine_print text_field" %><br/>
-    (used internally by your code, only letters, numbers, underscores; changing this will start a new contract with new version counts)<br/><br/>
+    <%= f.label :name, :class => "fine_print" %>
+    <%= f.text_field :name, :size => 40, :class => "fine_print text_field" %>
+    <div class="fine_print field_help">
+      used internally by your code, only letters, numbers, underscores; changing this will start a new contract with new version counts
+    </div>
   </div>
   <div class="field">
-    <%= f.label :title, :class => "fine_print label" %><br/>
-    <%= f.text_field :title, :size => 40, :class => "fine_print text_field" %><br/>
-    (e.g., "Terms of Use")<br/><br/>
+    <%= f.label :title, :class => "fine_print" %>
+    <%= f.text_field :title, :size => 40, :class => "fine_print text_field" %>
+    <div class="fine_print field_help">
+      e.g., "Terms of Use"
+    </div>
   </div>
   <div class="field">
-    <%= f.label :content, :class => "fine_print label" %><br/>
-    <%= f.text_area :content, :cols => 56, :class => "fine_print text_area" %><br/><br/>
+    <%= f.label :content, :class => "fine_print" %>
+    <%= f.text_area :content, :cols => 56, :class => "fine_print text_area" %>
   </div>
   <div class="actions">
     <%= f.submit nil, :class => "fine_print submit" %>
