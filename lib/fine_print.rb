@@ -28,6 +28,12 @@ module FinePrint
     yield self
   end
 
+  # Accepts a hash containing:
+  #   - :names -- an array of contract names
+  #   - :user -- the user in question
+  # and returns an array of names for the contracts whose latest published
+  # version the given user has not signed.
+  #
   def self.get_unsigned_contract_names(options={})
     return [] if options[:names].blank? || options[:user].nil?
     options[:names] = [options[:names]].flatten.collect{|name| name.to_s}
@@ -46,6 +52,7 @@ module FinePrint
 
   # Records that the given user has signed the given contract; the contract
   # can be a Contract object, a contract ID, or a contract name (string)
+  #
   def self.sign_contract(user, contract)
     contract = get_contract(contract)
 
@@ -55,6 +62,9 @@ module FinePrint
     end
   end
 
+  # Returns true iff the given user has signed the given contract; the contract
+  # can be a Contract object, a contract ID, or a contract name (string)
+  #
   def self.has_signed_contract?(user, contract)
     contract = get_contract(contract)
     contract.signed_by?(user)
@@ -64,6 +74,8 @@ module FinePrint
     !user.nil? && user_admin_proc.call(user)
   end
 
+  # Gets a contract given either the contract's name or ID
+  #
   def self.get_contract(reference)
     case reference
     when Integer

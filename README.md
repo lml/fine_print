@@ -79,6 +79,12 @@ class MyController < ApplicationController
                             except: :index
 ```
 
+You should only try to get signatures when you have a user who is logged in 
+(FinePrint will raise an exception if you try to get a non-logged in user to sign
+an agreement, as that does not make any sense).  This normally means that before
+the call to `fine_print_get_signature` you should call whatever `before_filter` 
+gets a user to login.
+
 Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls, 
 FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same 
 arguments as, and can be called either before or after, `fine_print_get_signatures`.  
@@ -102,7 +108,7 @@ the names of the unsigned contracts passed along in a `terms` array in the URL p
 
 Your job as the site developer is to present the terms to the user and ask her to sign them.
 This normally involves the user clicking an "I Agree" checkbox which enables an "Agree" button.
-When the "Agree" button is clicked, you need to send the information off to a controller 
+When the "Agree" button is clicked (and you should verify that the checkbox is actually clicked in the params passed to the server), you need to send the information off to a controller 
 method that can call `FinePrint.sign_contract` which takes a user and a contract name, ID, or
 object.  On success this controller method can send the user back to where they were trying to
 go by redirecting them to the path stored in the `:fine_print_return_to` session variable, e.g.:
