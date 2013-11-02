@@ -4,9 +4,9 @@ FinePrint is a Rails gem (engine) that makes managing web site agreements (terms
 
 As the meaning of 'agreement' can be somewhat ambiguous (meaning either the thing someone agrees to or the record of the agreement between that thing and the user) we have call a set of terms a 'contract' and a user's agreement to that contract a 'signature'.
 
-A version history of all contracts is maintained.  Once a particular version of a contract is published, it becomes available for users to sign.  Once a version has been signed it cannot be changed (to effect a change a new version must be created and published).  
+A version history of all contracts is maintained.  Once a particular version of a contract is published, it becomes available for users to sign.  Once a version has been signed it cannot be changed (to effect a change a new version must be created and published).  When a new version of a contract is created and published, users visiting pages requiring signature of that contract will be redirect to a page you specify where they can sign the new contract.
 
-FinePrint provides views for admins to manage contracts and signatures, but does not provide views for the application to display contracts to end users; that functionality is too specific to particular applications.  FinePrint does provide convenience methods for finding unsigned agreements and for recording when a user signs a contract.  
+FinePrint provides views for admins to manage contracts and signatures, but does not provide views for the application to display contracts to end users; that functionality is too specific to particular applications.  FinePrint does provide convenience methods for finding unsigned contracts and for recording when a user signs a contract.  
 
 ## Installation
 
@@ -46,7 +46,7 @@ Also add FinePrint to your application's routes:
 mount FinePrint::Engine => "/fine_print"
 ```
 
-And provide a link on your site for administrators to access the FinePrint engine to manage agreements.
+And provide a link on your site for administrators to access the FinePrint engine to manage contracts.
 
 ```erb
 <%= link_to 'FinePrint', fine_print_path %>
@@ -56,53 +56,57 @@ And provide a link on your site for administrators to access the FinePrint engin
 
 After installation, the initializer for FinePrint will be located under `config/initializers/fine_print.rb`.
 Make sure to configure it to suit your needs.
-Pay particular attention to `user_admin_proc`, as you will be unable to manage your agreements unless you set up this proc to return true for your admins.
+Pay particular attention to `user_admin_proc`, as you will be unable to manage your contracts unless you set up this proc to return true for your admins.
 
 ## Usage
 
-FinePrint adds a new method to all controllers that behaves like a before_filter.
-It can be accessed by calling `fine_print_agreement` from any controller.
-This method takes an agreement name and an options hash.
-Accepted options are (see initializer for more explanation):
+To require that your users sign the most recent version of a contract, call 
+`fine_print_get_signatures` in your controllers, just as you would a 
+before_filter (in fact this method works by adding a before_filter for you).
 
-- `only` and `except` just like a before_filter
+This method takes a list of contract names (given either as strings or as 
+symbols), along with an options hash.
 
-- `agreement_notice` notice to be shown to the user above the agreement
+The options hash can include the following options:
 
-- `accept_path` path to redirect users to when an agreement is accepted and no referer information is available
-- `cancel_path` path to redirect users to when an agreement is not accepted and no referer information is available
-- `use_referers` false if you want users to always be redirected to the above paths
-
-- `use_modal_dialogs` true if you want to use FinePrint's modal dialogs
+- any options you could pass to a before_filter, e.g. `only` and `except`
 
 Example:
 
 ```rb
-fine_print_agreement 'terms of use', :except => :index, :use_modal_dialogs => true
+class MyController < ApplicationController
+  fine_print_get_signatures :terms_of_use, :privacy_policy,
+                            except: :index
 ```
 
-This gem also adds the `fine_print_dialog` helper method, which needs to be called (usually from your layout) if you want to use FinePrint's modal dialogs.
-This method only takes an options hash. Accepted options are:
+Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls, 
+FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same 
+arguments as, and can be called either before or after, `fine_print_get_signatures`.  
 
-- `width`
-- `height`
+One way you may want to use these methods is to require signatures in every controller 
+by default, and then to skip them in certain situation, e.g.:
 
-Example:
-
-```erb
-<%= fine_print_dialog, :width => 800, :height => 600 %>
+```rb
+class ApplicationController < ActionController::Base
+  fine_print_get_signatures :terms_of_use
 ```
 
-## Managing Agreements
+```rb
+class NoSigsRequiredController < ApplicationController
+  fine_print_skip_signatures :terms_of_use
+```
 
-Here are some important notes about managing your agreements with FinePrint:
+## Managing Contracts
 
-- Agreements are referred to on your controller by the name you specified
-- Creating another agreement with the same name will make it a new version of a previous agreement
-- Agreements need to be marked as `ready` to be able to be accepted by users
-- The latest version of each agreement that is marked as `ready` will always be used
-- Agreements cannot be modified after at least one user has accepted them, but you can always create new versions
-- When a new version is present, users will be asked to accept it the next time they visit a controller action that calls `fine_print_agreement`
+Here are some important notes about managing your contracts with FinePrint:
+
+- Contracts have a name and a title; the former is used by your code, the latter 
+is intended for display to end users.
+- Creating another contract with the same name as an existing contract will make it a new version of that existing contract.
+- Contracts need to be explicitly published to be available to users to sign (this can be done on the contracts admin page).
+- The latest published version is what users will see.
+- A contract cannot be modified after at least one user has signed it, but you can always create a new version.
+- When a published contract version is available but has not been signed, users will be asked to accept it the next time they visit a controller action that calls `fine_print_get_signatures` for that contract's name.
 
 ## Customization
 
