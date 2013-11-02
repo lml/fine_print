@@ -96,6 +96,28 @@ class NoSigsRequiredController < ApplicationController
   fine_print_skip_signatures :terms_of_use
 ```
 
+When a set of contracts is found by FinePrint to be required but unsigned, FinePrint redirects 
+the user to the path specified by the `pose_contracts_path` configuration variable, with
+the names of the unsigned contracts passed along in a `terms` array in the URL parameters.
+
+Your job as the site developer is to present the terms to the user and ask her to sign them.
+This normally involves the user clicking an "I Agree" checkbox which enables an "Agree" button.
+When the "Agree" button is clicked, you need to send the information off to a controller 
+method that can call `FinePrint.sign_contract` which takes a user and a contract name, ID, or
+object.  On success this controller method can send the user back to where they were trying to
+go by redirecting them to the path stored in the `:fine_print_return_to` session variable, e.g.:
+
+```rb
+redirect_to session.delete(:fine_print_return_to) || root_path 
+```
+
+If there are multiple unsigned contracts, you are not required to get the user to sign
+them all in one page.  One strategy is to present the first unsigned contract to them
+for signature.  Once they sign it, they'll be redirected to where they were trying to 
+go and FinePrint will see again that they still have remaining unsigned contracts, and
+FinePrint will direct them back to your `pose_contracts_path` with one fewer contract
+name passed in.
+
 ## Managing Contracts
 
 Here are some important notes about managing your contracts with FinePrint:
