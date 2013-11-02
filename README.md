@@ -62,14 +62,14 @@ Pay particular attention to `user_admin_proc`, as you will be unable to manage y
 
 To require that your users sign the most recent version of a contract, call 
 `fine_print_get_signatures` in your controllers, just as you would a 
-before_filter (in fact this method works by adding a before_filter for you).
+`before_filter` (in fact this method works by adding a `before_filter` for you).
 
 This method takes a list of contract names (given either as strings or as 
 symbols), along with an options hash.
 
 The options hash can include the following options:
 
-- any options you could pass to a before_filter, e.g. `only` and `except`
+- any options you could pass to a `before_filter`, e.g. `only` and `except`
 
 Example:
 
