@@ -30,7 +30,7 @@ module FinePrint
 
   def self.get_unsigned_contract_names(options={})
     return [] if options[:names].blank? || options[:user].nil?
-    options[:names] = [options[:names]].flatten
+    options[:names] = [options[:names]].flatten.collect{|name| name.to_s}
 
     signed_contracts = FinePrint::Contract
       .where(name: options[:names].collect{|name| name.to_s})
@@ -44,26 +44,10 @@ module FinePrint
     return options[:names] - signed_contract_names
   end
 
-  def self.get_signatures(options={})
-    return true if options[:names].blank?
-
-    raise IllegalState, "Cannot get signatures from a user who is not signed in" \
-      if !user_signed_in_proc.call(options[:user])
-
-    unsigned_contract_names = 
-      FinePrint.get_unsigned_contract_names(names: options[:names], 
-                                            user: options[:user])
-
-    return true if unsigned_contract_names.empty?
-
-    pose_contracts_proc.call(unsigned_contract_names)
-  end
-
   # Records that the given user has signed the given contract; the contract
   # can be a Contract object, a contract ID, or a contract name (string)
   def self.sign_contract(user, contract)
-    contract = Contract.find(contract) if contract.is_a? Integer
-    contract = Contract.where(name: contract) if contract.is_a? String
+    contract = get_contract(contract)
 
     Signature.create do |signature|
       signature.user = user
@@ -71,7 +55,21 @@ module FinePrint
     end
   end
 
+  def self.has_signed_contract?(user, contract)
+    contract = get_contract(contract)
+    contract.signed_by?(user)
+  end
+
   def self.is_admin?(user)
     !user.nil? && user_admin_proc.call(user)
+  end
+
+  def self.get_contract(reference)
+    case reference
+    when Integer
+      Contract.find(reference)
+    when String
+      Contract.where(name: reference)
+    end
   end
 end

@@ -122,6 +122,10 @@ module FinePrint
       errors.none?
     end
 
+    def signed_by?(user)
+      signatures.where(:user_id => user.id).where(:user_type => user.class.to_s).any?
+    end
+
     def downcase_name
       self.name = name.downcase
     end
