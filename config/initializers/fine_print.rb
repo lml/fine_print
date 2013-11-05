@@ -13,41 +13,24 @@ FinePrint.configure do |config|
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
 
+  # A proc that returns true if and only if the provided user is logged
+  # in.  In many systems a non-logged-in user is represented by nil.  
+  # However, some systems use something like an AnonymousUser class to 
+  # represent this state.  This proc is mostly used to help the developer
+  # realize that they should only being asking signed in users to sign 
+  # contracts; without this, developers would get a cryptic SQL error.
+  config.user_signed_in_proc = lambda { |user| !user.nil? }
+
+  # A path to redirect users to when they need to agree to a contract(s).
+  # A "terms" parameter will be passed along containing a list of contract
+  # names that must be agreed to.  Your code doesn't have to deal with all
+  # of them at once, e.g. you can get the user to agree to the first one and
+  # then they'll just eventually be redirected back to this page with the
+  # remaining contract names.
+  config.pose_contracts_path = '/some/path/here'
+
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages)
   # Default: "/"
   config.redirect_path = "/"
-
-  # Path to link users to if they need to sign in
-  # Set to nil to disable the link
-  # Default: "/"
-  config.sign_in_path = "/"
-
-
-
-  # Agreement Options (initializer or inline)
-
-  # Message to be displayed to the user explaining that they need to accept an agreement
-  # Set to nil to disable
-  # Default: "You must accept the following agreement to proceed."
-  config.agreement_notice = "You must accept the following agreement to proceed."
-
-  # Path to redirect users to when an agreement is accepted and referer information is unavailable
-  # Default: "/"
-  config.accept_path = "/"
-
-  # Path to redirect users to when an agreement is not accepted and referer information is unavailable
-  # Default: "/"
-  config.cancel_path = "/"
-
-  # Whether to use referer information to redirect users after (not) accepting an agreement
-  # Default: true
-  config.use_referers = true
-
-  # If set to true, modal jQuery UI dialogs will be used instead of redirecting the user to the agreement page
-  # Note: users with javascript disabled will not even see the agreement and will be able to proceed without accepting it
-  #       if users are not supposed to ever see or interact with a certain page without accepting the agreement,
-  #       disable this option for that particular controller action
-  # Default: false
-  config.use_modal_dialogs = false
   
 end

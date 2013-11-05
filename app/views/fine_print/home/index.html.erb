@@ -1,7 +1,15 @@
 <h1 class="fine_print heading">FinePrint</h1>
 
-<ul>
-  <li><%= link_to 'Manage agreements', agreements_path, :class => "fine_print link" %></li>
-  <li><%= link_to 'View accepted agreements', user_agreements_path, :class => "fine_print link" %></li>
+<ul class="fine_print">
+  <li>
+    <%= link_to 'Manage contracts', 
+                contracts_path, 
+                :class => "fine_print link" %>
+  </li>
+  <li>
+    <%= link_to 'View signatures', 
+                signatures_path, 
+                :class => "fine_print link" %>
+  </li>
 </ul>
 

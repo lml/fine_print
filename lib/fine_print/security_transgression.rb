@@ -1,4 +1,3 @@
 module FinePrint
-  class SecurityTransgression < StandardError
-  end
+  class SecurityTransgression < StandardError; end
 end

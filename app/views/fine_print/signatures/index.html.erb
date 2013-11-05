@@ -1,0 +1,32 @@
+<h1 class="fine_print heading">Contract Signatures</h1>
+
+<table class="fine_print index">
+  <tr class="fine_print heading-row">
+    <th>User ID</th>
+    <th>Contract name</th>
+    <th>Contract version</th>
+    <th>Date accepted</th>
+    <th></th>
+  </tr>
+
+<% @signatures.each do |signature| %>
+  <tr class="fine_print data-row <%= cycle('even', 'odd') %>">
+    <td><%= signature.user.id %></td>
+    <td><%= signature.contract.name %></td>
+    <td><%= signature.contract.version %></td>
+    <td><%= signature.created_at %></td>
+    <td><%= link_to 'Terminate', 
+                    signature, 
+                    method: :delete, 
+                    data: { 
+                      confirm: 'User will be asked to accept the contract again. Are you sure?' 
+                    }, 
+                    :class => "fine_print link" %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Overview', root_path, :class => "fine_print link" %>
