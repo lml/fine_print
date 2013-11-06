@@ -1,13 +1,12 @@
-
 <p>Name: <%= @contract.name %></p>
 <p>Title: <%= @contract.title %></p>
-<p>Version: <%= @contract.version.nil? ? 'draft' : @contract.version %></p>
+<p>Version: <%= @contract.version.nil? ? 'Draft' : @contract.version %></p>
 <p>Updated at: <%= @contract.updated_at %></p>
 <p>Content:</p>
 
 <p><%= @contract.content.html_safe %></p>
 
 <% if @contract.can_be_edited_by?(@user) %>
-  <%= link_to 'Edit', edit_contract_path(@contract), :class => "fine_print link" %> |
+  <%= link_to 'Edit', edit_contract_path(@contract), :class => 'fine_print link' %> |
 <% end %>
-<%= link_to 'List', contracts_path, :class => "fine_print link" %>
+<%= link_to 'List', contracts_path, :class => 'fine_print link' %>

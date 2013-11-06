@@ -1,12 +1,9 @@
 # Change the settings below to suit your needs
 # All settings are initially set to their default values
 FinePrint.configure do |config|
-
-  # Engine Options (initializer only)
-
   # Name of the ApplicationController helper method that returns the current user
-  # Default: "current_user"
-  config.current_user_method = "current_user"
+  # Default: 'current_user'
+  config.current_user_method = 'current_user'
 
   # Proc called with user as argument that should return true if and only if the user is an admin
   # Admins can create and edit agreements and terminate accepted agreements
@@ -22,7 +19,7 @@ FinePrint.configure do |config|
   config.user_signed_in_proc = lambda { |user| !user.nil? }
 
   # A path to redirect users to when they need to agree to a contract(s).
-  # A "terms" parameter will be passed along containing a list of contract
+  # A 'terms' parameter will be passed along containing a list of contract
   # names that must be agreed to.  Your code doesn't have to deal with all
   # of them at once, e.g. you can get the user to agree to the first one and
   # then they'll just eventually be redirected back to this page with the
@@ -30,7 +27,6 @@ FinePrint.configure do |config|
   config.pose_contracts_path = '/some/path/here'
 
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages)
-  # Default: "/"
-  config.redirect_path = "/"
-  
+  # Default: '/'
+  config.redirect_path = '/'
 end

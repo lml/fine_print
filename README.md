@@ -2,11 +2,11 @@
 
 FinePrint is a Rails gem (engine) that makes managing web site agreements (terms, privacy policy, etc) simple and easy.
 
-As the meaning of 'agreement' can be somewhat ambiguous (meaning either the thing someone agrees to or the record of the agreement between that thing and the user) we have call a set of terms a 'contract' and a user's agreement to that contract a 'signature'.
+As the meaning of 'agreement' can be somewhat ambiguous (meaning either the thing someone agrees to or the record of the agreement between that thing and the user), we call a set of terms a 'contract' and a user's agreement to that contract a 'signature'.
 
-A version history of all contracts is maintained.  Once a particular version of a contract is published, it becomes available for users to sign.  Once a version has been signed it cannot be changed (to effect a change a new version must be created and published).  When a new version of a contract is created and published, users visiting pages requiring signature of that contract will be redirect to a page you specify where they can sign the new contract.
+A version history of all contracts is maintained.  Once a particular version of a contract is published, it becomes available for users to sign.  Once a version has been signed, it cannot be changed (to effect a change, a new version must be created and published).  When a new version of a contract is created and published, users visiting pages requiring signature of that contract will be redirected to a page you specify where they can sign the new contract.
 
-FinePrint provides views for admins to manage contracts and signatures, but does not provide views for the application to display contracts to end users; that functionality is too specific to particular applications.  FinePrint does provide convenience methods for finding unsigned contracts and for recording when a user signs a contract.  
+FinePrint provides views for admins to manage contracts and signatures, but does not provide views for the application to display contracts to end users, as that functionality is specific to each particular application.  FinePrint does provide convenience methods for finding unsigned contracts and for recording when a user signs a contract.
 
 ## Installation
 
@@ -67,16 +67,14 @@ To require that your users sign the most recent version of a contract, call
 This method takes a list of contract names (given either as strings or as 
 symbols), along with an options hash.
 
-The options hash can include the following options:
-
-- any options you could pass to a `before_filter`, e.g. `only` and `except`
+The options hash can include any options you could pass to a `before_filter`, e.g. `only` and `except`.
 
 Example:
 
 ```rb
 class MyController < ApplicationController
   fine_print_get_signatures :terms_of_use, :privacy_policy,
-                            except: :index
+                            :except => :index
 ```
 
 You should only try to get signatures when you have a user who is logged in 
@@ -87,10 +85,10 @@ gets a user to login.
 
 Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls, 
 FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same 
-arguments as, and can be called either before or after, `fine_print_get_signatures`.  
+arguments as, and can be called either before or after, `fine_print_get_signatures`.
 
 One way you may want to use these methods is to require signatures in every controller 
-by default, and then to skip them in certain situation, e.g.:
+by default, and then to skip them in certain situations, e.g.:
 
 ```rb
 class ApplicationController < ActionController::Base
@@ -106,8 +104,8 @@ When a set of contracts is found by FinePrint to be required but unsigned, FineP
 the user to the path specified by the `pose_contracts_path` configuration variable, with
 the names of the unsigned contracts passed along in a `terms` array in the URL parameters.
 
-Your job as the site developer is to present the terms to the user and ask her to sign them.
-This normally involves the user clicking an "I Agree" checkbox which enables an "Agree" button.
+Your job as the site developer is to present the terms to the user and ask them to sign them.
+This normally involves the user clicking an "I have read the above terms" checkbox which enables an "I Agree" button.
 When the "Agree" button is clicked (and you should verify that the checkbox is actually clicked in the params passed to the server), you need to send the information off to a controller 
 method that can call `FinePrint.sign_contract` which takes a user and a contract name, ID, or
 object.  On success this controller method can send the user back to where they were trying to
@@ -118,7 +116,7 @@ redirect_to session.delete(:fine_print_return_to) || root_path
 ```
 
 If there are multiple unsigned contracts, you are not required to get the user to sign
-them all in one page.  One strategy is to present the first unsigned contract to them
+them all in one page.  One strategy is to present only the first unsigned contract to them
 for signature.  Once they sign it, they'll be redirected to where they were trying to 
 go and FinePrint will see again that they still have remaining unsigned contracts, and
 FinePrint will direct them back to your `pose_contracts_path` with one fewer contract
@@ -146,7 +144,7 @@ Run the following command to copy a part of FinePrint into your main application
 $ rake fine_print:copy:folder
 ```
 
-Where folder is one of `stylesheets`, `javascripts`, `layouts`, `views` or `controllers`.
+Where folder is one of `stylesheets`, `layouts`, `views` or `controllers`.
 
 Example:
 
@@ -162,7 +160,7 @@ $ rake fine_print:copy
 
 ## Testing
 
-Run `bundle exec rake db:migrate` then `bundle exec rake app:db:test:prepare`.  Then call the specs.
+From the gem's main folder, run `bundle install`, `bundle exec rake db:migrate` and then `bundle exec rake` to run all the specs.
 
 ## Contributing
 

@@ -1,28 +1,28 @@
-<h1 class="fine_print heading">FinePrint Contracts</h1>
+<h1 class='fine_print heading'>FinePrint Contracts</h1>
 
 <% @contracts.group_by(&:name).each do |name, contracts| %>
 
-  <ul class="fine_print">
+  <ul class='fine_print'>
     <li><%= name %></li>
     
-      <ul class="fine_print">
+      <ul class='fine_print'>
         <% contracts.each do |contract| %>
           <li><%= link_to contract.title, contract %> 
-            (<%= contract.version.nil? ? 'draft' : "v.#{contract.version}" %>)
-            <% if contract.can_be_edited_by?(@user) %>
-              [<%= link_to 'Edit', edit_contract_path(contract), :class => "fine_print link" %>]
+            (<%= contract.version.nil? ? 'draft' : 'v.#{contract.version}' %>)
+            <% if contract.can_be_updated_by? %>
+              [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
             <% else %>
-              [<%= link_to 'New version', new_version_contract_path(contract), :class => "fine_print link" %>]
+              [<%= link_to 'New version', new_version_contract_path(contract), :class => 'fine_print link' %>]
             <% end %>
-            <% if !contract.published? %>
-              [<%= link_to 'Publish', publish_contract_path(contract), method: :put, data: {confirm: 'Are you sure you want to publish this contract?'} %>]
+            <% if contract.can_be_published? %>
+              [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]
             <% else %>
-              <% if contract.is_latest? && contract.no_signatures? %>
-                [<%= link_to 'Unpublish', unpublish_contract_path(contract), method: :put, data: {confirm: 'Are you sure you want to unpublish this contract?'} %>]
+              <% if contract.can_be_unpublished? %>
+                [<%= link_to 'Unpublish', unpublish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>]
               <% end %>
             <% end %>
-            <% if contract.can_be_destroyed_by?(@user) %>
-              [<%= link_to 'Delete', contract, method: :delete, data: { confirm: 'Are you sure you wish to delete this contract?' }, :class => "fine_print link" %>]
+            <% if contract.can_be_destroyed? %>
+              [<%= link_to 'Delete', contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>]
             <% end %>
           </li>
         <% end %>
@@ -34,5 +34,5 @@
 
 <br />
 
-<%= link_to 'New Contract', new_contract_path, :class => "fine_print link" %> |
-<%= link_to 'Overview', root_path, :class => "fine_print link" %>
+<%= link_to 'New Contract', new_contract_path, :class => 'fine_print link' %> |
+<%= link_to 'Overview', root_path, :class => 'fine_print link' %>

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :contract, class: FinePrint::Contract do
+  factory :contract, :class => FinePrint::Contract do
 
     name { "Contract_#{SecureRandom.hex(4)}" }
     title { Faker::Lorem.sentence(3) }

@@ -1,20 +1,11 @@
 module FinePrint
-
-  GET_SIGNATURES_OPTIONS = [
-    :names
-  ]
-
-  SKIP_SIGNATURES_OPTIONS = [
-    :names
-  ]
+  GET_SIGNATURES_OPTIONS = [:names]
 
   module ControllerAdditions
-
     #
     # Internally these methods think of contract names as strings, not symbols.
     # Any names passed in as symbols are converted to strings.
     #
-
     def self.included(base)
       base.extend(ClassMethods)
     end
@@ -24,7 +15,6 @@ module FinePrint
     end
 
     module ClassMethods
-
       # See the README
       def fine_print_get_signatures(*args)
         options = args.last.is_a?(Hash) ? args.pop : {}
@@ -44,17 +34,17 @@ module FinePrint
 
             user = self.send FinePrint.current_user_method
 
-            raise IllegalState, "Cannot get signatures from a user who is not signed in" \
+            raise IllegalState, 'Cannot get signatures from a user who is not signed in' \
               if !FinePrint.user_signed_in_proc.call(user)
 
             unsigned_contract_names = 
-              FinePrint.get_unsigned_contract_names(names: names_to_check, user: user)
+              FinePrint.get_unsigned_contract_names(:names => names_to_check, :user => user)
 
             return true if unsigned_contract_names.empty?
 
             # http://stackoverflow.com/a/2165727/1664216
             session[:fine_print_return_to] = "#{request.protocol}#{request.host_with_port}#{request.fullpath}"
-            redirect_to FinePrint.pose_contracts_path + '/?' +  {terms: unsigned_contract_names}.to_query
+            redirect_to FinePrint.pose_contracts_path + '/?' +  {:terms => unsigned_contract_names}.to_query
           end
         end
       end
@@ -64,8 +54,8 @@ module FinePrint
         options = args.last.is_a?(Hash) ? args.pop : {}
         names = args.collect{|arg| arg.to_s}
 
-        filter_options = options.except(*FinePrint::SKIP_SIGNATURES_OPTIONS)
-        fine_print_options = options.slice(*FinePrint::SKIP_SIGNATURES_OPTIONS)
+        filter_options = options.except(*FinePrint::GET_SIGNATURES_OPTIONS)
+        fine_print_options = options.slice(*FinePrint::GET_SIGNATURES_OPTIONS)
 
         class_eval do
           prepend_before_filter(filter_options) do |controller|

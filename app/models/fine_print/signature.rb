@@ -1,22 +1,25 @@
 module FinePrint
   class Signature < ActiveRecord::Base
-    belongs_to :contract
+    belongs_to :contract, :inverse_of => :signatures
     belongs_to :user, :polymorphic => true
 
-    validates_presence_of :contract, :user_id
-    validates_uniqueness_of :user_id, :scope => [:contract_id, :user_type]
+    before_save :contract_published
 
-    validate :contract_published
+    validates_presence_of :contract, :user_type, :user_id
+    validates_uniqueness_of :contract_id, :scope => [:user_type, :user_id]
 
     default_scope order(:contract_id, :user_type, :user_id)
 
-  protected
+    protected
+
+    ##############
+    # Validation #
+    ##############
 
     def contract_published
-      errors.add(:contract, "needs to be published before it can be signed") \
-        if !contract.published?
-      errors.none?
+      return if contract.is_published?
+      errors.add(:contract, 'needs to be published before it can be signed')
+      false
     end
-
   end
 end

@@ -1,9 +1,8 @@
-require_dependency "fine_print/application_controller"
+require_dependency 'fine_print/application_controller'
 
 module FinePrint
   class ContractsController < ApplicationController
-
-    before_filter :get_contract, only: [:show, :edit, :new_version, :update, :destroy, :publish, :unpublish]
+    before_filter :get_contract, :except => [:index, :new, :create]
 
     def index
       @contracts = Contract.all
@@ -17,56 +16,58 @@ module FinePrint
     end
   
     def edit
-      raise SecurityTransgression unless @contract.can_be_edited_by?(@user)
+      raise SecurityTransgression unless @contract.can_be_updated?
     end
 
     def new_version
       @contract = @contract.draft_copy
-      raise SecurityTransgression unless @contract.can_be_created_by?(@user)
     end
   
     def create
       @contract = Contract.new(params[:contract])
-      raise SecurityTransgression unless @contract.can_be_created_by?(@user)
   
       if @contract.save
-        redirect_to @contract, notice: 'Contract was successfully created.'
+        redirect_to @contract, :notice => 'Contract was successfully created.'
       else
-        render action: "new"
+        render :action => 'new'
       end
     end
   
     def update
-      raise SecurityTransgression unless @contract.can_be_edited_by?(@user)
+      raise SecurityTransgression unless @contract.can_be_updated?
 
       if @contract.update_attributes(params[:contract])
-        redirect_to @contract, notice: 'Contract was successfully updated.'
+        redirect_to @contract, :notice => 'Contract was successfully updated.'
       else
-        render action: "edit"
+        render :action => 'edit'
       end
     end
 
     def publish
+      raise SecurityTransgression unless @contract.can_be_published?
+
       @contract.publish
-      redirect_to request.referrer
+      redirect_to @contract, :notice => 'Contract was successfully published.'
     end
 
     def unpublish
+      raise SecurityTransgression unless @contract.can_be_unpublished?
+
       @contract.unpublish
-      redirect_to request.referrer
+      redirect_to @contract, :notice => 'Contract was successfully unpublished.'
     end
   
     def destroy
-      raise SecurityTransgression unless @contract.can_be_destroyed_by?(@user)
+      raise SecurityTransgression unless @contract.can_be_destroyed?
+
       @contract.destroy
       redirect_to contracts_url
     end
 
-  protected
+    protected
 
     def get_contract
-      @contract = Contract.find(params[:id] || params[:contract_id])
+      @contract = Contract.find(params[:id])
     end
-
   end
 end

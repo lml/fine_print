@@ -1,12 +1,11 @@
-FINE_PRINT_COPY_TASKS = ['assets/stylesheets', 
-                         # 'assets/javascripts', 
-                         'views/layouts', 
-                         'views', 
+FINE_PRINT_COPY_TASKS = ['assets/stylesheets',
+                         'views/layouts',
+                         'views',
                          'controllers']
 
 namespace :fine_print do
   namespace :install do
-    desc "Copy initializers from fine_print to application"
+    desc 'Copy initializers from fine_print to application'
     task :initializers do
       Dir.glob(File.expand_path('../../../config/initializers/*.rb', __FILE__)) do |file|
         if File.exists?(File.expand_path(File.basename(file), 'config/initializers'))
@@ -30,13 +29,13 @@ namespace :fine_print do
     end
   end
   
-  desc "Copy migrations from fine_print to application"
+  desc 'Copy migrations from fine_print to application'
   task :install do
-    Rake::Task["fine_print:install:initializers"].invoke
-    Rake::Task["fine_print:install:migrations"].invoke
+    Rake::Task['fine_print:install:initializers'].invoke
+    Rake::Task['fine_print:install:migrations'].invoke
   end
   
-  desc "Copy assets, layouts, views and controllers from fine_print to application"
+  desc 'Copy assets, layouts, views and controllers from fine_print to application'
   task :copy do
     FINE_PRINT_COPY_TASKS.each do |path|
       Rake::Task["fine_print:copy:#{File.basename(path)}"].invoke
