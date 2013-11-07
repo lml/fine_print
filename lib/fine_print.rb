@@ -22,8 +22,8 @@ module FinePrint
   end
 
   # Accepts the following arguments:
-  #   - :names -- an array of contract names
-  #   - :user -- the user in question
+  #   - names -- an array of contract names
+  #   - user -- the user in question
   # and returns an array of names for the contracts whose latest published
   # version the given user has not signed.
   #

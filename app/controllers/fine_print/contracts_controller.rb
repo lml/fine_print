@@ -47,21 +47,21 @@ module FinePrint
       raise SecurityTransgression unless @contract.can_be_published?
 
       @contract.publish
-      redirect_to @contract, :notice => 'Contract was successfully published.'
+      redirect_to contracts_path, :notice => 'Contract was successfully published.'
     end
 
     def unpublish
       raise SecurityTransgression unless @contract.can_be_unpublished?
 
       @contract.unpublish
-      redirect_to @contract, :notice => 'Contract was successfully unpublished.'
+      redirect_to contracts_path, :notice => 'Contract was successfully unpublished.'
     end
   
     def destroy
       raise SecurityTransgression unless @contract.can_be_destroyed?
 
       @contract.destroy
-      redirect_to contracts_url
+      redirect_to contracts_path
     end
 
     protected
