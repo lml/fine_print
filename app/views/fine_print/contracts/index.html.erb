@@ -9,7 +9,7 @@
         <% contracts.each do |contract| %>
           <li><%= link_to contract.title, contract %> 
             (<%= contract.version.nil? ? 'draft' : 'v.#{contract.version}' %>)
-            <% if contract.can_be_updated_by? %>
+            <% if contract.can_be_updated? %>
               [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
             <% else %>
               [<%= link_to 'New version', new_version_contract_path(contract), :class => 'fine_print link' %>]
