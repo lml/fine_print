@@ -1,7 +1,9 @@
 <h1 class='fine_print heading'>New Version of <%= @contract.name %></h1>
 
-<%= render 'form' %>
+<div class='fine_print new_contract_version'>
+  <%= render 'form' %>
 
-<br/>
-
-<%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+  <div class='fine_print links'>
+    <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+  </div>
+</div>

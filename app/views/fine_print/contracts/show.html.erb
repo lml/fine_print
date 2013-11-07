@@ -1,12 +1,35 @@
-<p>Name: <%= @contract.name %></p>
-<p>Title: <%= @contract.title %></p>
-<p>Version: <%= @contract.version.nil? ? 'Draft' : @contract.version %></p>
-<p>Updated at: <%= @contract.updated_at %></p>
-<p>Content:</p>
+<h1 class='fine_print heading'>Contract Details</h1>
 
-<p><%= @contract.content.html_safe %></p>
+<div class='fine_print show_contract'>
 
-<% if @contract.can_be_edited_by?(@user) %>
-  <%= link_to 'Edit', edit_contract_path(@contract), :class => 'fine_print link' %> |
-<% end %>
-<%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+  <table class='fine_print left_heading'>
+    <tr>
+      <th>Name</th>
+      <td><%= @contract.name %></td>
+    </tr>
+    <tr>
+      <th>Title</th>
+      <td><%= @contract.title %></td>
+    </tr>
+    <tr>
+      <th>Version</th>
+      <td><%= @contract.version.nil? ? 'Draft' : @contract.version %></td>
+    </tr>
+    <tr>
+      <th>Updated at</th>
+      <td><%= @contract.updated_at %></td>
+    </tr>
+    <tr>
+      <th>Content</th>
+      <td><%= @contract.content.html_safe %></td>
+    </tr>
+  </table>
+
+  <div class='fine_print links'>
+    <% if @contract.can_be_updated? %>
+      <%= link_to 'Edit', edit_contract_path(@contract), :class => 'fine_print link' %> |
+    <% end %>
+    <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+  </div>
+
+</div>

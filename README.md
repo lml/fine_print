@@ -122,6 +122,8 @@ go and FinePrint will see again that they still have remaining unsigned contract
 FinePrint will direct them back to your `pose_contracts_path` with one fewer contract
 name passed in.
 
+Note that are some utility methods available in the `FinePrint::Utilities` module.
+
 ## Managing Contracts
 
 Here are some important notes about managing your contracts with FinePrint:
