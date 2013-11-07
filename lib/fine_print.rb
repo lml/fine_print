@@ -1,5 +1,6 @@
 require 'fine_print/engine'
 require 'fine_print/security_transgression'
+require 'fine_print/utilities'
 require 'fine_print/controller_additions'
 
 module FinePrint
