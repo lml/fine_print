@@ -8,7 +8,7 @@
       <ul class='fine_print'>
         <% contracts.each do |contract| %>
           <li><%= link_to contract.title, contract %> 
-            (<%= contract.version.nil? ? 'draft' : 'v.#{contract.version}' %>)
+            (<%= contract.version.nil? ? 'draft' : 'v.' + contract.version.to_s %>)
             <% if contract.can_be_updated? %>
               [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
             <% else %>
