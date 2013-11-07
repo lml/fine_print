@@ -1,38 +1,45 @@
 <h1 class='fine_print heading'>FinePrint Contracts</h1>
 
-<% @contracts.group_by(&:name).each do |name, contracts| %>
+<div class='fine_print contract_index'>
 
-  <ul class='fine_print'>
-    <li><%= name %></li>
-    
-      <ul class='fine_print'>
-        <% contracts.each do |contract| %>
-          <li><%= link_to contract.title, contract %> 
-            (<%= contract.version.nil? ? 'draft' : 'v.' + contract.version.to_s %>)
-            <% if contract.can_be_updated? %>
-              [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
-            <% else %>
-              [<%= link_to 'New version', new_version_contract_path(contract), :class => 'fine_print link' %>]
-            <% end %>
-            <% if contract.can_be_published? %>
-              [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]
-            <% else %>
-              <% if contract.can_be_unpublished? %>
-                [<%= link_to 'Unpublish', unpublish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>]
+  <% @contracts.group_by(&:name).each do |name, contracts| %>
+
+    <%# Sort contracts by version number; unpublished contracts go at end by creation date %>
+    <% contracts = contracts.sort_by {|cc| cc.version || cc.created_at.to_i} %>
+
+    <ul class='fine_print'>
+      <li><%= name %></li>
+      
+        <ul class='fine_print'>
+          <% contracts.each do |contract| %>
+            <li><%= link_to contract.title, contract %> 
+              (<%= contract.version.nil? ? 'draft' : 'v.' + contract.version.to_s %>)
+              <% if contract.can_be_updated? %>
+                [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
+              <% else %>
+                [<%= link_to 'New version', new_version_contract_path(contract), :class => 'fine_print link' %>]
               <% end %>
-            <% end %>
-            <% if contract.can_be_destroyed? %>
-              [<%= link_to 'Delete', contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>]
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-    
-  </ul>
+              <% if contract.can_be_published? %>
+                [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]
+              <% else %>
+                <% if contract.can_be_unpublished? %>
+                  [<%= link_to 'Unpublish', unpublish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>]
+                <% end %>
+              <% end %>
+              <% if contract.can_be_destroyed? %>
+                [<%= link_to 'Delete', contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>]
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      
+    </ul>
 
-<% end %>
+  <% end %>
 
-<br />
+  <div class='fine_print links'>
+    <%= link_to 'New Contract', new_contract_path, :class => 'fine_print link' %> |
+    <%= link_to 'Overview', root_path, :class => 'fine_print link' %>
+  </div>
 
-<%= link_to 'New Contract', new_contract_path, :class => 'fine_print link' %> |
-<%= link_to 'Overview', root_path, :class => 'fine_print link' %>
+</div>
