@@ -38,7 +38,7 @@ module FinePrint
               if !FinePrint.user_signed_in_proc.call(user)
 
             unsigned_contract_names = 
-              FinePrint.get_unsigned_contract_names(:names => names_to_check, :user => user)
+              FinePrint.get_unsigned_contract_names(names_to_check, user)
 
             return true if unsigned_contract_names.empty?
 
