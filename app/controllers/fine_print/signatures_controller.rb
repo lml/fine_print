@@ -1,7 +1,5 @@
-require_dependency 'fine_print/application_controller'
-
 module FinePrint
-  class SignaturesController < ApplicationController
+  class SignaturesController < FinePrint::ApplicationController
     def index
       @signatures = Signature.all
     end

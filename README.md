@@ -60,14 +60,22 @@ Pay particular attention to `user_admin_proc`, as you will be unable to manage y
 
 ## Usage
 
-To require that your users sign the most recent version of a contract, call 
-`fine_print_get_signatures` in your controllers, just as you would a 
-`before_filter` (in fact this method works by adding a `before_filter` for you).
+FinePrint adds 3 controller methods to all of your controllers:
+
+`fine_print_get_signatures`, `fine_print_skip_signatures` and `fine_print_return`
+
+Additionally, the FinePrint module contains several methods that help you find contracts and mark them as signed.
+
+To require that your users sign the most recent version of a contract, call
+`fine_print_get_signatures` in your controllers, just as you would a
+`before_filter` (in fact, this method works by adding a `before_filter` for you).
 
 This method takes a list of contract names (given either as strings or as 
 symbols), along with an options hash.
 
-The options hash can include any options you could pass to a `before_filter`, e.g. `only` and `except`.
+The options hash can include any options you could pass to a `before_filter`, e.g. `only` and `except`,
+plus the FinePrint-specific option `pose_contracts_path`, which can override the value specified
+in the FinePrint initializer.
 
 Example:
 
@@ -77,17 +85,17 @@ class MyController < ApplicationController
                             :except => :index
 ```
 
-You should only try to get signatures when you have a user who is logged in 
+You should only try to get signatures when you have a user who is logged in
 (FinePrint will raise an exception if you try to get a non-logged in user to sign
 an agreement, as that does not make any sense).  This normally means that before
-the call to `fine_print_get_signature` you should call whatever `before_filter` 
+the call to `fine_print_get_signatures` you should call whatever `before_filter`
 gets a user to login.
 
-Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls, 
-FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same 
-arguments as, and can be called either before or after, `fine_print_get_signatures`.
+Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls,
+FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same
+arguments as before_filter, and can be called either before or after `fine_print_get_signatures`.
 
-One way you may want to use these methods is to require signatures in every controller 
+One way you may want to use these methods is to require signatures in every controller
 by default, and then to skip them in certain situations, e.g.:
 
 ```rb
@@ -100,7 +108,7 @@ class NoSigsRequiredController < ApplicationController
   fine_print_skip_signatures :terms_of_use
 ```
 
-When a set of contracts is found by FinePrint to be required but unsigned, FinePrint redirects 
+When a set of contracts is found by FinePrint to be required but unsigned, FinePrint redirects
 the user to the path specified by the `pose_contracts_path` configuration variable, with
 the names of the unsigned contracts passed along in a `terms` array in the URL parameters.
 
@@ -108,12 +116,8 @@ Your job as the site developer is to present the terms to the user and ask them 
 This normally involves the user clicking an "I have read the above terms" checkbox which enables an "I Agree" button.
 When the "Agree" button is clicked (and you should verify that the checkbox is actually clicked in the params passed to the server), you need to send the information off to a controller 
 method that can call `FinePrint.sign_contract` which takes a user and a contract name, ID, or
-object.  On success this controller method can send the user back to where they were trying to
-go by redirecting them to the path stored in the `:fine_print_return_to` session variable, e.g.:
-
-```rb
-redirect_to session.delete(:fine_print_return_to) || root_path 
-```
+object. On success, this controller method can send the user back to where they were trying to
+go by calling the `fine_print_return` controller method (only works for GET requests).
 
 If there are multiple unsigned contracts, you are not required to get the user to sign
 them all in one page.  One strategy is to present only the first unsigned contract to them
@@ -121,8 +125,6 @@ for signature.  Once they sign it, they'll be redirected to where they were tryi
 go and FinePrint will see again that they still have remaining unsigned contracts, and
 FinePrint will direct them back to your `pose_contracts_path` with one fewer contract
 name passed in.
-
-Note that are some utility methods available in the `FinePrint::Utilities` module.
 
 ## Managing Contracts
 

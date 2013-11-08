@@ -1,7 +1,5 @@
-require_dependency 'fine_print/application_controller'
-
 module FinePrint
-  class ContractsController < ApplicationController
+  class ContractsController < FinePrint::ApplicationController
     before_filter :get_contract, :except => [:index, :new, :create]
 
     def index
