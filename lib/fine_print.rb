@@ -55,7 +55,7 @@ module FinePrint
     signed_contracts = Contract
       .joins(:signatures)
       .where({:name => names_array,
-              :signatures => {:user_id => user.id,
+              :fine_print_signatures => {:user_id => user.id,
                               :user_type => user.class.name}}).latest
     signed_contract_names = signed_contracts.collect{|c| c.name}
 
