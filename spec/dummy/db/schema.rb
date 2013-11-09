@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 1) do
+
+  create_table "dummy_users", :force => true do |t|
+    t.boolean  "is_admin",   :default => false, :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
 
   create_table "fine_print_contracts", :force => true do |t|
     t.string   "name",       :null => false

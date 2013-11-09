@@ -93,7 +93,7 @@ module FinePrint
     raise_unless_signed_in(user)
     contract = get_contract(contract)
     !Signature.joins(:contract)
-              .where(:contract => {:name => contract.name},
+              .where(:fine_print_contracts => {:name => contract.name},
                      :user_type => user.class.name,
                      :user_id => user.id).first.nil?
   end
