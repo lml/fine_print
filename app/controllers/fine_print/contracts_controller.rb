@@ -16,10 +16,6 @@ module FinePrint
     def edit
       raise SecurityTransgression unless @contract.can_be_updated?
     end
-
-    def new_version
-      @contract = @contract.draft_copy
-    end
   
     def create
       @contract = Contract.new(params[:contract])
@@ -41,6 +37,13 @@ module FinePrint
       end
     end
 
+    def destroy
+      raise SecurityTransgression unless @contract.can_be_destroyed?
+
+      @contract.destroy
+      redirect_to contracts_path
+    end
+
     def publish
       raise SecurityTransgression unless @contract.can_be_published?
 
@@ -54,12 +57,9 @@ module FinePrint
       @contract.unpublish
       redirect_to contracts_path, :notice => 'Contract was successfully unpublished.'
     end
-  
-    def destroy
-      raise SecurityTransgression unless @contract.can_be_destroyed?
 
-      @contract.destroy
-      redirect_to contracts_path
+    def new_version
+      @contract = @contract.draft_copy
     end
 
     protected

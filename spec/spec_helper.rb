@@ -23,7 +23,9 @@ FinePrint::ApplicationController.class_eval do
 end
 
 def setup_controller_spec
-  class_eval {include ApplicationHelper}
+  class_eval { include ApplicationHelper }
   sign_out
   @user = FactoryGirl.create(:dummy_user)
+  @admin = FactoryGirl.create(:dummy_user)
+  @admin.is_admin = true
 end
