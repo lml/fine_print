@@ -1,5 +1,6 @@
 module FinePrint
   class ContractsController < FinePrint::ApplicationController
+    include FinePrint::ApplicationHelper
     before_filter :get_contract, :except => [:index, :new, :create]
 
     def index
@@ -14,11 +15,13 @@ module FinePrint
     end
   
     def edit
-      raise SecurityTransgression unless @contract.can_be_updated?
     end
   
     def create
-      @contract = Contract.new(params[:contract])
+      @contract = Contract.new
+      @contract.name = params[:contract][:name]
+      @contract.title = params[:contract][:title]
+      @contract.content = params[:contract][:content]
   
       if @contract.save
         redirect_to @contract, :notice => 'Contract was successfully created.'
@@ -28,9 +31,11 @@ module FinePrint
     end
   
     def update
-      raise SecurityTransgression unless @contract.can_be_updated?
+      @contract.name = params[:contract][:name]
+      @contract.title = params[:contract][:title]
+      @contract.content = params[:contract][:content]
 
-      if @contract.update_attributes(params[:contract])
+      if @contract.save
         redirect_to @contract, :notice => 'Contract was successfully updated.'
       else
         render :action => 'edit'
@@ -38,24 +43,27 @@ module FinePrint
     end
 
     def destroy
-      raise SecurityTransgression unless @contract.can_be_destroyed?
-
-      @contract.destroy
-      redirect_to contracts_path
+      if @contract.destroy
+        redirect_to contracts_path, :notice => 'Contract was successfully deleted.'
+      else
+        redirect_to contracts_path, :alert => merge_errors_for(@contract)
+      end
     end
 
     def publish
-      raise SecurityTransgression unless @contract.can_be_published?
-
-      @contract.publish
-      redirect_to contracts_path, :notice => 'Contract was successfully published.'
+      if @contract.publish
+        redirect_to contracts_path, :notice => 'Contract was successfully published.'
+      else
+        redirect_to contracts_path, :alert => merge_errors_for(@contract)
+      end
     end
 
     def unpublish
-      raise SecurityTransgression unless @contract.can_be_unpublished?
-
-      @contract.unpublish
-      redirect_to contracts_path, :notice => 'Contract was successfully unpublished.'
+      if @contract.unpublish
+        redirect_to contracts_path, :notice => 'Contract was successfully unpublished.'
+      else
+        redirect_to contracts_path, :alert => merge_errors_for(@contract)
+      end
     end
 
     def new_version

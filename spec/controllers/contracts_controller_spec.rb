@@ -10,7 +10,7 @@ module FinePrint
       @contract.reload
     end
 
-    it 'won''t get index unless authorized' do
+    it "won't get index unless authorized" do
       get :index, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       
@@ -25,7 +25,7 @@ module FinePrint
       assert_response :success
     end
     
-    it 'won''t get new unless authorized' do
+    it "won't get new unless authorized" do
       get :new, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       
@@ -40,17 +40,20 @@ module FinePrint
       assert_response :success
     end
     
-    it 'won''t create unless authorized' do
+    it "won't create unless authorized" do
       attributes = Hash.new
+      attributes[:name] = 'some_name'
       attributes[:title] = 'Some title'
       attributes[:content] = 'Some content'
       
       post :create, :contract => attributes, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
+      expect(assigns(:contract)).to be_nil
       
       sign_in @user
       post :create, :contract => attributes, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
+      expect(assigns(:contract)).to be_nil
     end
     
     it 'must create if authorized' do
@@ -63,9 +66,12 @@ module FinePrint
       post :create, :contract => attributes, :use_route => :fine_print
       assert_redirected_to assigns(:contract)
       expect(assigns(:contract).errors).to be_empty
+      expect(assigns(:contract).name).to eq 'some_name'
+      expect(assigns(:contract).title).to eq 'Some title'
+      expect(assigns(:contract).content).to eq 'Some content'
     end
     
-    it 'won''t edit unless authorized' do
+    it "won't edit unless authorized" do
       get :edit, :id => @contract.id, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       
@@ -80,16 +86,19 @@ module FinePrint
       assert_response :success
     end
     
-    it 'won''t update unless authorized' do
+    it "won't update unless authorized" do
       attributes = Hash.new
+      attributes[:name] = 'some_name'
       attributes[:title] = 'Some title'
       attributes[:content] = 'Some content'
+      name = @contract.name
       title = @contract.title
       content = @contract.content
       
       put :update, :id => @contract.id, :contract => attributes, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       @contract.reload
+      expect(@contract.name).to eq name
       expect(@contract.title).to eq title
       expect(@contract.content).to eq content
       
@@ -97,26 +106,28 @@ module FinePrint
       put :update, :id => @contract.id, :contract => attributes, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       @contract.reload
+      expect(@contract.name).to eq name
       expect(@contract.title).to eq title
       expect(@contract.content).to eq content
     end
     
     it 'must update if authorized' do
       attributes = Hash.new
+      attributes[:name] = 'some_name'
       attributes[:title] = 'Some title'
       attributes[:content] = 'Some content'
-      title = @contract.title
-      content = @contract.content
+
       sign_in @admin
       put :update, :id => @contract.id, :contract => attributes, :use_route => :fine_print
       assert_redirected_to @contract
       @contract.reload
       expect(@contract.errors).to be_empty
+      expect(@contract.name).to eq 'some_name'
       expect(@contract.title).to eq 'Some title'
       expect(@contract.content).to eq 'Some content'
     end
 
-    it 'won''t destroy unless authorized' do
+    it "won't destroy unless authorized" do
       delete :destroy, :id => @contract.id, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       expect(Contract.find(@contract.id)).to eq @contract
@@ -134,7 +145,7 @@ module FinePrint
       expect(Contract.find_by_id(@contract.id)).to be_nil
     end
 
-    it 'won''t publish unless authorized' do
+    it "won't publish unless authorized" do
       expect(@contract.is_published?).to eq false
       put :publish, :id => @contract.id, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
@@ -158,7 +169,7 @@ module FinePrint
       expect(@contract.is_published?).to eq true
     end
 
-    it 'won''t unpublish unless authorized' do
+    it "won't unpublish unless authorized" do
       @contract.publish
       expect(@contract.is_published?).to eq true
       put :unpublish, :id => @contract.id, :use_route => :fine_print
@@ -184,7 +195,7 @@ module FinePrint
       expect(@contract.is_published?).to eq false
     end
 
-    it 'won''t new_version unless authorized' do
+    it "won't new_version unless authorized" do
       @contract.publish
       expect(@contract.is_published?).to eq true
       

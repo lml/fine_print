@@ -10,7 +10,7 @@ module FinePrint
       @signature.reload
     end
 
-    it 'won''t get index unless authorized' do
+    it "won't get index unless authorized" do
       get :index, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       
@@ -25,7 +25,7 @@ module FinePrint
       assert_response :success
     end
 
-    it 'won''t destroy unless authorized' do
+    it "won't destroy unless authorized" do
       delete :destroy, :id => @signature.id, :use_route => :fine_print
       assert_redirected_to FinePrint.redirect_path
       expect(Signature.find(@signature.id)).to eq @signature

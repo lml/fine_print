@@ -3,7 +3,7 @@ module FinePrint
     belongs_to :contract, :inverse_of => :signatures
     belongs_to :user, :polymorphic => true
 
-    before_save :contract_published
+    before_create :contract_published
 
     validates_presence_of :contract, :user_type, :user_id
     validates_uniqueness_of :contract_id, :scope => [:user_type, :user_id]

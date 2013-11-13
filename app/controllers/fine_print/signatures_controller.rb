@@ -8,7 +8,7 @@ module FinePrint
       @signature = Signature.find(params[:id])
 
       @signature.destroy
-      redirect_to signatures_url
+      redirect_to signatures_path
     end
   end
 end

@@ -6,7 +6,7 @@ module FinePrint
       setup_controller_spec
     end
 
-    it 'wont get index unless authorized' do
+    it "won't get index unless authorized" do
       get :index, :use_route => :fine_print
       assert_response :redirect
       

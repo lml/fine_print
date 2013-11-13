@@ -4,9 +4,9 @@ module FinePrint
 
     has_many :same_name, :class_name => 'Contract', :primary_key => :name, :foreign_key => :name
 
-    attr_accessible :content, :title, :name
-
     before_validation :downcase_name
+    before_update :no_signatures
+    before_destroy :no_signatures
 
     validates_presence_of :name, :title, :content
     validates_format_of :name, :with => /\A\w+\z/
@@ -38,17 +38,25 @@ module FinePrint
     end
 
     def publish
+      no_signatures
+      errors.add(:base, 'Contract is already published') if is_published?
+      return false unless errors.empty?
+
       self.version = (same_name.published.first.try(:version) || 0) + 1
       save
     end
 
     def unpublish
+      no_signatures
+      errors.add(:base, 'Contract is not the latest published version') unless is_latest?
+      return false unless errors.empty?
+
       self.version = nil
       save
     end
 
     def draft_copy
-      dup.tap{|contract| contract.version = nil}
+      Contract.where(:name => name, :version => nil).first || dup.tap{|contract| contract.version = nil}
     end
 
     ##################
@@ -68,6 +76,16 @@ module FinePrint
     end
 
     alias_method :can_be_destroyed?, :can_be_updated?
+
+    ##############
+    # Validation #
+    ##############
+
+    def no_signatures
+      return if signatures.empty?
+      errors.add(:base, 'Contract cannot be modified because users have signed it')
+      false
+    end
 
     protected
 
