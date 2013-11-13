@@ -26,7 +26,7 @@ module FinePrint
         fine_print_options = options.slice(*FinePrint::SIGNATURE_OPTIONS)
 
         # Convert all names to string
-        names = args.collect{|n| n.to_s}
+        names = args.flatten.collect{|n| n.to_s}
 
         class_eval do
           before_filter(filter_options) do |controller|
@@ -54,7 +54,9 @@ module FinePrint
       # See the README
       def fine_print_skip_signatures(*args)
         options = args.last.is_a?(Hash) ? args.pop : {}
-        names = args.collect{|arg| arg.to_s}
+
+        # Convert all names to string
+        names = args.flatten.collect{|n| n.to_s}
 
         class_eval do
           prepend_before_filter(options) do |controller|
