@@ -30,16 +30,16 @@ module FinePrint
 
         class_eval do
           before_filter(filter_options) do |controller|
-            names_to_check = names - fine_print_skipped_contract_names
+            contract_names = names - fine_print_skipped_contract_names
 
             # Bail if nothing to do
-            return true if names_to_check.blank?
+            return true if contract_names.blank?
 
             user = send FinePrint.current_user_method
             FinePrint.raise_unless_signed_in(user)
 
             unsigned_contract_names = 
-              FinePrint.get_unsigned_contract_names(names_to_check, user)
+              FinePrint.get_unsigned_contract_names(user, contract_names)
             return true if unsigned_contract_names.empty?
 
             # http://stackoverflow.com/a/2165727/1664216

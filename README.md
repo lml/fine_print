@@ -60,11 +60,22 @@ Pay particular attention to `user_admin_proc`, as you will be unable to manage y
 
 ## Usage
 
-FinePrint adds 3 controller methods to all of your controllers:
+The FinePrint module contains several methods that help you find contracts and mark them as signed:
 
-`fine_print_get_signatures`, `fine_print_skip_signatures` and `fine_print_return`
+`get_contract(contract_object_or_id_or_name)`
+`sign_contract(user, contract_object_or_id_or_name)`
+`signed_contract?(user, contract_object_or_id_or_name)`
+`signed_any_contract_version?(user, contract_object_or_id_or_name)`
+`get_unsigned_contract_names(user, contract_names...)`
 
-Additionally, the FinePrint module contains several methods that help you find contracts and mark them as signed.
+Additionally, FinePrint adds 2 class methods to all of your controllers:
+
+`fine_print_get_signatures(contract_names..., options_hash)`
+`fine_print_skip_signatures(contract_names..., options_hash)`
+
+And 1 instance method, also to all of your controllers:
+
+`fine_print_return`
 
 To require that your users sign the most recent version of a contract, call
 `fine_print_get_signatures` in your controllers, just as you would a
@@ -114,10 +125,10 @@ the names of the unsigned contracts passed along in a `terms` array in the URL p
 
 Your job as the site developer is to present the terms to the user and ask them to sign them.
 This normally involves the user clicking an "I have read the above terms" checkbox which enables an "I Agree" button.
-When the "Agree" button is clicked (and you should verify that the checkbox is actually clicked in the params passed to the server), you need to send the information off to a controller 
-method that can call `FinePrint.sign_contract` which takes a user and a contract name, ID, or
-object. On success, this controller method can send the user back to where they were trying to
-go by calling the `fine_print_return` controller method (only works for GET requests).
+When the "Agree" button is clicked (and you should verify that the checkbox is actually clicked in the params passed to the server),
+you need to send the information off to a controller method that can call `FinePrint.sign_contract` which takes
+a user and a contract name, ID, or object. On success, this controller method can send the user back to where
+they were trying to go by calling the `fine_print_return` controller method (only works for GET requests).
 
 If there are multiple unsigned contracts, you are not required to get the user to sign
 them all in one page.  One strategy is to present only the first unsigned contract to them

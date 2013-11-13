@@ -29,6 +29,7 @@ module FinePrint
 
   # Gets a contract given either the contract's object, ID or name
   # If given a name, it returns the latest published version of that contract
+  #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
   #
   def self.get_contract(reference)
     ref = Integer(reference) rescue reference
@@ -42,30 +43,11 @@ module FinePrint
     end
   end
 
-  # Returns an array of names for the contracts whose latest published
-  # version the given user has not signed.
-  #   - names -- an array of contract names
+  # Records that the given user has signed the given contract
   #   - user -- the user in question
+  #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
   #
-  def self.get_unsigned_contract_names(names, user)
-    raise_unless_signed_in(user)
-    return [] if names.blank?
-    names_array = names.is_a?(Array) ? names.collect{|name| name.to_s} : [names.to_s]
-
-    signed_contracts = Contract
-      .joins(:signatures)
-      .where({:name => names_array,
-              :fine_print_signatures => {:user_id => user.id,
-                              :user_type => user.class.name}}).latest
-    signed_contract_names = signed_contracts.collect{|c| c.name}
-
-    return names - signed_contract_names
-  end
-
-  # Records that the given user has signed the given contract; the contract
-  # can be a Contract object, a contract ID, or a contract name (string)
-  #
-  def self.sign_contract(contract, user)
+  def self.sign_contract(user, contract)
     raise_unless_signed_in(user)
     contract = get_contract(contract)
     raise IllegalState, 'Contract not found' if contract.nil?
@@ -76,10 +58,11 @@ module FinePrint
     end
   end
 
-  # Returns true iff the given user has signed the given contract; the contract
-  # can be a Contract object, a contract ID, or a contract name (string)
+  # Returns true iff the given user has signed the given contract
+  #   - user -- the user in question
+  #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
   #
-  def self.signed_contract?(contract, user)
+  def self.signed_contract?(user, contract)
     raise_unless_signed_in(user)
     contract = get_contract(contract)
 
@@ -87,15 +70,36 @@ module FinePrint
                                :user_type => user.class.name).first.nil?
   end
 
-  # Returns true iff the given user has signed any version of the given contract.
+  # Returns true iff the given user has signed any version of the given contract
+  #   - user -- the user in question
   #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
-  def self.signed_any_contract_version?(contract, user)
+  def self.signed_any_contract_version?(user, contract)
     raise_unless_signed_in(user)
     contract = get_contract(contract)
     !Signature.joins(:contract)
               .where(:fine_print_contracts => {:name => contract.name},
                      :user_type => user.class.name,
                      :user_id => user.id).first.nil?
+  end
+
+  # Returns an array of names for the contracts whose latest published
+  # version the given user has not signed.
+  #   - user -- the user in question
+  #   - names -- contract names to check
+  #
+  def self.get_unsigned_contract_names(user, *names)
+    raise_unless_signed_in(user)
+    names = names.flatten.collect{|name| name.to_s}
+    return [] if names.blank?
+
+    signed_contracts = Contract
+      .joins(:signatures)
+      .where({:name => names,
+              :fine_print_signatures => {:user_id => user.id,
+                                         :user_type => user.class.name}}).latest
+    signed_contract_names = signed_contracts.collect{|c| c.name}
+
+    return names - signed_contract_names
   end
 
   def self.is_signed_in?(user)

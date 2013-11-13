@@ -24,24 +24,24 @@ describe FinePrint do
   end
 
   it 'gets unsigned contracts' do
-    expect(FinePrint.get_unsigned_contract_names(['beta', 'alpha'], @user)).to eq ['alpha']
+    expect(FinePrint.get_unsigned_contract_names(@user, 'beta', 'alpha')).to eq ['alpha']
   end
 
   it 'allows users to sign contracts' do
-    expect(FinePrint.signed_contract?(@alpha_1, @user)).to eq true
-    expect(FinePrint.signed_contract?(@alpha_2, @user)).to eq false
-    expect(FinePrint.signed_contract?(@beta_1, @user)).to eq true
-    expect(FinePrint.signed_any_contract_version?(@alpha_1, @user)).to eq true
-    expect(FinePrint.signed_any_contract_version?(@alpha_2, @user)).to eq true
-    expect(FinePrint.signed_any_contract_version?(@beta_1, @user)).to eq true
+    expect(FinePrint.signed_contract?(@user, @alpha_1)).to eq true
+    expect(FinePrint.signed_contract?(@user, @alpha_2)).to eq false
+    expect(FinePrint.signed_contract?(@user, @beta_1)).to eq true
+    expect(FinePrint.signed_any_contract_version?(@user, @alpha_1)).to eq true
+    expect(FinePrint.signed_any_contract_version?(@user, @alpha_2)).to eq true
+    expect(FinePrint.signed_any_contract_version?(@user, @beta_1)).to eq true
 
-    expect(FinePrint.sign_contract(@alpha_2, @user)).to be_a FinePrint::Signature
+    expect(FinePrint.sign_contract(@user, @alpha_2)).to be_a FinePrint::Signature
 
-    expect(FinePrint.signed_contract?(@alpha_1, @user)).to eq true
-    expect(FinePrint.signed_contract?(@alpha_2, @user)).to eq true
-    expect(FinePrint.signed_contract?(@beta_1, @user)).to eq true
-    expect(FinePrint.signed_any_contract_version?(@alpha_1, @user)).to eq true
-    expect(FinePrint.signed_any_contract_version?(@alpha_2, @user)).to eq true
-    expect(FinePrint.signed_any_contract_version?(@beta_1, @user)).to eq true
+    expect(FinePrint.signed_contract?(@user, @alpha_1)).to eq true
+    expect(FinePrint.signed_contract?(@user, @alpha_2)).to eq true
+    expect(FinePrint.signed_contract?(@user, @beta_1)).to eq true
+    expect(FinePrint.signed_any_contract_version?(@user, @alpha_1)).to eq true
+    expect(FinePrint.signed_any_contract_version?(@user, @alpha_2)).to eq true
+    expect(FinePrint.signed_any_contract_version?(@user, @beta_1)).to eq true
   end
 end
