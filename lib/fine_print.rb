@@ -38,8 +38,8 @@ module FinePrint
       ref
     when Integer
       Contract.find(ref)
-    when String
-      Contract.where(:name => ref).published.first
+    when String, Symbol
+      Contract.where(:name => ref.to_s).published.first
     end
   end
 
