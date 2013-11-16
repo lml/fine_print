@@ -8,7 +8,7 @@ module FinePrint
     protected
 
     def verify_admin
-      user = send FinePrint.current_user_method
+      user = FinePrint.current_user_proc.call(self)
       FinePrint.raise_unless_admin(user)
     end
   end

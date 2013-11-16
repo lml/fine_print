@@ -3,22 +3,22 @@
 FinePrint.configure do |config|
   # Engine Configuration
 
-  # Name of the ApplicationController helper method that returns the current user.
-  # Default: 'current_user'
-  config.current_user_method = 'current_user'
+  # Proc called with controller as argument that returns the current user.
+  # Default: lambda { |controller| controller.current_user }
+  config.current_user_proc = lambda { |controller| controller.current_user }
 
-  # Proc called with user as argument that should return true if and only if the user is an admin.
+  # Proc called with user as argument that returns true iif the user is an admin.
   # Admins can create and edit agreements and terminate accepted agreements.
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
 
-  # Proc that returns true if and only if the provided user is logged in.
+  # Proc called with user as argument that returns true iif the user is logged in.
   # In many systems, a non-logged-in user is represented by nil.
   # However, some systems use something like an AnonymousUser class to represent this state.
   # This proc is mostly used to help the developer realize that they should only be asking
   # signed in users to sign contracts; without this, developers would get a cryptic SQL error.
-  # Default: lambda { |user| !user.nil? }
-  config.user_signed_in_proc = lambda { |user| !user.nil? }
+  # Default: lambda { |user| user }
+  config.user_signed_in_proc = lambda { |user| user }
 
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages).
   # Default: '/'

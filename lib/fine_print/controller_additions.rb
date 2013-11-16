@@ -35,7 +35,7 @@ module FinePrint
             # Bail if nothing to do
             return true if contract_names.blank?
 
-            user = send FinePrint.current_user_method
+            user = FinePrint.current_user_proc.call(self)
             FinePrint.raise_unless_signed_in(user)
 
             unsigned_contract_names = 

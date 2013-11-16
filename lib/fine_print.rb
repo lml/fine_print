@@ -7,7 +7,7 @@ module FinePrint
 
   # Can be set in initializer only
   ENGINE_OPTIONS = [
-    :current_user_method,
+    :current_user_proc,
     :user_admin_proc,
     :user_signed_in_proc,
     :pose_contracts_path,
