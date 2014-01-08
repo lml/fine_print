@@ -40,6 +40,12 @@ module FinePrint
 
             unsigned_contract_names = 
               FinePrint.get_unsigned_contract_names(user, contract_names)
+
+            # Ignore contracts that don't yet exist or aren't yet published (happens 
+            # when adding code that requires a new contract but before that contract 
+            # has been added and published)
+            unsigned_contract_names.reject!{|name| FinePrint.get_contract(name).blank?}
+
             return true if unsigned_contract_names.empty?
 
             # http://stackoverflow.com/a/2165727/1664216
