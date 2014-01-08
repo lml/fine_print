@@ -30,13 +30,16 @@ module FinePrint
 
         class_eval do
           before_filter(filter_options) do |controller|
+            # If the user isn't signed in, they can't sign a contract.  Since there 
+            # may be some pages that logged in and non-logged in users can visit,
+            # just return quietly instead of raising an exception.
+            user = FinePrint.current_user_proc.call(self)
+            return true unless FinePrint.is_signed_in?(user)
+
             contract_names = names - fine_print_skipped_contract_names
 
             # Bail if nothing to do
             return true if contract_names.blank?
-
-            user = FinePrint.current_user_proc.call(self)
-            FinePrint.raise_unless_signed_in(user)
 
             unsigned_contract_names = 
               FinePrint.get_unsigned_contract_names(user, contract_names)
