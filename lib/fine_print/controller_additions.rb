@@ -36,7 +36,7 @@ module FinePrint
             return true if contract_names.blank?
 
             user = FinePrint.current_user_proc.call(self)
-            FinePrint.raise_unless_signed_in(user)
+            FinePrint.raise_unless_can_sign(user)
 
             unsigned_contract_names = 
               FinePrint.get_unsigned_contract_names(user, contract_names)

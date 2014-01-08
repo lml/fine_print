@@ -18,7 +18,7 @@ FinePrint.configure do |config|
   # This proc is mostly used to help the developer realize that they should only be asking
   # signed in users to sign contracts; without this, developers would get a cryptic SQL error.
   # Default: lambda { |user| user }
-  config.user_signed_in_proc = lambda { |user| user }
+  config.can_sign_contracts_proc = lambda { |user| user }
 
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages).
   # Default: '/'
