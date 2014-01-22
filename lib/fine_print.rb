@@ -9,7 +9,7 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_proc,
     :user_admin_proc,
-    :user_signed_in_proc,
+    :can_sign_contracts_proc,
     :pose_contracts_path,
     :redirect_path
   ]
@@ -48,7 +48,7 @@ module FinePrint
   #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
   #
   def self.sign_contract(user, contract)
-    raise_unless_signed_in(user)
+    raise_unless_can_sign(user)
     contract = get_contract(contract)
     raise IllegalState, 'Contract not found' if contract.nil?
 
@@ -63,7 +63,7 @@ module FinePrint
   #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
   #
   def self.signed_contract?(user, contract)
-    raise_unless_signed_in(user)
+    raise_unless_can_sign(user)
     contract = get_contract(contract)
 
     !contract.signatures.where(:user_id => user.id,
@@ -74,7 +74,7 @@ module FinePrint
   #   - user -- the user in question
   #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
   def self.signed_any_contract_version?(user, contract)
-    raise_unless_signed_in(user)
+    raise_unless_can_sign(user)
     contract = get_contract(contract)
     !Signature.joins(:contract)
               .where(:fine_print_contracts => {:name => contract.name},
@@ -88,7 +88,7 @@ module FinePrint
   #   - names -- contract names to check
   #
   def self.get_unsigned_contract_names(user, *names)
-    raise_unless_signed_in(user)
+    raise_unless_can_sign(user)
     names = names.flatten.collect{|name| name.to_s}
     return [] if names.blank?
 
@@ -102,16 +102,16 @@ module FinePrint
     return names - signed_contract_names
   end
 
-  def self.is_signed_in?(user)
-    user_signed_in_proc.call(user)
+  def self.can_sign?(user)
+    can_sign_contracts_proc.call(user)
   end
 
   def self.is_admin?(user)
-    is_signed_in?(user) && user_admin_proc.call(user)
+    !user.nil? && user_admin_proc.call(user)
   end
 
-  def self.raise_unless_signed_in(user)
-    raise IllegalState, 'User not signed in' unless is_signed_in?(user)
+  def self.raise_unless_can_sign(user)
+    raise IllegalState, 'User cannot sign contracts' unless can_sign?(user)
   end
 
   def self.raise_unless_admin(user)

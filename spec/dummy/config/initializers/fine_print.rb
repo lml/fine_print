@@ -12,13 +12,14 @@ FinePrint.configure do |config|
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| user.is_admin }
 
-  # Proc called with user as argument that returns true iif the user is logged in.
-  # In many systems, a non-logged-in user is represented by nil.
+  # Proc called with user as argument that returns true iif the argument is a user
+  # who can sign a contract.  In many systems, a non-logged-in user is represented by nil.
   # However, some systems use something like an AnonymousUser class to represent this state.
-  # This proc is mostly used to help the developer realize that they should only be asking
-  # signed in users to sign contracts; without this, developers would get a cryptic SQL error.
+  # If this proc returns false, FinePrint will not ask for signatures and will allow access
+  # to any page, so it's up to the developer to make sure that unsigned users can't access
+  # pages that require a contract signature to use.
   # Default: lambda { |user| user }
-  config.user_signed_in_proc = lambda { |user| user }
+  config.can_sign_contracts_proc = lambda { |user| user }
 
   # Path to redirect users to when an error occurs (e.g. permission denied on admin pages).
   # Default: '/'

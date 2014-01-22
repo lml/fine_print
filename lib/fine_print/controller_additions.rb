@@ -34,7 +34,7 @@ module FinePrint
             # may be some pages that logged in and non-logged in users can visit,
             # just return quietly instead of raising an exception.
             user = FinePrint.current_user_proc.call(self)
-            return true unless FinePrint.is_signed_in?(user)
+            return true unless FinePrint.can_sign?(user)
 
             contract_names = names - fine_print_skipped_contract_names
 
