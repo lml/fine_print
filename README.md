@@ -97,10 +97,9 @@ class MyController < ApplicationController
 ```
 
 You should only try to get signatures when you have a user who is logged in
-(FinePrint will raise an exception if you try to get a non-logged in user to sign
-an agreement, as that does not make any sense).  This normally means that before
-the call to `fine_print_get_signatures` you should call whatever `before_filter`
-gets a user to login.
+(FinePrint will allow non-logged in users to pass right through without signing
+anything).  This normally means that before the call to `fine_print_get_signatures`
+you should call whatever `before_filter` gets a user to login.
 
 Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls,
 FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same
