@@ -11,12 +11,12 @@ module FinePrint
     end
 
     it "won't get index unless authorized" do
-      get :index, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :index, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       
       sign_in @user
-      get :index, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :index, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
     end
     
     it 'must get index if authorized' do
@@ -26,13 +26,13 @@ module FinePrint
     end
 
     it "won't destroy unless authorized" do
-      delete :destroy, :id => @signature.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { delete :destroy, :id => @signature.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(Signature.find(@signature.id)).to eq @signature
       
       sign_in @user
-      delete :destroy, :id => @signature.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { delete :destroy, :id => @signature.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(Signature.find(@signature.id)).to eq @signature
     end
     

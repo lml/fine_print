@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :contract, :class => FinePrint::Contract do
     name { "Contract_#{SecureRandom.hex(4)}" }
-    title { Faker::Lorem.sentence(3) }
-    content { Faker::Lorem.paragraphs(2) }
+    title { Faker::Lorem.sentence(3).to_s }
+    content { Faker::Lorem.paragraphs(2).to_s }
 
     factory :published_contract do
       after(:create) {|instance| instance.publish }

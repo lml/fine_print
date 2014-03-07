@@ -46,7 +46,7 @@ Also add FinePrint to your application's routes:
 mount FinePrint::Engine => "/fine_print"
 ```
 
-And provide a link on your site for administrators to access the FinePrint engine to manage contracts.
+And provide a link on your site for administrators to access the FinePrint engine to manage your contracts.
 
 ```erb
 <%= link_to 'FinePrint', fine_print_path %>
@@ -56,37 +56,28 @@ And provide a link on your site for administrators to access the FinePrint engin
 
 After installation, the initializer for FinePrint will be located under `config/initializers/fine_print.rb`.
 Make sure to configure it to suit your needs.
-Pay particular attention to `user_admin_proc`, as you will be unable to manage your contracts unless you set up this proc to return true for your admins.
+Pay particular attention to `user_admin_proc`, as you will be unable to manage your contracts unless you setup this proc to return true for your admins.
 
 ## Usage
 
-The FinePrint module contains several methods that help you find contracts and mark them as signed:
+You can choose to check if users signed contracts either as a before_filter or inside your controller actions.
 
-`get_contract(contract_object_or_id_or_name)`
-`sign_contract(user, contract_object_or_id_or_name)`
-`signed_contract?(user, contract_object_or_id_or_name)`
-`signed_any_contract_version?(user, contract_object_or_id_or_name)`
-`get_unsigned_contract_names(user, contract_names...)`
+### Option 1 - As a before_filter
 
-Additionally, FinePrint adds 2 class methods to all of your controllers:
+If you choose to have FinePrint work like a before_filter, you can user the following 2 class methods, which are automatically added to all of your controllers:
 
-`fine_print_get_signatures(contract_names..., options_hash)`
-`fine_print_skip_signatures(contract_names..., options_hash)`
-
-And 1 instance method, also to all of your controllers:
-
-`fine_print_return`
+```rb
+fine_print_get_signatures(contract_names..., options_hash)
+fine_print_skip_signatures(contract_names..., options_hash)
+```
 
 To require that your users sign the most recent version of a contract, call
-`fine_print_get_signatures` in your controllers, just as you would a
-`before_filter` (in fact, this method works by adding a `before_filter` for you).
+`fine_print_get_signatures` in your controller classes. It works just like a `before_filter` (in fact, it will add a `before_filter` for you).
 
-This method takes a list of contract names (given either as strings or as 
+This method takes a list of contract names to check (given either as strings or as 
 symbols), along with an options hash.
 
-The options hash can include any options you could pass to a `before_filter`, e.g. `only` and `except`,
-plus the FinePrint-specific option `pose_contracts_path`, which can override the value specified
-in the FinePrint initializer.
+The options hash can include any options you could pass to a `before_filter`, e.g. `only` and `except`, plus the FinePrint-specific options `contracts_path`, which can override the value specified in the FinePrint initializer.
 
 Example:
 
@@ -96,16 +87,11 @@ class MyController < ApplicationController
                             :except => :index
 ```
 
-You should only try to get signatures when you have a user who is logged in
-(FinePrint will allow non-logged in users to pass right through without signing
-anything).  This normally means that before the call to `fine_print_get_signatures`
-you should call whatever `before_filter` gets a user to login.
+You should only try to get signatures when you have a user who is logged in (by default FinePrint will allow non-logged in users to pass right through without signing anything).  This normally means that before the call to `fine_print_get_signatures` you should call whatever `before_filter` gets a user to login.
 
-Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls,
-FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same
-arguments as before_filter, and can be called either before or after `fine_print_get_signatures`.
+Just like how rails provides a `skip_before_filter` method to offset `before_filter` calls, FinePrint provides a `fine_print_skip_signatures` method.  This method takes the same arguments as before_filter, and can be called either before or after `fine_print_get_signatures`.
 
-One way you may want to use these methods is to require signatures in every controller
+One way you can use these methods is to require signatures in every controller
 by default, and then to skip them in certain situations, e.g.:
 
 ```rb
@@ -118,22 +104,48 @@ class NoSigsRequiredController < ApplicationController
   fine_print_skip_signatures :terms_of_use
 ```
 
-When a set of contracts is found by FinePrint to be required but unsigned, FinePrint redirects
-the user to the path specified by the `pose_contracts_path` configuration variable, with
-the names of the unsigned contracts passed along in a `terms` array in the URL parameters.
+### Option 2 - Inside your controller actions
 
-Your job as the site developer is to present the terms to the user and ask them to sign them.
-This normally involves the user clicking an "I have read the above terms" checkbox which enables an "I Agree" button.
-When the "Agree" button is clicked (and you should verify that the checkbox is actually clicked in the params passed to the server),
-you need to send the information off to a controller method that can call `FinePrint.sign_contract` which takes
-a user and a contract name, ID, or object. On success, this controller method can send the user back to where
-they were trying to go by calling the `fine_print_return` controller method (only works for GET requests).
+If instead you have to check for contracts inside controller action methods, you can use the following 2 instance methods, also automatically added to all of your controllers:
+
+```rb
+fine_print_get_unsigned_contract_names(contract_names)
+fine_print_redirect(unsigned_contract_names)
+```
+
+This can be done in one line, like so:
+
+```rb
+fine_print_redirect(fine_print_get_unsigned_contract_names(contract_names))
+```
+
+The `fine_print_get_unsigned_contract_names` method can return nil if no contracts are provided or if the user cannot sign contracts; otherwise, it returns an array of the contract names the user has not yet signed.
+
+Keep in mind that `fine_print_redirect` might cause a redirect, so if your controller action also needs to redirect, you should check the output of `fine_print_get_unsigned_contract_names`. This method will not redirect the user if either the array of contract names to sign is blank or if the user_can_sign_proc returns false when called with the user as an argument.
+
+### Displaying and signing contracts
+
+When a set of contracts is found by FinePrint to be required but unsigned, and the user is allowed to sign contracts, FinePrint redirects the user to the path specified by the `contract_redirect_path` configuration variable, with the names of the unsigned contracts passed along in the params hash. The param key for the unsigned contract names array is determined by the `contract_param_name` configuration variable (default is :contracts).
+
+Your job as the site developer is to present the terms to the user and ask them to sign them. This normally involves the user clicking an "I have read the above terms" checkbox which enables an "I Agree" button. When the "Agree" button is clicked (and you should verify that the checkbox is actually clicked in the params passed to the server), you need to send the information off to a controller method that will mark the contract as signed using the `FinePrint.sign_contract` method. The following methods in the FinePrint module can be used to help you find contract objects and mark them as signed:
+
+```rb
+FinePrint.get_contract(contract_object_or_id_or_name)
+FinePrint.sign_contract(user, contract_object_or_id_or_name)
+FinePrint.signed_contract?(user, contract_object_or_id_or_name)
+FinePrint.signed_any_contract_version?(user, contract_object_or_id_or_name)
+FinePrint.get_unsigned_contract_names(user, contract_names...)
+```
+
+If you require more explanation about these methods and their arguments, check the `lib/fine_print.rb` file.
+
+### Redirecting users back
+
+Regardless if you use `fine_print_get_signatures` or `fine_print_redirect`, after your contract is signed you can use the `fine_print_return` controller instance method to send the user back to the place where they came from.
 
 If there are multiple unsigned contracts, you are not required to get the user to sign
-them all in one page.  One strategy is to present only the first unsigned contract to them
-for signature.  Once they sign it, they'll be redirected to where they were trying to 
-go and FinePrint will see again that they still have remaining unsigned contracts, and
-FinePrint will direct them back to your `pose_contracts_path` with one fewer contract
+them all at once.  One strategy is to present only the first unsigned contract to them.  Once they sign it, they'll be redirected to where they were trying to 
+go and FinePrint will once again determine that they still have remaining unsigned contracts, and redirect them back to your `contract_redirect_path` with one less contract
 name passed in.
 
 ## Managing Contracts
@@ -141,12 +153,12 @@ name passed in.
 Here are some important notes about managing your contracts with FinePrint:
 
 - Contracts have a name and a title; the former is used by your code, the latter 
-is intended for display to end users.
+is intended for display to end users and even site admins.
 - Creating another contract with the same name as an existing contract will make it a new version of that existing contract.
 - Contracts need to be explicitly published to be available to users to sign (this can be done on the contracts admin page).
 - The latest published version is what users will see.
 - A contract cannot be modified after at least one user has signed it, but you can always create a new version.
-- When a published contract version is available but has not been signed, users will be asked to accept it the next time they visit a controller action that calls `fine_print_get_signatures` for that contract's name.
+- When a published contract version is available but has not been signed, users will be asked to accept it the next time they visit a controller action that calls either `fine_print_get_signatures` or the controller fine_print instance methods with that contract's name.
 
 ## Customization
 

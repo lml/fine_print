@@ -1,6 +1,6 @@
 require 'fine_print/engine'
 require 'fine_print/security_transgression'
-require 'fine_print/controller_additions'
+require 'fine_print/controller_includes'
 
 module FinePrint
   # Attributes
@@ -9,17 +9,17 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_proc,
     :user_admin_proc,
-    :can_sign_contracts_proc,
-    :pose_contracts_path,
-    :redirect_path
+    :user_can_sign_proc
   ]
 
-  # Can be set in initializer or passed as an option to fine_print_get_signatures
-  SIGNATURE_OPTIONS = [
-    :pose_contracts_path
+  # Can be set in initializer or passed as an argument to either
+  # `fine_print_get_signatures` or `fine_print_redirect`
+  CONTRACT_OPTIONS = [
+    :contract_param_name,
+    :contract_redirect_path
   ]
   
-  (ENGINE_OPTIONS + SIGNATURE_OPTIONS).each do |option|
+  (ENGINE_OPTIONS + CONTRACT_OPTIONS).each do |option|
     mattr_accessor option
   end
   
@@ -27,10 +27,9 @@ module FinePrint
     yield self
   end
 
-  # Gets a contract given either the contract's object, ID or name
+  # Gets a contract, given either the contract's object, ID or name
   # If given a name, it returns the latest published version of that contract
-  #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
-  #
+  #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
   def self.get_contract(reference)
     ref = Integer(reference) rescue reference
     case ref
@@ -44,9 +43,8 @@ module FinePrint
   end
 
   # Records that the given user has signed the given contract
-  #   - user -- the user in question
-  #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
-  #
+  #   - user - the user in question
+  #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
   def self.sign_contract(user, contract)
     raise_unless_can_sign(user)
     contract = get_contract(contract)
@@ -59,9 +57,8 @@ module FinePrint
   end
 
   # Returns true iff the given user has signed the given contract
-  #   - user -- the user in question
-  #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
-  #
+  #   - user - the user in question
+  #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
   def self.signed_contract?(user, contract)
     raise_unless_can_sign(user)
     contract = get_contract(contract)
@@ -71,8 +68,8 @@ module FinePrint
   end
 
   # Returns true iff the given user has signed any version of the given contract
-  #   - user -- the user in question
-  #   - contract -- can be a Contract object, its ID, or its name as a String or Symbol
+  #   - user - the user in question
+  #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
   def self.signed_any_contract_version?(user, contract)
     raise_unless_can_sign(user)
     contract = get_contract(contract)
@@ -84,9 +81,8 @@ module FinePrint
 
   # Returns an array of names for the contracts whose latest published
   # version the given user has not signed.
-  #   - user -- the user in question
-  #   - names -- contract names to check
-  #
+  #   - user - the user in question
+  #   - names - contract names to check
   def self.get_unsigned_contract_names(user, *names)
     raise_unless_can_sign(user)
     names = names.flatten.collect{|name| name.to_s}
@@ -97,13 +93,13 @@ module FinePrint
       .where({:name => names,
               :fine_print_signatures => {:user_id => user.id,
                                          :user_type => user.class.name}}).latest
-    signed_contract_names = signed_contracts.collect{|c| c.name}
+    signed_contract_names = signed_contracts.to_a.collect{|c| c.name}
 
     return names - signed_contract_names
   end
 
   def self.can_sign?(user)
-    can_sign_contracts_proc.call(user)
+    user_can_sign_proc.call(user)
   end
 
   def self.is_admin?(user)

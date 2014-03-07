@@ -8,7 +8,7 @@ module FinePrint
     validates_presence_of :contract, :user_type, :user_id
     validates_uniqueness_of :contract_id, :scope => [:user_type, :user_id]
 
-    default_scope order(:contract_id, :user_type, :user_id)
+    default_scope { order(:contract_id, :user_type, :user_id) }
 
     protected
 

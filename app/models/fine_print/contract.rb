@@ -12,14 +12,15 @@ module FinePrint
     validates_format_of :name, :with => /\A\w+\z/
     validates_uniqueness_of :version, :scope => :name, :case_sensitive => false
 
-    default_scope order(:name, 'version DESC')
+    default_scope { order(:name, 'version DESC') }
 
-    scope :published, where(arel_table[:version].not_eq(nil))
-    scope :latest, published
-      .joins(:same_name)
-      .group(:id)
-      .having(:version => arel_table.alias(:same_names_fine_print_contracts)[:version]
-                          .maximum.tap{|mvq| mvq.alias = nil})
+    scope :published, lambda { where(arel_table[:version].not_eq(nil)) }
+    scope :latest, lambda {
+      published.joins(:same_name)
+               .group('fine_print_contracts.id')
+               .having(:version =>
+                       arel_table.alias(:same_names_fine_print_contracts)[:version].maximum.tap{|mvq| mvq.alias = nil})
+    }
 
     def is_published?
       !version.nil?

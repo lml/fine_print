@@ -1,3 +1,4 @@
 Rails.application.routes.draw do
-  mount FinePrint::Engine => '/fine_print'
+
+  mount FinePrint::Engine => "/fine_print"
 end

@@ -7,12 +7,12 @@ module FinePrint
     end
 
     it "won't get index unless authorized" do
-      get :index, :use_route => :fine_print
-      assert_response :redirect
+      expect { get :index, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       
       sign_in @user
-      get :index, :use_route => :fine_print
-      assert_response :redirect
+      expect { get :index, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
     end
     
     it 'must get index if authorized' do

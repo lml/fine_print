@@ -11,12 +11,12 @@ module FinePrint
     end
 
     it "won't get index unless authorized" do
-      get :index, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :index, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       
       sign_in @user
-      get :index, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :index, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
     end
     
     it 'must get index if authorized' do
@@ -26,12 +26,12 @@ module FinePrint
     end
     
     it "won't get new unless authorized" do
-      get :new, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :new, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       
       sign_in @user
-      get :new, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :new, :use_route => :fine_print }
+      .to raise_error(FinePrint::SecurityTransgression)
     end
     
     it 'must get new if authorized' do
@@ -46,13 +46,13 @@ module FinePrint
       attributes[:title] = 'Some title'
       attributes[:content] = 'Some content'
       
-      post :create, :contract => attributes, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { post :create, :contract => :attributes, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(assigns(:contract)).to be_nil
       
       sign_in @user
-      post :create, :contract => attributes, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { post :create, :contract => :attributes, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(assigns(:contract)).to be_nil
     end
     
@@ -72,12 +72,12 @@ module FinePrint
     end
     
     it "won't edit unless authorized" do
-      get :edit, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :edit, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       
       sign_in @user
-      get :edit, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { get :edit, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
     end
     
     it 'must edit if authorized' do
@@ -95,16 +95,18 @@ module FinePrint
       title = @contract.title
       content = @contract.content
       
-      put :update, :id => @contract.id, :contract => attributes, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { post :update, :id => @contract.id,
+                    :contract => attributes, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       @contract.reload
       expect(@contract.name).to eq name
       expect(@contract.title).to eq title
       expect(@contract.content).to eq content
       
       sign_in @user
-      put :update, :id => @contract.id, :contract => attributes, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { post :update, :id => @contract.id,
+        :contract => attributes, :use_route => :fine_print }
+      .to raise_error(FinePrint::SecurityTransgression)
       @contract.reload
       expect(@contract.name).to eq name
       expect(@contract.title).to eq title
@@ -128,13 +130,13 @@ module FinePrint
     end
 
     it "won't destroy unless authorized" do
-      delete :destroy, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { delete :destroy, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(Contract.find(@contract.id)).to eq @contract
       
       sign_in @user
-      delete :destroy, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { delete :destroy, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(Contract.find(@contract.id)).to eq @contract
     end
     
@@ -147,14 +149,14 @@ module FinePrint
 
     it "won't publish unless authorized" do
       expect(@contract.is_published?).to eq false
-      put :publish, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { put :publish, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       @contract.reload
       expect(@contract.is_published?).to eq false
       
       sign_in @user
-      put :publish, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { put :publish, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       @contract.reload
       expect(@contract.is_published?).to eq false
     end
@@ -172,14 +174,14 @@ module FinePrint
     it "won't unpublish unless authorized" do
       @contract.publish
       expect(@contract.is_published?).to eq true
-      put :unpublish, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { put :unpublish, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       @contract.reload
       expect(@contract.is_published?).to eq true
       
       sign_in @user
-      put :unpublish, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { put :unpublish, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       @contract.reload
       expect(@contract.is_published?).to eq true
     end
@@ -199,13 +201,13 @@ module FinePrint
       @contract.publish
       expect(@contract.is_published?).to eq true
       
-      put :new_version, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { put :new_version, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(assigns(:contract)).to be_nil
       
       sign_in @user
-      put :new_version, :id => @contract.id, :use_route => :fine_print
-      assert_redirected_to FinePrint.redirect_path
+      expect { put :new_version, :id => @contract.id, :use_route => :fine_print }
+             .to raise_error(FinePrint::SecurityTransgression)
       expect(assigns(:contract)).to be_nil
     end
     
