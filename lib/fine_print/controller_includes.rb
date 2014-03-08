@@ -28,23 +28,29 @@ module FinePrint
     end
 
     # Accepts an array of unsigned contract names and an options hash
-    # Unless the array of unsigned contract names is blank, saves the current
-    # request path and redirects the user to the `contract_redirect_path`, with
+    # Unless the array of unsigned contract names is blank or the request url is
+    # already the contract_redirect_path, it saves the current request path and
+    # redirects the user to the `contract_redirect_path`, with
     # `contract_param_name` containing the unsigned contract names
     def fine_print_redirect(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
       unsigned_contract_names = args.flatten
-      return if unsigned_contract_names.blank?
+      return if unsigned_contract_names.nil? ||\
+                unsigned_contract_names.all? { |n| n.blank? }
 
-      # http://stackoverflow.com/a/2165727/1664216
-      session[:fine_print_return_to] = "#{request.protocol}#{request.host_with_port}#{request.fullpath}"
-
-      path = options[:contract_redirect_path] || FinePrint.pose_contracts_path
+      path = options[:contract_redirect_path] || FinePrint.contract_redirect_path
       param_name = options[:contract_param_name] || FinePrint.contract_param_name
 
       # http://stackoverflow.com/a/6561953
-      redirect_to path + (path.include?('?') ? '&' : '?') +\
-                  {param_name.to_sym => unsigned_contract_names}.to_query
+      redirect_path = path + (path.include?('?') ? '&' : '?') +\
+                      {param_name.to_sym => unsigned_contract_names}.to_query
+
+      # Prevent redirect loop
+      return if view_context.current_page?(redirect_path)
+
+      # http://stackoverflow.com/a/2165727/1664216
+      session[:fine_print_return_to] = "#{request.protocol}#{request.host_with_port}#{request.fullpath}"
+      redirect_to redirect_path
     end
 
     # Accepts no arguments

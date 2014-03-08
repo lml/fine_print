@@ -19,7 +19,7 @@ FinePrint.configure do |config|
   # In many systems, a non-logged-in user is represented by nil.
   # However, some systems use something like an AnonymousUser class to represent this state.
   # If this proc returns false, FinePrint will not ask for signatures and will not redirect the user, so it's up to the developer to make sure that unsigned users can't access pages that should require a signed contract to use.
-  # Default: lambda { |user| user }
+  # Default: lambda { |user| !!user }
   config.user_can_sign_proc = lambda { |user| !!user }
 
 
