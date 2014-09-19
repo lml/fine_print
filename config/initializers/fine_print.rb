@@ -32,7 +32,7 @@ FinePrint.configure do |config|
   # What to call the url or json parameter that holds contract names
   # This is visible to the user in the url or in json responses
   # Default: 'contracts'
-  config.contract_param = 'contracts'
+  config.contracts_param = 'contracts'
 
   # Path to redirect users to when they need to agree to contract(s).
   # A list of contract names that must be agreed to will be available in the `contract_param`.
@@ -40,6 +40,6 @@ FinePrint.configure do |config|
   # the user to agree to the first one and then they'll just eventually be
   # redirected back to this page with the remaining contract names.
   # Default: '/'
-  config.sign_contract_path = '/'
+  config.sign_contracts_path = '/'
 
 end

@@ -15,8 +15,8 @@ module FinePrint
   # Can be set in initializer or passed as an argument
   # to FinePrint controller methods
   CONTROLLER_OPTIONS = [
-    :contract_param,
-    :sign_contract_path
+    :contracts_param,
+    :sign_contracts_path
   ]
   
   (ENGINE_OPTIONS + CONTROLLER_OPTIONS).each do |option|
