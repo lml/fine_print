@@ -9,7 +9,7 @@ describe FinePrint do
     @alpha_1_sig = FactoryGirl.create(:signature, :contract => @alpha_1, :user => @user) 
     @beta_1_sig = FactoryGirl.create(:signature, :contract => @beta_1, :user => @user)
 
-    @alpha_2 = @alpha_1.draft_copy
+    @alpha_2 = @alpha_1.new_version
     @alpha_2.update_attribute(:content, 'foo')
     @alpha_2.publish
   end

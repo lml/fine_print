@@ -1,3 +1,6 @@
+require 'action_interceptor'
+require 'squeel'
+
 module FinePrint
   class Engine < ::Rails::Engine
     isolate_namespace FinePrint

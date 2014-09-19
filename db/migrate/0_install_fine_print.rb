@@ -18,10 +18,9 @@ class InstallFinePrint < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :fine_print_signatures, :contract_id
-    add_index :fine_print_signatures,
-              [:user_id, :user_type, :contract_id],
+    add_index :fine_print_signatures, [:user_id, :user_type, :contract_id],
               :name => 'index_fine_print_s_on_u_id_and_u_type_and_c_id',
               :unique => true
+    add_index :fine_print_signatures, :contract_id
   end
 end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module FinePrint
-  describe SignaturesController do
+  describe SignaturesController, :type => :controller do
     routes { FinePrint::Engine.routes }
 
     before do

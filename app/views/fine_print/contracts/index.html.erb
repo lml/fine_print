@@ -17,7 +17,7 @@
               <% if contract.can_be_updated? %>
                 [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
               <% else %>
-                [<%= link_to 'New version', new_version_contract_path(contract), :class => 'fine_print link' %>]
+                [<%= link_to 'New version', new_version_contract_path(contract), :method => :post %>]
               <% end %>
               <% if contract.can_be_published? %>
                 [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]

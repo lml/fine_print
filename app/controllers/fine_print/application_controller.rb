@@ -1,12 +1,12 @@
 module FinePrint
   class ApplicationController < ActionController::Base
-    before_filter :verify_admin
+    before_filter :require_manager
 
     protected
 
-    def verify_admin
+    def require_manager
       user = FinePrint.current_user_proc.call(self)
-      FinePrint.raise_unless_admin(user)
+      raise IllegalState, 'User is not a manager' unless FinePrint.manager?(user)
     end
   end
 end

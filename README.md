@@ -1,6 +1,6 @@
 # FinePrint
 
-FinePrint is a Rails gem (engine) that makes managing web site agreements (terms, privacy policy, etc) simple and easy.
+FinePrint is a Rails engine in gem form that makes managing web site agreements (terms of use, privacy policy, etc) simple and easy.
 
 As the meaning of 'agreement' can be somewhat ambiguous (meaning either the thing someone agrees to or the record of the agreement between that thing and the user), we call a set of terms a 'contract' and a user's agreement to that contract a 'signature'.
 
@@ -64,13 +64,16 @@ You can choose to check if users signed contracts either as a before_filter or i
 
 ### Option 1 - As a before_filter
 
-If you choose to have FinePrint work like a before_filter, you can user the following 2 class methods, which are automatically added to all of your controllers:
+If you choose to have FinePrint work like a before_filter, you can user the following 3 class methods, which are automatically added to all of your controllers:
 
 ```rb
 fine_print_get_signatures(contract_names..., options_hash)
+fine_print_require_signatures(contract_names..., options_hash)
 fine_print_skip_signatures(contract_names..., options_hash)
 ```
 
+They work as follows:
+- `fine_print_get_signatures` will redirect the user
 To require that your users sign the most recent version of a contract, call
 `fine_print_get_signatures` in your controller classes. It works just like a `before_filter` (in fact, it will add a `before_filter` for you).
 

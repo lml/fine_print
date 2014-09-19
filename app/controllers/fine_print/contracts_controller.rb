@@ -1,22 +1,17 @@
 module FinePrint
   class ContractsController < FinePrint::ApplicationController
     include FinePrint::ApplicationHelper
+
     before_filter :get_contract, :except => [:index, :new, :create]
 
     def index
       @contracts = Contract.all
     end
-  
-    def show
-    end
 
     def new
       @contract = Contract.new
     end
-  
-    def edit
-    end
-  
+
     def create
       @contract = Contract.new
       @contract.name = params[:contract][:name]
@@ -29,7 +24,13 @@ module FinePrint
         render :action => 'new'
       end
     end
-  
+
+    def show
+    end
+
+    def edit
+    end
+
     def update
       @contract.name = params[:contract][:name]
       @contract.title = params[:contract][:title]
@@ -67,7 +68,7 @@ module FinePrint
     end
 
     def new_version
-      @contract = @contract.draft_copy
+      @contract = @contract.new_version
     end
 
     protected

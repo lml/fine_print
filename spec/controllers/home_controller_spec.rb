@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module FinePrint
-  describe HomeController do
+  describe HomeController, :type => :controller do
     before do
       setup_controller_spec
     end
