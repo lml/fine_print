@@ -5,7 +5,7 @@ module FinePrint
     before_filter :get_contract, :except => [:index, :new, :create]
 
     def index
-      @contracts = Contract.all
+      @contracts = Contract.includes(:signatures).all.to_a.group_by(&:name)
     end
 
     def new
@@ -21,7 +21,7 @@ module FinePrint
       if @contract.save
         redirect_to @contract, :notice => 'Contract was successfully created.'
       else
-        render :action => 'new'
+        render :action => 'new', :alert => merge_errors_for(@contract)
       end
     end
 
@@ -29,6 +29,9 @@ module FinePrint
     end
 
     def edit
+      @contract.no_signatures
+      redirect_to contracts_path, :alert => merge_errors_for(@contract) \
+        unless @contract.errors.empty?
     end
 
     def update
@@ -39,7 +42,7 @@ module FinePrint
       if @contract.save
         redirect_to @contract, :notice => 'Contract was successfully updated.'
       else
-        render :action => 'edit'
+        render :action => 'edit', :alert => merge_errors_for(@contract)
       end
     end
 

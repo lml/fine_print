@@ -37,7 +37,6 @@ module FinePrint
     end
 
     def unpublish
-      no_signatures
       errors.add(:base, 'Contract is not the latest published version') unless is_latest?
       return false unless errors.empty?
 

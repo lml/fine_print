@@ -12,7 +12,7 @@
     </tr>
     <tr>
       <th>Version</th>
-      <td><%= @contract.version.nil? ? 'Draft' : @contract.version %></td>
+      <td><%= @contract.version || 'Draft' %></td>
     </tr>
     <tr>
       <th>Updated at</th>
@@ -25,7 +25,7 @@
   </table>
 
   <div class='fine_print links'>
-    <% if @contract.can_be_updated? %>
+    <% if @contract.signatures.empty? %>
       <%= link_to 'Edit', edit_contract_path(@contract), :class => 'fine_print link' %> |
     <% end %>
     <%= link_to 'List', contracts_path, :class => 'fine_print link' %>

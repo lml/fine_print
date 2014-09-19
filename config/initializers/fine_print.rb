@@ -23,6 +23,10 @@ FinePrint.configure do |config|
   # Default: lambda { |user| !!user }
   config.can_sign_proc = lambda { |user| !!user }
 
+  # Proc that raises an Exception when an unauthorized user accesses FinePrint's controllers.
+  # Default: lambda { raise ActionController::RoutingError, 'Not Found' }
+  config.security_transgression_proc = lambda { raise ActionController::RoutingError, 'Not Found' }
+
   # Contract Configuration
 
   # What to call the url or json parameter that holds contract names

@@ -8,7 +8,8 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_proc,
     :manager_proc,
-    :can_sign_proc
+    :can_sign_proc,
+    :security_transgression_proc
   ]
 
   # Can be set in initializer or passed as an argument
@@ -42,7 +43,7 @@ module FinePrint
   #   - user - the user in question
   #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
   def self.sign_contract(user, contract)
-    raise IllegalState, 'User cannot sign contracts' unless can_sign?(user)
+    FinePrint.raise_security_transgression unless can_sign?(user)
     contract = get_contract(contract)
 
     Signature.create do |signature|
@@ -101,5 +102,9 @@ module FinePrint
 
   def self.manager?(user)
     !user.nil? && manager_proc.call(user)
+  end
+
+  def self.raise_security_transgression
+    security_transgression_proc.call
   end
 end

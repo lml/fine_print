@@ -2,10 +2,10 @@
 
 <div class='fine_print contract_index'>
 
-  <% @contracts.group_by(&:name).each do |name, contracts| %>
+  <% @contracts.each do |name, contracts| %>
 
     <%# Sort contracts by version number; unpublished contracts go at end by creation date %>
-    <% contracts = contracts.sort_by {|cc| cc.version || cc.created_at.to_i} %>
+    <% #contracts = contracts.sort_by {|cc| cc.version || cc.created_at.to_i} %>
 
     <ul class='fine_print'>
       <li><%= name %></li>
@@ -14,17 +14,17 @@
           <% contracts.each do |contract| %>
             <li><%= link_to contract.title, contract %> 
               (<%= contract.version.nil? ? 'draft' : "v.#{contract.version.to_s}" %>)
-              <% if contract.can_be_updated? %>
+              <% if contract.signatures.empty? %>
                 [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
               <% else %>
                 [<%= link_to 'New version', new_version_contract_path(contract), :method => :post %>]
               <% end %>
-              <% if contract.can_be_published? %>
+              <% if !contract.is_published? %>
                 [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]
-              <% elsif contract.can_be_unpublished? %>
+              <% elsif contract.is_published? && contract.signatures.empty? %>
                 [<%= link_to 'Unpublish', unpublish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>]
               <% end %>
-              <% if contract.can_be_destroyed? %>
+              <% if contract.signatures.empty? %>
                 [<%= link_to 'Delete', contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>]
               <% end %>
             </li>
