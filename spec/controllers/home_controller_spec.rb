@@ -2,6 +2,8 @@ require 'spec_helper'
 
 module FinePrint
   describe HomeController, :type => :controller do
+    routes { FinePrint::Engine.routes }
+
     before(:each) do
       setup_controller_spec
     end
@@ -19,7 +21,7 @@ module FinePrint
       sign_in @user
       @user.is_admin = true
       get :index, :use_route => :fine_print
-      assert_response :success
+      expect(response).to redirect_to contracts_path
     end
   end
 end

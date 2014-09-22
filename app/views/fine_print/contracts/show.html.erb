@@ -1,33 +1,10 @@
 <h1 class='fine_print heading'>Contract Details</h1>
 
-<div class='fine_print show_contract'>
-  <table class='fine_print left_heading'>
-    <tr>
-      <th>Name</th>
-      <td><%= @contract.name %></td>
-    </tr>
-    <tr>
-      <th>Title</th>
-      <td><%= @contract.title %></td>
-    </tr>
-    <tr>
-      <th>Version</th>
-      <td><%= @contract.version || 'Draft' %></td>
-    </tr>
-    <tr>
-      <th>Updated at</th>
-      <td><%= @contract.updated_at %></td>
-    </tr>
-    <tr>
-      <th>Content</th>
-      <td><%= @contract.content.html_safe %></td>
-    </tr>
-  </table>
+<%= render :partial => 'show', :locals => {:contract => @contract} %>
 
-  <div class='fine_print links'>
-    <% if @contract.signatures.empty? %>
-      <%= link_to 'Edit', edit_contract_path(@contract), :class => 'fine_print link' %> |
-    <% end %>
-    <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
-  </div>
+<div class='fine_print links'>
+  <% if @contract.signatures.empty? %>
+    <%= link_to 'Edit', edit_contract_path(@contract), :class => 'fine_print link' %> |
+  <% end %>
+  <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
 </div>

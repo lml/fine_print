@@ -1,0 +1,11 @@
+<%# Clients of this partial must provide the following variable:
+    contract %>
+
+<h2 class='fine_print heading'><%= contract.title %> <%= @contract.version ? \
+  "version #{@contract.version}" : 'Draft' %></h2>
+
+<h3 class='fine_print heading'>Last updated: <%= contract.updated_at %></h3>
+
+<div class='fine_print contract'>
+  <pre><%= @contract.content.html_safe %></pre>
+</div>

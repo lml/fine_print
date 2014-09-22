@@ -1,0 +1,14 @@
+<h1 class='fine_print heading'>New Contract</h1>
+
+<div class='fine_print contract'>
+  <%= render :partial => 'fine_print/contracts/show',
+             :locals => {:contract => @contract} %>
+</div>
+
+<div class='fine_print new_signature'>
+  <%= render 'form' %>
+
+  <div class='fine_print links'>
+    <%= link_to 'I do not agree', root_url, :class => 'fine_print link' %>
+  </div>
+</div>

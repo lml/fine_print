@@ -4,42 +4,41 @@ FinePrint.configure do |config|
 
   # Engine Configuration
 
-  # Proc called with a controller as argument.
+  # Proc called with a controller as self.
   # Returns the current user.
-  # Default: lambda { |controller| controller.current_user }
-  config.current_user_proc = lambda { |controller| controller.current_user }
+  # Default: lambda { current_user }
+  config.current_user_proc = lambda { current_user }
 
-  # Proc called with a user as argument.
-  # If it returns true, the user is considered to be a contract manager.
+  # Proc called with a user as argument and a controller as self.
+  # This proc is called when a user tries to access FinePrint's controllers.
+  # Should raise and exception, render or redirect unless the user can manage contracts.
   # Contract managers can create and edit agreements and terminate accepted agreements.
-  # Default: lambda { |user| false } (no contract managers)
-  config.manager_proc = lambda { |user| false }
+  # The default does not allow anyone to manage contracts.
+  # Note: Proc must account for nil users, if current_user_proc returns nil.
+  # Default: lambda { |user| false || raise(ActionController::RoutingError, 'Not Found') }
+  config.can_manage_proc = lambda { |user| false || \
+                                      raise(ActionController::RoutingError, 'Not Found') }
 
-  # Proc called with a user as argument
-  # Returns true iif the argument the user is allowed to sign a contract.
-  # In many systems, a non-logged-in user is represented by nil.
-  # However, some systems use something like an AnonymousUser class to represent this state.
-  # In general, you don't want anonymous users signing contracts.
-  # Default: lambda { |user| !!user }
-  config.can_sign_proc = lambda { |user| !!user }
+  # Proc called with a user as argument and a controller as self.
+  # This proc is called to check that the given user is allowed to sign contracts.
+  # Should raise and exception, render or redirect unless the user can sign contracts.
+  # You might want to redirect users to a login page if they are not signed in.
+  # The default renders 401 Unauthorized for nil users.
+  # Default: lambda { |user| !user.nil? || head(:unauthorized) }
+  config.can_sign_proc = lambda { |user| !user.nil? || head(:unauthorized) }
 
-  # Proc that raises an Exception when an unauthorized user accesses FinePrint's controllers.
-  # Default: lambda { raise ActionController::RoutingError, 'Not Found' }
-  config.security_transgression_proc = lambda { raise ActionController::RoutingError, 'Not Found' }
+  # Controller Configuration
 
-  # Contract Configuration
-
-  # What to call the url or json parameter that holds contract names
-  # This is visible to the user in the url or in json responses
-  # Default: 'contracts'
-  config.contracts_param = 'contracts'
-
-  # Path to redirect users to when they need to agree to contract(s).
-  # A list of contract names that must be agreed to will be available in the `contract_param`.
-  # Your code doesn't have to deal with all of them at once, e.g. you can get
-  # the user to agree to the first one and then they'll just eventually be
-  # redirected back to this page with the remaining contract names.
-  # Default: '/'
-  config.sign_contracts_path = '/'
+  # Proc called with a user and an array of contract ids as arguments and a controller as self.
+  # This proc is called when a user tries to access a resource protected by FinePrint,
+  # but has not signed all the required contracts.
+  # Should raise and exception, render or redirect the user.
+  # The `contract_ids` variable contains the contract ids that need to be signed.
+  # The default redirects users to FinePrint's contract signing views.
+  # The `fine_print_return` method can be used to return from a redirect made here.
+  # Default: lambda { |user, contract_ids| redirect_to(
+  #   fine_print.new_signature_path(:contract_id => contract_ids.first)) }
+  config.must_sign_proc = lambda { |user, contract_ids| redirect_to(
+    fine_print.new_signature_path(:contract_id => contract_ids.first)) }
 
 end

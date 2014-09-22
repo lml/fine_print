@@ -1,0 +1,21 @@
+<%= form_for(@signature, :html => {:class => 'fine_print'}) do |f| %>
+  <% if @signature.errors.any? %>
+    <div id='error_explanation' class='fine_print errors'>
+      <h2 class='fine_print heading'><%= pluralize(@signature.errors.count, 'error') %> prohibited this signature from being saved:</h2>
+
+      <ul>
+      <% @signature.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class='field'>
+    <%= f.label :i_have_read, :class => 'fine_print' %>
+    <%= f.check_box :i_have_read, :class => 'fine_print check_box' %>
+  </div>
+  <div class='actions'>
+    <%= f.submit 'I agree', :class => 'fine_print submit' %>
+  </div>
+<% end %>

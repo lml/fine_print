@@ -7,16 +7,14 @@ module FinePrint
   # Can be set in initializer only
   ENGINE_OPTIONS = [
     :current_user_proc,
-    :manager_proc,
-    :can_sign_proc,
-    :security_transgression_proc
+    :can_manage_proc,
+    :can_sign_proc
   ]
 
   # Can be set in initializer or passed as an argument
   # to FinePrint controller methods
   CONTROLLER_OPTIONS = [
-    :contracts_param,
-    :sign_contracts_path
+    :must_sign_proc
   ]
   
   (ENGINE_OPTIONS + CONTROLLER_OPTIONS).each do |option|
@@ -43,7 +41,6 @@ module FinePrint
   #   - user - the user in question
   #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
   def self.sign_contract(user, contract)
-    FinePrint.raise_security_transgression unless can_sign?(user)
     contract = get_contract(contract)
 
     Signature.create do |signature|
@@ -96,15 +93,4 @@ module FinePrint
     names - get_signed_latest_contract_names(user)
   end
 
-  def self.can_sign?(user)
-    !user.nil? && can_sign_proc.call(user)
-  end
-
-  def self.manager?(user)
-    !user.nil? && manager_proc.call(user)
-  end
-
-  def self.raise_security_transgression
-    security_transgression_proc.call
-  end
 end
