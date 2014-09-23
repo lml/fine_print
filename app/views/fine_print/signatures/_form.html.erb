@@ -1,19 +1,19 @@
-<%= form_for(@signature, :html => {:class => 'fine_print'}) do |f| %>
+<%= form_for([@contract, @signature], :html => {:class => 'fine_print'}) do |f| %>
   <% if @signature.errors.any? %>
     <div id='error_explanation' class='fine_print errors'>
-      <h2 class='fine_print heading'><%= pluralize(@signature.errors.count, 'error') %> prohibited this signature from being saved:</h2>
+      <h4 class='fine_print heading'>Error:</h4>
 
       <ul>
-      <% @signature.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
+        <% @signature.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class='field'>
-    <%= f.label :i_have_read, :class => 'fine_print' %>
-    <%= f.check_box :i_have_read, :class => 'fine_print check_box' %>
+    <%= f.label :accept, 'I have read and accept the terms above.', :class => 'fine_print' %>
+    <%= check_box_tag :signature_accept, :class => 'fine_print check_box' %>
   </div>
   <div class='actions'>
     <%= f.submit 'I agree', :class => 'fine_print submit' %>

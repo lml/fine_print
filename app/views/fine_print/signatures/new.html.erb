@@ -1,5 +1,3 @@
-<h1 class='fine_print heading'>New Contract</h1>
-
 <div class='fine_print contract'>
   <%= render :partial => 'fine_print/contracts/show',
              :locals => {:contract => @contract} %>
@@ -9,6 +7,7 @@
   <%= render 'form' %>
 
   <div class='fine_print links'>
-    <%= link_to 'I do not agree', root_url, :class => 'fine_print link' %>
+    <%= without_interceptor { link_to 'I do not agree',
+          main_app.root_url, :class => 'fine_print link' } %>
   </div>
 </div>

@@ -16,16 +16,15 @@
               (<%= contract.version.nil? ? 'draft' : "v.#{contract.version.to_s}" %>)
               <% if contract.signatures.empty? %>
                 [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
+                <% if contract.is_published? %>
+                  [<%= link_to 'Unpublish', unpublish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>]
+                <% else %>
+                  [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]
+                <% end %>
+                [<%= link_to 'Delete', contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>]
               <% else %>
                 [<%= link_to 'New version', new_version_contract_path(contract), :method => :post %>]
-              <% end %>
-              <% if !contract.is_published? %>
-                [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]
-              <% elsif contract.is_published? && contract.signatures.empty? %>
-                [<%= link_to 'Unpublish', unpublish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>]
-              <% end %>
-              <% if contract.signatures.empty? %>
-                [<%= link_to 'Delete', contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>]
+                [<%= link_to 'Signatures', contract_signatures_path(contract) %>]
               <% end %>
             </li>
           <% end %>

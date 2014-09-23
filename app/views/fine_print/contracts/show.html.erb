@@ -1,10 +1,22 @@
 <h1 class='fine_print heading'>Contract Details</h1>
 
+<h4 class='fine_print heading'>Name: <%= @contract.name %></h4>
+
 <%= render :partial => 'show', :locals => {:contract => @contract} %>
 
 <div class='fine_print links'>
   <% if @contract.signatures.empty? %>
     <%= link_to 'Edit', edit_contract_path(@contract), :class => 'fine_print link' %> |
+      <% if @contract.is_published? %>
+        <%= link_to 'Unpublish', unpublish_contract_path(@contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>
+      <% else %>
+        <%= link_to 'Publish', publish_contract_path(@contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %> |
+      <% end %>
+      <%= link_to 'Delete', @contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>
+  <% else %>
+    <%= link_to 'New version', new_version_contract_path(@contract), :method => :post %> |
+    <%= link_to 'Signatures', contract_signatures_path(@contract),
+                              :class => 'fine_print link' %>
   <% end %>
-  <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+  | <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
 </div>

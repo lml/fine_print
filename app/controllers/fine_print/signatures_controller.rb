@@ -2,22 +2,29 @@ module FinePrint
   class SignaturesController < FinePrint::ApplicationController
     include FinePrint::ApplicationHelper
 
+    acts_as_interceptor :override_url_options => true
+
     skip_before_filter :can_manage, :only => [:new, :create]
     before_filter :can_sign, :only => [:new, :create]
-    before_filter :get_contract, :only => [:new, :create]
+    before_filter :get_contract, :only => [:index, :new, :create]
 
     def index
-      @signatures = Signature.all
+      @signatures = @contract.signatures
     end
 
     def new
       @signature = Signature.new
-      @signature.user = @user
-      @signature.contract = @contract
     end
 
     def create
       @signature = Signature.new
+
+      unless params[:signature_accept]
+        @signature.errors.add(:contract, 'must be accepted to proceed')
+        render :action => 'new'
+        return
+      end
+
       @signature.user = @user
       @signature.contract = @contract
   

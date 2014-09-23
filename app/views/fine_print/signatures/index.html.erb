@@ -1,12 +1,10 @@
-<h1 class='fine_print heading'>Contract Signatures</h1>
+<h1 class='fine_print heading'>Signatures for <%= link_to "#{@contract.title} (v.#{@contract.version})", @contract %></h1>
 
 <div class='fine_print signature_index'>
 
   <table class='fine_print top_heading index'>
     <tr class='fine_print heading-row'>
       <th>User ID</th>
-      <th>Contract name</th>
-      <th>Contract version</th>
       <th>Date accepted</th>
       <th></th>
     </tr>
@@ -14,8 +12,6 @@
   <% @signatures.each do |signature| %>
     <tr class='fine_print data-row <%= cycle('even', 'odd') %>'>
       <td><%= signature.user.id %></td>
-      <td><%= signature.contract.name %></td>
-      <td><%= signature.contract.version %></td>
       <td><%= signature.created_at %></td>
       <td><%= link_to 'Terminate', 
                       signature, 
@@ -30,7 +26,7 @@
   </table>
 
   <div class='fine_print links'>
-    <%= link_to 'Overview', root_path, :class => 'fine_print link' %>
+    <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
   </div>
   
 </div>

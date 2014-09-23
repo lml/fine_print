@@ -36,9 +36,9 @@ FinePrint.configure do |config|
   # The `contract_ids` variable contains the contract ids that need to be signed.
   # The default redirects users to FinePrint's contract signing views.
   # The `fine_print_return` method can be used to return from a redirect made here.
-  # Default: lambda { |user, contract_ids| redirect_to(
-  #   fine_print.new_signature_path(:contract_id => contract_ids.first)) }
+  # Default: lambda { |user, contract_ids| with_interceptor { redirect_to(
+  #   fine_print.new_contract_signature_path(:contract_id => contract_ids.first)) } }
   config.must_sign_proc = lambda { |user, contract_ids| redirect_to(
-    fine_print.new_signature_path(:contract_id => contract_ids.first)) }
+    fine_print.new_contract_signature_path(:contract_id => contract_ids.first)) }
 
 end

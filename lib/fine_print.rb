@@ -71,26 +71,37 @@ module FinePrint
     end
   end
 
-  # Returns an array of names for the contracts whose
-  # latest published version the given user has signed.
-  #   - user - the user in question
-  #   - names - contract names to check
-  def self.get_signed_latest_contract_names(user)
-    Contract.latest.joins(:signatures)
-            .where(:signatures => {:user_id => user.id,
-                                   :user_type => user.class.name})
-            .pluck(:name)
+  # Converts an array of contract names into an array containing
+  # the latest contract id for each given name.
+  def self.contract_names_to_ids(*contract_names)
+    names = contract_names.flatten
+    Contract.latest.where(:name => names).pluck(:id)
   end
 
-  # Returns an array of names for the contracts among those given
-  # whose latest published version the given user has not signed.
+  # Returns an array of ids for the contracts among those given
+  # whose latest published version the user has signed.
   #   - user - the user in question
-  #   - contract_names - contract names to check
-  # If no contract names are provided, all contracts are checked
-  def self.get_unsigned_latest_contract_names(user, *contract_names)
-    names = contract_names.flatten.collect{|name| name.to_s}
-    names = Contract.uniq.pluck(:name) if names.blank?
-    names - get_signed_latest_contract_names(user)
+  #   - contract_ids - contract ids to check
+  # If no contract ids are provided, all latest contracts are checked
+  def self.get_signed_contract_ids(user, *contract_ids)
+    ids = contract_ids.flatten
+    ids = Contract.published.latest.pluck(:id) if ids.blank?
+
+    Signature.where(:user_id => user.id,
+                    :user_type => user.class.name,
+                    :contract_id => ids).pluck(:contract_id)
+  end
+
+  # Returns an array of ids for the contracts among those given
+  # whose latest published version the user has not signed.
+  #   - user - the user in question
+  #   - contract_ids - contract ids to check
+  # If no contract ids are provided, all latest contracts are checked
+  def self.get_unsigned_contract_ids(user, *contract_ids)
+    ids = contract_ids.flatten
+    ids = Contract.published.latest.pluck(:id) if ids.blank?
+
+    ids - get_signed_contract_ids(user, ids)
   end
 
 end

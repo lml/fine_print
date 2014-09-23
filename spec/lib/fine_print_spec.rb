@@ -24,13 +24,13 @@ describe FinePrint do
   end
 
   it 'gets signed contracts' do
-    expect(FinePrint.get_signed_latest_contract_names(@user)).to(
-      eq ['beta'])
+    expect(FinePrint.get_signed_contract_ids(@user)).to(
+      eq [@beta_1.id])
   end
 
   it 'gets unsigned contracts' do
-    expect(FinePrint.get_unsigned_latest_contract_names(@user, 'beta', 'alpha')).to(
-      eq ['alpha'])
+    expect(FinePrint.get_unsigned_contract_ids(@user, @alpha_2.id, @beta_1.id)).to(
+      eq [@alpha_2.id])
   end
 
   it 'allows users to sign contracts' do

@@ -44,8 +44,7 @@ module FinePrint
         fine_print_options = options.slice(*FinePrint::CONTROLLER_OPTIONS)
 
         # Convert names to an array of Strings
-        contract_names = args.flatten.collect{|n| n.to_s}
-        contract_ids = FinePrint.contract_names_to_ids(contract_names)
+        contract_ids = FinePrint.contract_names_to_ids(args).flatten
 
         class_eval do
           before_filter(filter_options) do |controller|
@@ -55,7 +54,7 @@ module FinePrint
             # Return quietly if all contracts skipped
             next if unskipped_contract_ids.blank?
 
-            user = FinePrint.current_user_proc.call(self)
+            user = instance_exec &FinePrint.current_user_proc
 
             unsigned_contract_ids = FinePrint.get_unsigned_contract_ids(
                                       user, unskipped_contract_ids)
@@ -75,13 +74,10 @@ module FinePrint
       def fine_print_skip(*args)
         options = args.last.is_a?(Hash) ? args.pop : {}
 
-        # Convert all names to string
-        contract_names = args.flatten.collect{|n| n.to_s}
-
         class_eval do
           prepend_before_filter(options) do |controller|
-            contract_ids = FinePrint.contract_names_to_ids(contract_names)
-            controller.fine_print_skipped_contract_id.push(*contract_ids)
+            contract_ids = FinePrint.contract_names_to_ids(args).flatten
+            controller.fine_print_skipped_contract_ids.push(*contract_ids)
           end
         end
       end

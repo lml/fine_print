@@ -2,9 +2,9 @@
     contract %>
 
 <h2 class='fine_print heading'><%= contract.title %> <%= @contract.version ? \
-  "version #{@contract.version}" : 'Draft' %></h2>
+  "(v.#{@contract.version})" : 'Draft' %></h2>
 
-<h3 class='fine_print heading'>Last updated: <%= contract.updated_at %></h3>
+<h4 class='fine_print heading'>Last updated: <%= contract.updated_at %></h4>
 
 <div class='fine_print contract'>
   <pre><%= @contract.content.html_safe %></pre>

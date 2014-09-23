@@ -12,7 +12,8 @@ module FinePrint
     validates :name, :presence => true, :format => /\A[\w-]+\z/
     validates :title, :presence => true
     validates :content, :presence => true
-    validates :version, :uniqueness => {:scope => :name, :case_sensitive => false}
+    validates :version, :uniqueness => {:scope => :name, :case_sensitive => false},
+                        :allow_nil => true
 
     default_scope lambda { order{[name.asc, version.desc]} }
 
