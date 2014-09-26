@@ -7,7 +7,6 @@
   <%= render 'form' %>
 
   <div class='fine_print links'>
-    <%= without_interceptor { link_to 'I do not agree',
-          main_app.root_url, :class => 'fine_print link' } %>
+    <%= without_interceptor { link_to 'I do not agree', :back } %>
   </div>
 </div>

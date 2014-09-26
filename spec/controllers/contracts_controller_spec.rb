@@ -8,7 +8,7 @@ module FinePrint
       setup_controller_spec
     end
 
-    let!(:contract) { FactoryGirl.create(:contract) }
+    let!(:contract) { FactoryGirl.create(:fine_print_contract) }
 
     it "won't get index unless authorized" do
       expect { get :index, :use_route => :fine_print }

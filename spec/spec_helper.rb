@@ -16,15 +16,3 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.order = 'random'
 end
-
-FinePrint::ApplicationController.class_eval do
-  include ApplicationHelper
-end
-
-def setup_controller_spec
-  class_eval { include ApplicationHelper }
-  sign_out
-  @user = FactoryGirl.create(:dummy_user)
-  @admin = FactoryGirl.create(:dummy_user)
-  @admin.is_admin = true
-end

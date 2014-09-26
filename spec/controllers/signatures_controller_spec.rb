@@ -8,7 +8,7 @@ module FinePrint
       setup_controller_spec
     end
 
-    let!(:signature) { FactoryGirl.create(:signature) }
+    let!(:signature) { FactoryGirl.create(:fine_print_signature) }
 
     it "won't get index unless authorized" do
       expect { get :index, :contract_id => signature.contract.id,
@@ -31,7 +31,7 @@ module FinePrint
     it "won't get new unless signed in" do
       get :new, :contract_id => signature.contract.id,
                 :use_route => :fine_print
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
     end
     
     it 'must get new if signed in' do
@@ -44,7 +44,7 @@ module FinePrint
     it "won't create unless signed in" do
       post :create, :contract_id => signature.contract.id,
                     :use_route => :fine_print
-      expect(response.status).to eq 401
+      expect(response.status).to eq 403
     end
     
     it 'must create if signed in' do

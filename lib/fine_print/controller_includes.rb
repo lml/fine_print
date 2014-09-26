@@ -25,8 +25,8 @@ module FinePrint
 
     protected
 
-    def fine_print_skipped_contract_ids
-      @fine_print_skipped_contract_ids ||= []
+    def fine_print_skipped_contract_names
+      @fine_print_skipped_contract_names ||= []
     end
 
     module ClassMethods
@@ -44,20 +44,21 @@ module FinePrint
         fine_print_options = options.slice(*FinePrint::CONTROLLER_OPTIONS)
 
         # Convert names to an array of Strings
-        contract_ids = FinePrint.contract_names_to_ids(args).flatten
+        contract_names = args.flatten.collect{|c| c.to_s}
 
         class_eval do
           before_filter(filter_options) do |controller|
-            skipped_contract_ids = controller.fine_print_skipped_contract_ids
-            unskipped_contract_ids = contract_ids - skipped_contract_ids
+            skipped_contract_names = controller.fine_print_skipped_contract_names
+            unskipped_contract_names = contract_names - skipped_contract_names
 
             # Return quietly if all contracts skipped
-            next if unskipped_contract_ids.blank?
+            next if unskipped_contract_names.blank?
 
             user = instance_exec &FinePrint.current_user_proc
 
-            unsigned_contract_ids = FinePrint.get_unsigned_contract_ids(
-                                      user, unskipped_contract_ids)
+            contract_ids = FinePrint.contract_names_to_ids(unskipped_contract_names).flatten
+
+            unsigned_contract_ids = FinePrint.get_unsigned_contract_ids(user, contract_ids)
 
             # Return quietly if no contracts left to sign
             next if unsigned_contract_ids.blank?
@@ -74,10 +75,12 @@ module FinePrint
       def fine_print_skip(*args)
         options = args.last.is_a?(Hash) ? args.pop : {}
 
+        # Convert names to an array of Strings
+        contract_names = args.flatten.collect{|c| c.to_s}
+
         class_eval do
           prepend_before_filter(options) do |controller|
-            contract_ids = FinePrint.contract_names_to_ids(args).flatten
-            controller.fine_print_skipped_contract_ids.push(*contract_ids)
+            controller.fine_print_skipped_contract_names.push(*contract_names)
           end
         end
       end
