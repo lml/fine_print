@@ -9,12 +9,12 @@ module FinePrint
     end
 
     it "won't get index unless authorized" do
-      expect { get :index, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      get :index, :use_route => :fine_print
+      expect(response.status).to eq 403
       
       sign_in @user
-      expect { get :index, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      get :index, :use_route => :fine_print
+      expect(response.status).to eq 403
     end
     
     it 'must get index if authorized' do

@@ -22,9 +22,9 @@ FinePrint.configure do |config|
   # This proc is called to check that the given user is allowed to sign contracts.
   # Should raise and exception, render or redirect unless the user can sign contracts.
   # You might want to redirect users to a login page if they are not signed in.
-  # The default renders 403 Forbidden for nil users.
-  # Default: lambda { |user| !user.nil? || head(:forbidden) }
-  config.can_sign_proc = lambda { |user| !user.nil? || head(:forbidden) }
+  # The default renders 401 Unauthorized for nil users.
+  # Default: lambda { |user| !user.nil? || head(:unauthorized) }
+  config.can_sign_proc = lambda { |user| !user.nil? || head(:unauthorized) }
 
   # Controller Configuration
 

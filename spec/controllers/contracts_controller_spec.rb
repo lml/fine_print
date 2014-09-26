@@ -11,12 +11,12 @@ module FinePrint
     let!(:contract) { FactoryGirl.create(:fine_print_contract) }
 
     it "won't get index unless authorized" do
-      expect { get :index, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      get :index, :use_route => :fine_print
+      expect(response.status).to eq 403
       
       sign_in @user
-      expect { get :index, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      get :index, :use_route => :fine_print
+      expect(response.status).to eq 403
     end
     
     it 'must get index if authorized' do
@@ -26,12 +26,12 @@ module FinePrint
     end
     
     it "won't get new unless authorized" do
-      expect { get :new, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      get :new, :use_route => :fine_print
+      expect(response.status).to eq 403
       
       sign_in @user
-      expect { get :new, :use_route => :fine_print }
-      .to raise_error(ActionController::RoutingError)
+      get :new, :use_route => :fine_print
+      expect(response.status).to eq 403
     end
     
     it 'must get new if authorized' do
@@ -45,14 +45,14 @@ module FinePrint
       attributes[:name] = 'some_name'
       attributes[:title] = 'Some title'
       attributes[:content] = 'Some content'
-      
-      expect { post :create, :contract => :attributes, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+
+      post :create, :contract => :attributes, :use_route => :fine_print
+      expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
       
       sign_in @user
-      expect { post :create, :contract => :attributes, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      post :create, :contract => :attributes, :use_route => :fine_print
+      expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
     end
     
@@ -72,12 +72,12 @@ module FinePrint
     end
     
     it "won't edit unless authorized" do
-      expect { get :edit, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      get :edit, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       
       sign_in @user
-      expect { get :edit, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      get :edit, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
     end
     
     it 'must edit if authorized' do
@@ -95,18 +95,16 @@ module FinePrint
       title = contract.title
       content = contract.content
       
-      expect { post :update, :id => contract.id,
-                    :contract => attributes, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      put :update, :id => contract.id, :contract => attributes, :use_route => :fine_print
+      expect(response.status).to eq 403
       contract.reload
       expect(contract.name).to eq name
       expect(contract.title).to eq title
       expect(contract.content).to eq content
       
       sign_in @user
-      expect { post :update, :id => contract.id,
-        :contract => attributes, :use_route => :fine_print }
-      .to raise_error(ActionController::RoutingError)
+      put :update, :id => contract.id, :contract => attributes, :use_route => :fine_print
+      expect(response.status).to eq 403
       contract.reload
       expect(contract.name).to eq name
       expect(contract.title).to eq title
@@ -130,13 +128,13 @@ module FinePrint
     end
 
     it "won't destroy unless authorized" do
-      expect { delete :destroy, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      delete :destroy, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       expect(Contract.find(contract.id)).to eq contract
       
       sign_in @user
-      expect { delete :destroy, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      delete :destroy, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       expect(Contract.find(contract.id)).to eq contract
     end
     
@@ -149,14 +147,14 @@ module FinePrint
 
     it "won't publish unless authorized" do
       expect(contract.is_published?).to eq false
-      expect { put :publish, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      put :publish, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq false
       
       sign_in @user
-      expect { put :publish, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      put :publish, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq false
     end
@@ -174,14 +172,14 @@ module FinePrint
     it "won't unpublish unless authorized" do
       contract.publish
       expect(contract.is_published?).to eq true
-      expect { put :unpublish, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      put :unpublish, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq true
       
       sign_in @user
-      expect { put :unpublish, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      put :unpublish, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq true
     end
@@ -201,13 +199,13 @@ module FinePrint
       contract.publish
       expect(contract.is_published?).to eq true
       
-      expect { put :new_version, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      post :new_version, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
       
       sign_in @user
-      expect { put :new_version, :id => contract.id, :use_route => :fine_print }
-             .to raise_error(ActionController::RoutingError)
+      post :new_version, :id => contract.id, :use_route => :fine_print
+      expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
     end
     
@@ -216,7 +214,7 @@ module FinePrint
       expect(contract.is_published?).to eq true
 
       sign_in @admin
-      put :new_version, :id => contract.id, :use_route => :fine_print
+      post :new_version, :id => contract.id, :use_route => :fine_print
       expect(response.status).to eq 200
       expect(assigns(:contract)).not_to be_nil
     end
