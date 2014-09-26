@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :fine_print_contract, :class => FinePrint::Contract do
     name { Faker::Lorem.words.join('_') }
     title { Faker::Lorem.words.join(' ').capitalize }
-    content { Faker::Lorem.paragraphs.join('\n') }
+    content { Faker::Lorem.paragraphs.join("\n") }
 
     trait :published do
       ignore do
