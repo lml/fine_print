@@ -1,5 +1,4 @@
-FINE_PRINT_COPY_TASKS = ['assets/stylesheets',
-                         'views/layouts',
+FINE_PRINT_COPY_TASKS = ['config/locales',
                          'views',
                          'controllers']
 
