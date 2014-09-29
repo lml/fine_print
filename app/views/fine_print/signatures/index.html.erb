@@ -1,32 +1,39 @@
-<h1 class='fine_print heading'>Signatures for <%= link_to "#{@contract.title} (v.#{@contract.version})", @contract %></h1>
+<h1 class='fine_print heading'>
+  <%= t('fine_print.signature.status.for_contract', contract: link_to(
+        "#{@contract.title} #{t('fine_print.contract.status.version',
+                                version: @contract.version.to_s)}", @contract)).html_safe %>
+</h1>
 
 <div class='fine_print signature_index'>
 
   <table class='fine_print top_heading index'>
     <tr class='fine_print heading-row'>
-      <th>User ID</th>
-      <th>Date accepted</th>
-      <th></th>
+      <th><%= t 'activerecord.attributes.fine_print/signature.user_type' %>&nbsp;</th>
+      <th>&nbsp;<%= t 'activerecord.attributes.fine_print/signature.user_id' %>&nbsp;</th>
+      <th>&nbsp;<%= t 'activerecord.attributes.fine_print/signature.created_at' %>&nbsp;</th>
+      <th>&nbsp;</th>
     </tr>
 
   <% @signatures.each do |signature| %>
     <tr class='fine_print data-row <%= cycle('even', 'odd') %>'>
-      <td><%= signature.user.id %></td>
-      <td><%= signature.created_at %></td>
-      <td><%= link_to 'Terminate', 
-                      signature, 
-                      :method => :delete, 
-                      :data => { 
-                        :confirm => 'User will be asked to accept the contract again. Are you sure?' 
-                      }, 
-                      :class => 'fine_print link' %>
+      <td><%= signature.user_type %>&nbsp;</td>
+      <td>&nbsp;<%= signature.user_id %>&nbsp;</td>
+      <td>&nbsp;<%= l signature.created_at, format: :fine_print %>&nbsp;</td>
+      <td>&nbsp;<%= link_to t('fine_print.signature.actions.delete'), 
+                            signature, :method => :delete, 
+                            :data => { 
+                              :confirm => t('fine_print.signature.actions.confirm.delete')
+                            }, :class => 'fine_print link' %>
       </td>
     </tr>
   <% end %>
   </table>
 
+  <br>
+
   <div class='fine_print links'>
-    <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+    <%= link_to t('fine_print.contract.actions.list'), contracts_path,
+                :class => 'fine_print link' %>
   </div>
   
 </div>

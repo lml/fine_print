@@ -17,5 +17,8 @@ module FinePrint
       g.assets false
       g.helper false
     end
+
+    # Load subfolders of config/locales as well
+    config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
   end
 end

@@ -1,0 +1,89 @@
+--- 
+en: 
+  activerecord: 
+    attributes: 
+      fine_print/contract: 
+        name: Name
+        version: Version
+        title: Title
+        content: Content
+      fine_print/signature: 
+        contract: Contract
+        user: User
+        user_id: "User ID"
+        user_type: "User Class"
+        created_at: "Signed on"
+    errors:
+      models:
+        fine_print/signature:
+          attributes:
+            contract:
+              taken: "has already been signed"
+    models: 
+      fine_print/contract: 
+        one: contract
+        other: contracts
+      fine_print/signature: 
+        one: signature
+        other: signatures
+  fine_print: 
+    contract: 
+      actions: 
+        delete: Delete
+        edit: Edit
+        editing: "Editing %{contract}"
+        list: List
+        new: New Contract
+        new_version: "New Version"
+        new_version_of: "New version of %{contract}"
+        publish: Publish
+        signatures: Signatures
+        show: Details
+        unpublish: Unpublish
+        update: Update
+        confirm:
+          delete: "Are you sure you want to delete this contract?"
+          publish: "Are you sure you want to publish this contract?"
+          unpublish: "Are you sure you want to unpublish this contract?"
+      descriptions: 
+        name: "Used internally by your code; only letters, numbers, underscores allowed; changing this will start a new contract at version 1"
+        title: 'e.g., "Terms of Use"'
+      errors:
+        already_published: "cannot be published because it is already published"
+        already_signed: "cannot be modified because it has already been signed"
+        not_latest: "cannot be unpublished because it is not the latest version"
+      notices:
+        created: "Contract created."
+        deleted: "Contract deleted."
+        published: "Contract published."
+        unpublished: "Contract unpublished."
+        updated: "Contract updated."
+      status: 
+        draft: draft
+        index: Contracts
+        name: "Name: %{name}"
+        updated_at: "Last updated on %{updated_at}."
+        version: "v.%{version}"
+    signature: 
+      actions: 
+        accept: "I have read and accept the terms above."
+        delete: Terminate
+        sign: "I agree"
+        confirm:
+          delete: "User will be asked to accept the contract again. Are you sure?"
+      errors: 
+        contract: 
+          must_agree: "must be accepted to proceed"
+          not_published: "must be published before it can be signed"
+      notices:
+        deleted: "Signature deleted."
+      status:
+        for_contract: "Signatures for %{contract}"
+        new_version: "Please review and accept the newest version of the %{contract}:"
+    error:
+      one: "Error:"
+      other: "Errors:"
+  time: 
+    formats: 
+      fine_print: "%b %d %Y at %I:%M%p %Z"
+

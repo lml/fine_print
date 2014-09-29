@@ -19,7 +19,8 @@ module FinePrint
 
     def contract_published
       return if contract.is_published?
-      errors.add(:contract, 'needs to be published before it can be signed')
+      errors.add(:contract, I18n.t(
+        'fine_print.signature.errors.contract.not_published'))
       false
     end
   end

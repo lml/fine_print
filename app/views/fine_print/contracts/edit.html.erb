@@ -1,10 +1,15 @@
-<h1 class='fine_print heading'>Editing Contract</h1>
+<h1 class='fine_print heading'><%= t 'fine_print.contract.actions.editing',
+                                     contract: @contract.title.to_s %></h1>
 
 <div class='fine_print edit_contract'>
   <%= render 'form' %>
 
+  <br>
+
   <div class='fine_print links'>
-    <%= link_to 'Show', @contract, :class => 'fine_print link' %> |
-    <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+    <%= link_to t('fine_print.contract.actions.show'), @contract,
+                :class => 'fine_print link' %> |
+    <%= link_to t('fine_print.contract.actions.list'), contracts_path,
+                :class => 'fine_print link' %>
   </div>
 </div>

@@ -19,7 +19,7 @@ module FinePrint
       @contract.content = params[:contract][:content]
   
       if @contract.save
-        redirect_to @contract, :notice => 'Contract was successfully created.'
+        redirect_to @contract, :notice => t('fine_print.contract.notices.created')
       else
         render :action => 'new', :alert => merge_errors_for(@contract)
       end
@@ -40,7 +40,7 @@ module FinePrint
       @contract.content = params[:contract][:content]
 
       if @contract.save
-        redirect_to @contract, :notice => 'Contract was successfully updated.'
+        redirect_to @contract, :notice => t('fine_print.contract.notices.updated')
       else
         render :action => 'edit', :alert => merge_errors_for(@contract)
       end
@@ -48,7 +48,7 @@ module FinePrint
 
     def destroy
       if @contract.destroy
-        redirect_to contracts_path, :notice => 'Contract was successfully deleted.'
+        redirect_to contracts_path, :notice => t('fine_print.contract.notices.deleted')
       else
         redirect_to contracts_path, :alert => merge_errors_for(@contract)
       end
@@ -56,7 +56,7 @@ module FinePrint
 
     def publish
       if @contract.publish
-        redirect_to contracts_path, :notice => 'Contract was successfully published.'
+        redirect_to contracts_path, :notice => t('fine_print.contract.notices.published')
       else
         redirect_to contracts_path, :alert => merge_errors_for(@contract)
       end
@@ -64,7 +64,7 @@ module FinePrint
 
     def unpublish
       if @contract.unpublish
-        redirect_to contracts_path, :notice => 'Contract was successfully unpublished.'
+        redirect_to contracts_path, :notice => t('fine_print.contract.notices.unpublished')
       else
         redirect_to contracts_path, :alert => merge_errors_for(@contract)
       end

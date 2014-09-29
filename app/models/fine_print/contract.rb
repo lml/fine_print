@@ -30,7 +30,8 @@ module FinePrint
     end
 
     def publish
-      errors.add(:base, 'Contract is already published') if is_published?
+      errors.add(:base, I18n.t('fine_print.contract.errors.already_published')) \
+        if is_published?
       return false unless errors.empty?
 
       self.version = (same_name.published.first.try(:version) || 0) + 1
@@ -38,7 +39,8 @@ module FinePrint
     end
 
     def unpublish
-      errors.add(:base, 'Contract is not the latest published version') unless is_latest?
+      errors.add(:base, I18n.t('fine_print.contract.errors.not_latest')) \
+        unless is_latest?
       return false unless errors.empty?
 
       self.version = nil
@@ -56,7 +58,7 @@ module FinePrint
 
     def no_signatures
       return if signatures.empty?
-      errors.add(:base, 'Contract cannot be modified because users have signed it')
+      errors.add(:base, I18n.t('fine_print.contract.errors.already_signed'))
       false
     end
 

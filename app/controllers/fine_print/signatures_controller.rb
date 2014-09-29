@@ -20,7 +20,7 @@ module FinePrint
       @signature = Signature.new
 
       unless params[:signature_accept]
-        @signature.errors.add(:contract, 'must be accepted to proceed')
+        @signature.errors.add(:contract, t('fine_print.signature.errors.contract.must_agree'))
         render :action => 'new'
         return
       end
@@ -40,7 +40,7 @@ module FinePrint
 
       @signature.destroy
       redirect_to contract_signatures_path(@signature.contract),
-                  :notice => 'Signature was successfully deleted.'
+                  :notice => t('fine_print.signature.notices.deleted')
     end
 
     protected

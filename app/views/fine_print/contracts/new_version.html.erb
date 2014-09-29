@@ -1,9 +1,13 @@
-<h1 class='fine_print heading'>New Version of <%= @contract.name %></h1>
+<h1 class='fine_print heading'><%= t('fine_print.contract.actions.new_version_of',
+                                     contract: @contract.name) %></h1>
 
 <div class='fine_print new_contract_version'>
   <%= render 'form' %>
 
+  <br>
+
   <div class='fine_print links'>
-    <%= link_to 'List', contracts_path, :class => 'fine_print link' %>
+    <%= link_to t('fine_print.contract.actions.list'), contracts_path,
+                :class => 'fine_print link' %>
   </div>
 </div>

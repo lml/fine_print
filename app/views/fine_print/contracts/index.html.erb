@@ -1,4 +1,4 @@
-<h1 class='fine_print heading'>FinePrint Contracts</h1>
+<h1 class='fine_print heading'><%= t 'fine_print.contract.status.index' %></h1>
 
 <div class='fine_print contract_index'>
 
@@ -12,19 +12,30 @@
       
         <ul class='fine_print'>
           <% contracts.each do |contract| %>
-            <li><%= link_to contract.title, contract %> 
-              (<%= contract.version.nil? ? 'draft' : "v.#{contract.version.to_s}" %>)
+            <li><%= link_to contract.title, contract, :class => 'fine_print link' %> 
+              (<%= contract.version.nil? ? t('fine_print.contract.status.draft') : \
+                   t('fine_print.contract.status.version', version: contract.version.to_s) %>)
               <% if contract.signatures.empty? %>
-                [<%= link_to 'Edit', edit_contract_path(contract), :class => 'fine_print link' %>]
+                [<%= link_to t('fine_print.contract.actions.edit'),
+                             edit_contract_path(contract), :class => 'fine_print link' %>]
                 <% if contract.is_published? %>
-                  [<%= link_to 'Unpublish', unpublish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to unpublish this contract?'} %>]
+                  [<%= link_to t('fine_print.contract.actions.unpublish'),
+                               unpublish_contract_path(contract), :method => :put,
+                               :data => {:confirm => t('fine_print.contract.actions.confirm.unpublish')}, :class => 'fine_print link' %>]
                 <% else %>
-                  [<%= link_to 'Publish', publish_contract_path(contract), :method => :put, :data => {:confirm => 'Are you sure you want to publish this contract?'} %>]
+                  [<%= link_to t('fine_print.contract.actions.publish'),
+                               publish_contract_path(contract), :method => :put,
+                               :data => {:confirm => t('fine_print.contract.actions.confirm.publish')}, :class => 'fine_print link' %>]
                 <% end %>
-                [<%= link_to 'Delete', contract, :method => :delete, :data => {:confirm => 'Are you sure you wish to delete this contract?'}, :class => 'fine_print link' %>]
+                [<%= link_to t('fine_print.contract.actions.delete'), contract,
+                             :method => :delete, :data => {:confirm => t('fine_print.contract.actions.confirm.delete')}, :class => 'fine_print link' %>]
               <% else %>
-                [<%= link_to 'New version', new_version_contract_path(contract), :method => :post %>]
-                [<%= link_to 'Signatures', contract_signatures_path(contract) %>]
+                [<%= link_to t('fine_print.contract.actions.new_version'),
+                             new_version_contract_path(contract), :method => :post,
+                             :class => 'fine_print link' %>]
+                [<%= link_to t('fine_print.contract.actions.signatures'),
+                             contract_signatures_path(contract),
+                             :class => 'fine_print link' %>]
               <% end %>
             </li>
           <% end %>

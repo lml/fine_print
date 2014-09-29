@@ -1,7 +1,9 @@
 <%= form_for(@contract, :html => {:class => 'fine_print'}) do |f| %>
   <% if @contract.errors.any? %>
     <div id='error_explanation' class='fine_print errors'>
-      <h2 class='fine_print heading'>Error:</h2>
+      <h4 class='fine_print heading'>
+        <%= t 'fine_print.error', count: @contract.errors.count %>
+      </h4>
 
       <ul>
       <% @contract.errors.full_messages.each do |msg| %>
@@ -14,21 +16,24 @@
   <div class='field'>
     <%= f.label :name, :class => 'fine_print' %>
     <%= f.text_field :name, :size => 40, :class => 'fine_print text_field' %>
-    <div class='fine_print field_help'>
-      used internally by your code, only letters, numbers, underscores; changing this will start a new contract with new version counts
+    <div class='fine_print field_description'>
+      <%= t 'fine_print.contract.descriptions.name' %>
     </div>
   </div>
   <div class='field'>
     <%= f.label :title, :class => 'fine_print' %>
     <%= f.text_field :title, :size => 40, :class => 'fine_print text_field' %>
-    <div class='fine_print field_help'>
-      e.g., 'Terms of Use'
+    <div class='fine_print field_description'>
+      <%= t 'fine_print.contract.descriptions.title' %>
     </div>
   </div>
   <div class='field'>
     <%= f.label :content, :class => 'fine_print' %>
     <%= f.text_area :content, :cols => 56, :class => 'fine_print text_area' %>
   </div>
+
+  <br>
+
   <div class='actions'>
     <%= f.submit nil, :class => 'fine_print submit' %>
   </div>
