@@ -4,6 +4,10 @@ module FinePrint
 
     before_filter :get_user, :can_manage
 
+    layout FinePrint.layout
+
+    helper FinePrint.helpers
+
     protected
 
     def get_user

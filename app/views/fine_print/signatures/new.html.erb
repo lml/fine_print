@@ -1,3 +1,9 @@
+<% if FinePrint.signed_any_version_of_contract?(@user, @contract) %>
+  <div class='fine_print notice'>
+    <h4 class='fine_print heading'>Please review and accept the newest version of the <%= @contract.title.downcase %>:</h4>
+  </div>
+<% end %>
+
 <div class='fine_print contract'>
   <%= render :partial => 'fine_print/contracts/show',
              :locals => {:contract => @contract} %>

@@ -3,6 +3,7 @@
 FinePrint.configure do |config|
 
   # Engine Configuration
+  # Must be set in an initializer
 
   # Proc called with a controller as self.
   # Returns the current user.
@@ -26,7 +27,16 @@ FinePrint.configure do |config|
   # Default: lambda { |user| !user.nil? || head(:unauthorized) }
   config.can_sign_proc = lambda { |user| !user.nil? || head(:unauthorized) }
 
+  # Layout to be used for FinePrint's controllers
+  # Default: 'application'
+  config.layout = 'application'
+
+  # Array of custom helpers for FinePrint's controllers
+  # Default: [] (no custom helpers)
+  config.helpers = []
+
   # Controller Configuration
+  # Can be set either in an initializer or passed as options to `fine_print_require`
 
   # Proc called with a user and an array of contract ids as arguments and a controller as self.
   # This proc is called when a user tries to access a resource protected by FinePrint,

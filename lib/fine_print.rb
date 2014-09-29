@@ -8,7 +8,9 @@ module FinePrint
   ENGINE_OPTIONS = [
     :current_user_proc,
     :can_manage_proc,
-    :can_sign_proc
+    :can_sign_proc,
+    :layout,
+    :helpers
   ]
 
   # Can be set in initializer or passed as an argument

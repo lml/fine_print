@@ -1,7 +1,7 @@
 <%= form_for(@contract, :html => {:class => 'fine_print'}) do |f| %>
   <% if @contract.errors.any? %>
     <div id='error_explanation' class='fine_print errors'>
-      <h2 class='fine_print heading'><%= pluralize(@contract.errors.count, 'error') %> prohibited this contract from being saved:</h2>
+      <h2 class='fine_print heading'>Error:</h2>
 
       <ul>
       <% @contract.errors.full_messages.each do |msg| %>
