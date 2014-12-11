@@ -5,17 +5,20 @@ FactoryGirl.define do
     content { Faker::Lorem.paragraphs.join("\n") }
 
     trait :published do
-      ignore do
+      transient do
         user_factory :user
         signatures_count 0
       end
 
       after(:build) do |contract, evaluator|
-        contract.version = (contract.same_name.published.first.try(:version) || 0) + 1
+        contract.version = (contract.same_name.published
+                                    .first.try(:version) || 0) + 1
 
         evaluator.signatures_count.times do 
-          contract.signatures << FactoryGirl.build(:fine_print_signature,
-                                                   user_factory: evaluator.user_factory)
+          contract.signatures << FactoryGirl.build(
+                                   :fine_print_signature,
+                                   user_factory: evaluator.user_factory
+                                 )
         end
       end
     end
