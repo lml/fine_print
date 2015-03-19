@@ -13,14 +13,16 @@ module FinePrint
       blk = options[:must_sign_proc] || FinePrint.must_sign_proc
 
       # Use action_interceptor to save the current url
-      with_interceptor { instance_exec user, contract_ids, &blk }
+      store_url key: :fine_print_return_to
+
+      instance_exec user, contract_ids, &blk
     end
 
     # Accepts no arguments
     # Redirects the user back to the url they were at before
     # one of FinePrint's procs redirected them
     def fine_print_return
-      redirect_back
+      redirect_back key: :fine_print_return_to
     end
 
     protected

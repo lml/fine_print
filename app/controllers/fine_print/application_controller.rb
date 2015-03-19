@@ -15,7 +15,7 @@ module FinePrint
     end
 
     def can_manage
-      with_interceptor { instance_exec @user, &FinePrint.can_manage_proc }
+      instance_exec @user, &FinePrint.can_manage_proc
     end
   end
 end

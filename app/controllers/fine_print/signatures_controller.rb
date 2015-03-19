@@ -2,8 +2,6 @@ module FinePrint
   class SignaturesController < FinePrint::ApplicationController
     include FinePrint::ApplicationHelper
 
-    acts_as_interceptor :override_url_options => true
-
     skip_before_filter :can_manage, :only => [:new, :create]
     before_filter :can_sign, :only => [:new, :create]
     before_filter :get_contract, :only => [:index, :new, :create]
@@ -29,7 +27,7 @@ module FinePrint
       @signature.contract = @contract
   
       if @signature.save
-        redirect_back
+        fine_print_return
       else
         render :action => 'new', :alert => merge_errors_for(@signature)
       end
@@ -46,7 +44,7 @@ module FinePrint
     protected
 
     def can_sign
-      with_interceptor { instance_exec @user, &FinePrint.can_sign_proc }
+      instance_exec @user, &FinePrint.can_sign_proc
     end
 
     def get_contract
