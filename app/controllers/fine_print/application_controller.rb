@@ -1,3 +1,5 @@
+require 'responders'
+
 module FinePrint
   class ApplicationController < ActionController::Base
     respond_to :html
