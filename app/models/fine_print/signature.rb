@@ -5,8 +5,8 @@ module FinePrint
 
     validate :contract_published, :on => :create
 
-    validates :contract, :presence => true,
-                         :uniqueness => {:scope => [:user_type, :user_id]}
+    validates :contract, :presence => true
+    validates :contract_id, :uniqueness => {:scope => [:user_type, :user_id]}
     validates :user, :presence => true
 
     default_scope { order(:contract_id, :user_type, :user_id) }
