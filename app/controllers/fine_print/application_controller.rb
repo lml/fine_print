@@ -1,23 +1,23 @@
 require 'responders'
 
 module FinePrint
-  class ApplicationController < ActionController::Base
+  class ApplicationController < ::ActionController::Base
     respond_to :html
 
     before_filter :get_user, :can_manage
 
-    layout FinePrint.layout
+    layout FinePrint.config.layout
 
-    helper FinePrint.helpers
+    helper FinePrint.config.helpers
 
     protected
 
     def get_user
-      @user = instance_exec &FinePrint.current_user_proc
+      @user = instance_exec &FinePrint.config.current_user_proc
     end
 
     def can_manage
-      instance_exec @user, &FinePrint.can_manage_proc
+      instance_exec @user, &FinePrint.config.authenticate_manager_proc
     end
   end
 end

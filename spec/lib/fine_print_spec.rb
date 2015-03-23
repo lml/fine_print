@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe FinePrint do
   before :each do
-    @alpha_1 = FactoryGirl.create(:fine_print_contract, :published, :name => 'alpha')
-    @beta_1 = FactoryGirl.create(:fine_print_contract, :published, :name => 'beta')
+    @alpha_1 = FactoryGirl.create(:fine_print_contract, :published,
+                                                        :name => 'alpha')
+    @beta_1 = FactoryGirl.create(:fine_print_contract, :published,
+                                                       :name => 'beta')
 
     @user = DummyUser.create
     @alpha_1_sig = FactoryGirl.create(:fine_print_signature, :contract => @alpha_1,
@@ -26,13 +28,14 @@ describe FinePrint do
   end
 
   it 'gets signed contracts' do
-    expect(FinePrint.get_signed_contract_ids(@user)).to(
-      eq [@beta_1.id])
+    expect(FinePrint.signed_contracts_for(@user)).to(
+      eq [@beta_1]
+    )
   end
 
   it 'gets unsigned contracts' do
-    expect(FinePrint.get_unsigned_contract_ids(@user, @alpha_2.id, @beta_1.id)).to(
-      eq [@alpha_2.id])
+    names = [@alpha_2, @beta_1].collect{|c| c.name}
+    expect(FinePrint.unsigned_contracts_for(@user, name: names)).to eq [@alpha_2]
   end
 
   it 'allows users to sign contracts' do

@@ -44,7 +44,7 @@ module FinePrint
     protected
 
     def can_sign
-      instance_exec @user, &FinePrint.can_sign_proc
+      instance_exec @user, &FinePrint.config.authenticate_user_proc
     end
 
     def get_contract

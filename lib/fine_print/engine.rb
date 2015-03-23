@@ -1,13 +1,16 @@
 require 'action_interceptor'
 require 'squeel'
+require 'fine_print/action_controller/base'
 
 module FinePrint
   class Engine < ::Rails::Engine
     isolate_namespace FinePrint
 
-    initializer "fine_print.factories", :after => "factory_girl.set_factory_paths" do
-      FactoryGirl.definition_file_paths << File.join(root, 'spec', 'factories', 'fine_print') \
-        if defined?(FactoryGirl)
+    initializer "fine_print.factories",
+                after: "factory_girl.set_factory_paths" do
+      FactoryGirl.definition_file_paths << File.join(
+        root, 'spec', 'factories', 'fine_print'
+      ) if defined?(FactoryGirl)
     end
 
     # http://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl
@@ -19,6 +22,7 @@ module FinePrint
     end
 
     # Load subfolders of config/locales as well
-    config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
+    config.i18n.load_path += \
+      Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
   end
 end
