@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/fine_print.svg)](http://badge.fury.io/rb/fine_print)
 [![Build Status](https://travis-ci.org/lml/fine_print.svg?branch=master)](https://travis-ci.org/lml/fine_print)
+[![Coverage Status](https://coveralls.io/repos/lml/fine_print/badge.svg)](https://coveralls.io/r/lml/fine_print)
 [![Code Climate](https://codeclimate.com/github/lml/fine_print/badges/gpa.svg)](https://codeclimate.com/github/lml/fine_print)
 
 FinePrint is a Rails engine in gem form that makes managing web site agreements
