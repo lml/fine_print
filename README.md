@@ -96,6 +96,8 @@ fine_print_skip(contract_names..., options_hash)
   the given contracts for certain controller actions
 
 These methods take a list of contract names to check, along with an options hash.
+If no contract names are provided, or if :all is passed to one of the methods,
+ALL existing contracts will be required or skipped.
 
 The options hash can include any options you could pass to a `before_filter`,
 e.g. `only` and `except`, plus the FinePrint-specific option
