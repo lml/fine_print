@@ -2,9 +2,10 @@ module FinePrint
   class SignaturesController < FinePrint::ApplicationController
     include FinePrint::ApplicationHelper
 
-    skip_before_filter :can_manage, :only => [:new, :create]
-    before_filter :can_sign, :only => [:new, :create]
-    before_filter :get_contract, :only => [:index, :new, :create]
+    skip_before_filter :can_manage, only: [:new, :create]
+    fine_print_skip only: [:new, :create]
+    before_filter :can_sign, only: [:new, :create]
+    before_filter :get_contract, only: [:index, :new, :create]
 
     def index
       @signatures = @contract.signatures
@@ -18,8 +19,10 @@ module FinePrint
       @signature = Signature.new
 
       unless params[:signature_accept]
-        @signature.errors.add(:contract, t('fine_print.signature.errors.contract.must_agree'))
-        render :action => 'new'
+        @signature.errors.add(
+          :contract, t('fine_print.signature.errors.contract.must_agree')
+        )
+        render action: 'new'
         return
       end
 
@@ -29,7 +32,7 @@ module FinePrint
       if @signature.save
         fine_print_return
       else
-        render :action => 'new', :alert => merge_errors_for(@signature)
+        render action: 'new', alert: merge_errors_for(@signature)
       end
     end
   
@@ -38,7 +41,7 @@ module FinePrint
 
       @signature.destroy
       redirect_to contract_signatures_path(@signature.contract),
-                  :notice => t('fine_print.signature.notices.deleted')
+                  notice: t('fine_print.signature.notices.deleted')
     end
 
     protected

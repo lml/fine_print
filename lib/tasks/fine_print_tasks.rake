@@ -10,7 +10,7 @@ namespace :fine_print do
         if File.exists?(File.expand_path(File.basename(file), 'config/initializers'))
           print "NOTE: Initializer #{File.basename(file)} from fine_print has been skipped. Initializer with the same name already exists.\n"
         else
-          cp file, 'config/initializers', :verbose => false
+          cp file, 'config/initializers', verbose: false
           print "Copied initializer #{File.basename(file)} from fine_print\n"
         end
       end
@@ -22,7 +22,9 @@ namespace :fine_print do
       name = File.basename(path)
       desc "Copy #{name} from fine_print to application"
       task name.to_sym do
-        cp_r File.expand_path("../../../app/#{path}/fine_print", __FILE__), "app/#{path}", :verbose => false
+        cp_r File.expand_path("../../../app/#{path}/fine_print", __FILE__),
+             "app/#{path}",
+             verbose: false
         print "Copied #{name} from fine_print\n"
       end
     end

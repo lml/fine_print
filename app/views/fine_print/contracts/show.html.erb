@@ -2,37 +2,52 @@
 
 <br>
 
-<h4 class='fine_print heading'><%= t('fine_print.contract.status.name', name: @contract.name) %></h4>
+<h4 class='fine_print heading'><%= t('fine_print.contract.status.name',
+                                   name: @contract.name) %></h4>
 
-<%= render :partial => 'show', :locals => {:contract => @contract} %>
+<%= render partial: 'show', locals: { contract: @contract } %>
 
 <br>
 
 <div class='fine_print links'>
   <% if @contract.signatures.empty? %>
-    <%= link_to t('fine_print.contract.actions.edit'), edit_contract_path(@contract),
-                :class => 'fine_print link' %> |
+    <%= link_to t('fine_print.contract.actions.edit'),
+                edit_contract_path(@contract),
+                class: 'fine_print link' %> |
       <% if @contract.is_published? %>
         <%= link_to t('fine_print.contract.actions.unpublish'),
-                    unpublish_contract_path(@contract), :method => :put, :data => {
-                      :confirm => t('fine_print.contract.actions.confirm.unpublish')},
-                    :class => 'fine_print link' %>
+                    unpublish_contract_path(@contract),
+                    method: :put,
+                    data: {
+                      confirm: t('fine_print.contract.actions.confirm.unpublish')
+                    },
+                    class: 'fine_print link' %>
       <% else %>
         <%= link_to t('fine_print.contract.actions.publish'),
-                    publish_contract_path(@contract), :method => :put, :data => {
-                      :confirm => t('fine_print.contract.actions.confirm.publish')},
-                    :class => 'fine_print link' %> |
+                    publish_contract_path(@contract),
+                    method: :put,
+                    data: {
+                      confirm: t('fine_print.contract.actions.confirm.publish')
+                    },
+                    class: 'fine_print link' %> |
       <% end %>
-      <%= link_to t('fine_print.contract.actions.delete'), @contract, :method => :delete,
-                  :data => {:confirm => t('fine_print.contract.actions.confirm.delete')},
-                  :class => 'fine_print link' %>
+      <%= link_to t('fine_print.contract.actions.delete'),
+                  @contract,
+                  method: :delete,
+                  date: {
+                    confirm: t('fine_print.contract.actions.confirm.delete')
+                  },
+                  class: 'fine_print link' %>
   <% else %>
     <%= link_to t('fine_print.contract.actions.new_version'),
-                new_version_contract_path(@contract), :method => :post,
-                :class => 'fine_print link' %> |
+                new_version_contract_path(@contract),
+                method: :post,
+                class: 'fine_print link' %> |
     <%= link_to t('fine_print.contract.actions.signatures'),
-                contract_signatures_path(@contract), :class => 'fine_print link' %>
+                contract_signatures_path(@contract),
+                class: 'fine_print link' %>
   <% end %>
-  | <%= link_to t('fine_print.contract.actions.list'), contracts_path,
-                :class => 'fine_print link' %>
+  | <%= link_to t('fine_print.contract.actions.list'),
+                contracts_path,
+                class: 'fine_print link' %>
 </div>

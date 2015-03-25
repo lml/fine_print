@@ -1,7 +1,11 @@
 <h1 class='fine_print heading'>
-  <%= t('fine_print.signature.status.for_contract', contract: link_to(
-        "#{@contract.title} #{t('fine_print.contract.status.version',
-                                version: @contract.version.to_s)}", @contract)).html_safe %>
+  <%= t('fine_print.signature.status.for_contract',
+        contract: link_to(
+          "#{@contract.title} #{t('fine_print.contract.status.version',
+                                version: @contract.version.to_s)}",
+          @contract
+        )
+      ).html_safe %>
 </h1>
 
 <div class='fine_print signature_index'>
@@ -19,11 +23,15 @@
       <td><%= signature.user_type %>&nbsp;</td>
       <td>&nbsp;<%= signature.user_id %>&nbsp;</td>
       <td>&nbsp;<%= l signature.created_at, format: :fine_print %>&nbsp;</td>
-      <td>&nbsp;<%= link_to t('fine_print.signature.actions.delete'), 
-                            signature, :method => :delete, 
-                            :data => { 
-                              :confirm => t('fine_print.signature.actions.confirm.delete')
-                            }, :class => 'fine_print link' %>
+      <td>&nbsp;<%= link_to(
+                      t('fine_print.signature.actions.delete'), 
+                      signature,
+                      method: :delete, 
+                      data: { 
+                        confirm: t('fine_print.signature.actions.confirm.delete')
+                      }
+                      class: 'fine_print link'
+                    ) %>
       </td>
     </tr>
   <% end %>
@@ -33,7 +41,7 @@
 
   <div class='fine_print links'>
     <%= link_to t('fine_print.contract.actions.list'), contracts_path,
-                :class => 'fine_print link' %>
+                class: 'fine_print link' %>
   </div>
   
 </div>

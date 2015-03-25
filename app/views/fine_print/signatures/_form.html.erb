@@ -1,4 +1,4 @@
-<%= form_for([@contract, @signature], :html => {:class => 'fine_print'}) do |f| %>
+<%= form_for([@contract, @signature], html: { class: 'fine_print' }) do |f| %>
   <% if @signature.errors.any? %>
     <div id='error_explanation' class='fine_print errors'>
       <h4 class='fine_print heading'>
@@ -14,13 +14,16 @@
   <% end %>
 
   <div class='field'>
-    <%= f.label :accept, t('fine_print.signature.actions.accept'), :class => 'fine_print' %>
-    <%= check_box_tag :signature_accept, :class => 'fine_print check_box' %>
+    <%= f.label :accept,
+                t('fine_print.signature.actions.accept'),
+                class: 'fine_print' %>
+    <%= check_box_tag :signature_accept, class: 'fine_print check_box' %>
   </div>
 
   <br>
 
   <div class='actions'>
-    <%= f.submit t('fine_print.signature.actions.sign'), :class => 'fine_print submit' %>
+    <%= f.submit t('fine_print.signature.actions.sign'),
+                 class: 'fine_print submit' %>
   </div>
 <% end %>

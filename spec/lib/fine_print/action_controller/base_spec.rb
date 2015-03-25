@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module FinePrint
   module ActionController
-    describe Base do
+    describe Base, type: :lib do
       let!(:controller)            { ::ActionController::Base.new }
       let!(:dummy_controller)      { DummyModelsController.new }
 

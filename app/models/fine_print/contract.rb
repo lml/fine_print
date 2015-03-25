@@ -1,20 +1,20 @@
 module FinePrint
   class Contract < ActiveRecord::Base
-    has_many :signatures, :dependent => :destroy, :inverse_of => :contract
+    has_many :signatures, dependent: :destroy, inverse_of: :contract
 
-    has_many :same_name, :class_name => 'Contract',
-             :primary_key => :name, :foreign_key => :name
+    has_many :same_name, class_name: 'Contract',
+             primary_key: :name, foreign_key: :name
 
     before_validation :downcase_name
     before_update :no_signatures
     before_destroy :no_signatures
 
-    validates :name, :presence => true, :format => /\A[\w-]+\z/
-    validates :title, :presence => true
-    validates :content, :presence => true
-    validates :version, :uniqueness => {:scope => :name,
-                                        :case_sensitive => false},
-                        :allow_nil => true
+    validates :name, presence: true, format: /\A[\w-]+\z/
+    validates :title, presence: true
+    validates :content, presence: true
+    validates :version, uniqueness: { scope: :name,
+                                      case_sensitive: false},
+                        allow_nil: true
 
     default_scope lambda { order{[name.asc, version.desc]} }
 
@@ -49,7 +49,7 @@ module FinePrint
     end
 
     def new_version
-      Contract.where(:name => name, :version => nil).first || \
+      Contract.where(name: name, version: nil).first || \
         dup.tap{|contract| contract.version = nil}
     end
 

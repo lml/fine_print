@@ -10,15 +10,16 @@ module FinePrint
       # Checks if the current user has signed the given contracts
       # and calls fine_print_redirect if not
       # Options relevant to FinePrint are passed to fine_print_redirect
+      # If no names are given, requires all contracts
       def fine_print_require(*names)
         options = names.last.is_a?(Hash) ? names.pop : {}
         fp_opts = options.slice(*FinePrint::Configuration::CONTROLLER_OPTIONS)
 
         # Convert names to an array of Strings
         contract_names = names.flatten.collect{|c| c.to_s}
-
-        # Return quietly if all contracts skipped
-        return if contract_names.blank?
+        contract_names = ['all'] if contract_names.empty?
+        contract_names = FinePrint::Contract.all.to_a.collect{|c| c.name}
+                           .uniq if contract_names.include?('all')
 
         user = instance_exec &FinePrint.config.current_user_proc
 
@@ -26,7 +27,7 @@ module FinePrint
 
         return if !can_sign || performed?
 
-        unsigned_contracts = FinePrint.get_unsigned_contracts(
+        unsigned_contracts = FinePrint.unsigned_contracts_for(
           user, name: contract_names
         )
 
@@ -76,12 +77,17 @@ module FinePrint
 
           # Convert names to an array of Strings
           contract_names = names.flatten.collect{|c| c.to_s}
+          contract_names = ['all'] if contract_names.empty?
 
           class_exec do
             before_filter(f_opts) do |controller|
               skipped_contract_names = fine_print_skipped_contract_names
+              next if skipped_contract_names.include?('all')
+              contract_names = FinePrint::Contract.all.to_a.collect{|c| c.name}
+                                 .uniq if contract_names.include?('all')
               unskipped_contract_names = contract_names - skipped_contract_names
-              controller.fine_print_require(unskipped_contract_names, options)
+              controller.fine_print_require(unskipped_contract_names, options) \
+                unless unskipped_contract_names.empty?
             end
           end
         end
@@ -95,6 +101,7 @@ module FinePrint
 
           # Convert names to an array of Strings
           contract_names = names.flatten.collect{|c| c.to_s}
+          contract_names = ['all'] if contract_names.empty?
 
           class_exec do
             prepend_before_filter(options) do |controller|

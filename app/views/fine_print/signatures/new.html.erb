@@ -1,13 +1,15 @@
 <% if FinePrint.signed_any_version_of_contract?(@user, @contract) %>
   <div class='fine_print notice'>
-    <h4 class='fine_print heading'><%= t('fine_print.signature.status.new_version',
-                                         contract: @contract.title) %></h4>
+    <h4 class='fine_print heading'>
+      <%= t('fine_print.signature.status.new_version',
+            contract: @contract.title) %>
+    </h4>
   </div>
 <% end %>
 
 <div class='fine_print contract'>
-  <%= render :partial => 'fine_print/contracts/show',
-             :locals => {:contract => @contract} %>
+  <%= render partial: 'fine_print/contracts/show',
+             locals: { contract: @contract } %>
 </div>
 
 <div class='fine_print new_signature'>

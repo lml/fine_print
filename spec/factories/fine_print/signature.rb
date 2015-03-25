@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  factory :fine_print_signature, :class => FinePrint::Signature do
-    association :contract, :factory => [:fine_print_contract, :published]
+  factory :fine_print_signature, class: FinePrint::Signature do
+    association :contract, factory: [:fine_print_contract, :published]
 
     transient do
       user_factory :user

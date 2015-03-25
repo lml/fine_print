@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module FinePrint
-  describe HomeController, :type => :controller do
+  describe HomeController, type: :controller do
     routes { FinePrint::Engine.routes }
 
     before(:each) do

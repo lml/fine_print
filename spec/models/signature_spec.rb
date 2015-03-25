@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module FinePrint
-  describe Signature do
+  describe Signature, type: :model do
     it "can't be associated with unpublished contracts" do
       contract = FactoryGirl.create(:fine_print_contract)
       expect(contract.is_published?).to eq false

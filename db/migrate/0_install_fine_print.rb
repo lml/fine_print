@@ -9,7 +9,7 @@ class InstallFinePrint < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :fine_print_contracts, [:name, :version], :unique => true
+    add_index :fine_print_contracts, [:name, :version], unique: true
 
     create_table :fine_print_signatures do |t|
       t.belongs_to :contract, null: false

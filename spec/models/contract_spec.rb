@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module FinePrint
-  describe Contract do
+  describe Contract, type: :model do
     it 'can be published and unpublished' do
       contract = FactoryGirl.create(:fine_print_contract)
       expect(contract.is_published?).to eq false
@@ -36,7 +36,7 @@ module FinePrint
       expect(contract.is_published?).to eq true
       expect(contract.signatures).to be_empty
 
-      ua = FactoryGirl.create(:fine_print_signature, :contract => contract)
+      ua = FactoryGirl.create(:fine_print_signature, contract: contract)
       contract.reload
       expect(contract.signatures).not_to be_empty
 
