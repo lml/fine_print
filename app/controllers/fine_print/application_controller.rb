@@ -1,7 +1,7 @@
 require 'responders'
 
 module FinePrint
-  class ApplicationController < ActionController::Base
+  class ApplicationController < ::ApplicationController
     respond_to :html
 
     before_filter :get_user, :can_manage
