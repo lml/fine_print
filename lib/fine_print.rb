@@ -3,6 +3,9 @@ require 'fine_print/engine'
 
 module FinePrint
 
+  SIGNATURE_IS_IMPLICIT = true
+  SIGNATURE_IS_EXPLICIT = false
+
   def self.config
     @config ||= Configuration.new
   end
@@ -27,12 +30,15 @@ module FinePrint
   # Records that the given user has signed the given contract
   #   - user - the user in question
   #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
-  def self.sign_contract(user, contract)
+  #   - is_implicit - if true, the signature is implicit/assumed/indirectly-acquired
+  #                   if false, the signature was obtained directly from the user
+  def self.sign_contract(user, contract, is_implicit = SIGNATURE_IS_EXPLICIT)
     contract = get_contract(contract)
 
     Signature.create do |signature|
       signature.user = user
       signature.contract = contract
+      signature.is_implicit = is_implicit
     end
   end
 

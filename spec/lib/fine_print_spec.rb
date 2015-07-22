@@ -9,7 +9,7 @@ describe FinePrint, type: :lib do
 
     @user = DummyUser.create
     @alpha_1_sig = FactoryGirl.create(:fine_print_signature, contract: @alpha_1,
-                                                             user: @user) 
+                                                             user: @user)
     @beta_1_sig = FactoryGirl.create(:fine_print_signature, contract: @beta_1,
                                                             user: @user)
 
@@ -54,5 +54,17 @@ describe FinePrint, type: :lib do
     expect(FinePrint.signed_any_version_of_contract?(@user, @alpha_1)).to eq true
     expect(FinePrint.signed_any_version_of_contract?(@user, @alpha_2)).to eq true
     expect(FinePrint.signed_any_version_of_contract?(@user, @beta_1)).to eq true
+  end
+
+  it 'can record implicit signatures' do
+    signature = FinePrint.sign_contract(@user, @alpha_2,
+                                        FinePrint::SIGNATURE_IS_IMPLICIT)
+
+    expect(signature.is_implicit?).to eq true
+    expect(signature.is_explicit?).to eq false
+  end
+
+  it 'records signatures explicitly by default' do
+    expect(FinePrint.sign_contract(@user, @alpha_2).is_explicit?).to eq true
   end
 end
