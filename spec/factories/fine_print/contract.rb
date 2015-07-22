@@ -3,6 +3,11 @@ FactoryGirl.define do
     name { Faker::Lorem.words.join('_') }
     title { Faker::Lorem.words.join(' ').capitalize }
     content { Faker::Lorem.paragraphs.join("\n") }
+    is_signed_by_proxy { false }
+
+    trait :signed_by_proxy do
+      is_signed_by_proxy true
+    end
 
     trait :published do
       transient do
@@ -14,7 +19,7 @@ FactoryGirl.define do
         contract.version = (contract.same_name.published
                                     .first.try(:version) || 0) + 1
 
-        evaluator.signatures_count.times do 
+        evaluator.signatures_count.times do
           contract.signatures << FactoryGirl.build(
                                    :fine_print_signature,
                                    user_factory: evaluator.user_factory

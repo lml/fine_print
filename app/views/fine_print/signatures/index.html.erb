@@ -24,12 +24,12 @@
       <td>&nbsp;<%= signature.user_id %>&nbsp;</td>
       <td>&nbsp;<%= l signature.created_at, format: :fine_print %>&nbsp;</td>
       <td>&nbsp;<%= link_to(
-                      t('fine_print.signature.actions.delete'), 
+                      t('fine_print.signature.actions.delete'),
                       signature,
-                      method: :delete, 
-                      data: { 
+                      method: :delete,
+                      data: {
                         confirm: t('fine_print.signature.actions.confirm.delete')
-                      }
+                      },
                       class: 'fine_print link'
                     ) %>
       </td>
@@ -43,5 +43,5 @@
     <%= link_to t('fine_print.contract.actions.list'), contracts_path,
                 class: 'fine_print link' %>
   </div>
-  
+
 </div>
