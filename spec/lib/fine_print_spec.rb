@@ -9,7 +9,7 @@ describe FinePrint, type: :lib do
 
     @user = DummyUser.create
     @alpha_1_sig = FactoryGirl.create(:fine_print_signature, contract: @alpha_1,
-                                                             user: @user) 
+                                                             user: @user)
     @beta_1_sig = FactoryGirl.create(:fine_print_signature, contract: @beta_1,
                                                             user: @user)
 
@@ -54,5 +54,14 @@ describe FinePrint, type: :lib do
     expect(FinePrint.signed_any_version_of_contract?(@user, @alpha_1)).to eq true
     expect(FinePrint.signed_any_version_of_contract?(@user, @alpha_2)).to eq true
     expect(FinePrint.signed_any_version_of_contract?(@user, @beta_1)).to eq true
+  end
+
+  it 'automatically signs contracts signed by proxy' do
+    contract = FactoryGirl.create(:fine_print_contract, :published,
+                                  :signed_by_proxy, name: 'gamma')
+
+    expect(FinePrint.signed_contract?(@user, contract)).to eq false
+    expect(FinePrint.unsigned_contracts_for(@user, name: 'gamma')).to eq []
+    expect(FinePrint.signed_contract?(@user, contract)).to eq true
   end
 end

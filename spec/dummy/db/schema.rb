@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 1) do
+ActiveRecord::Schema.define(version: 1000) do
 
   create_table "dummy_users", force: true do |t|
     t.boolean  "is_admin",   default: false, null: false
@@ -20,12 +20,13 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   create_table "fine_print_contracts", force: true do |t|
-    t.string   "name",       null: false
+    t.string   "name",                               null: false
     t.integer  "version"
-    t.string   "title",      null: false
-    t.text     "content",    null: false
+    t.string   "title",                              null: false
+    t.text     "content",                            null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_signed_by_proxy", default: false, null: false
   end
 
   add_index "fine_print_contracts", ["name", "version"], name: "index_fine_print_contracts_on_name_and_version", unique: true

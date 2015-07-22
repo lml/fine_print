@@ -17,7 +17,8 @@ module FinePrint
       @contract.name = params[:contract][:name]
       @contract.title = params[:contract][:title]
       @contract.content = params[:contract][:content]
-  
+      @contract.is_signed_by_proxy = params[:contract][:is_signed_by_proxy]
+
       if @contract.save
         redirect_to @contract, notice: t('fine_print.contract.notices.created')
       else
@@ -38,6 +39,7 @@ module FinePrint
       @contract.name = params[:contract][:name]
       @contract.title = params[:contract][:title]
       @contract.content = params[:contract][:content]
+      @contract.is_signed_by_proxy = params[:contract][:is_signed_by_proxy]
 
       if @contract.save
         redirect_to @contract, notice: t('fine_print.contract.notices.updated')

@@ -8,6 +8,13 @@
 <h4 class='fine_print heading'><%= t('fine_print.contract.status.updated_at', \
   updated_at: l(contract.updated_at, format: :fine_print)) %></h4>
 
+<h4 class='fine_print heading'>
+  <%= contract.is_signed_by_proxy? ?
+    t('fine_print.contract.status.signed_by_proxy.is') :
+    t('fine_print.contract.status.signed_by_proxy.is_not')
+  %>
+</h4>
+
 <div class='fine_print contract'>
   <pre><%= @contract.content.html_safe %></pre>
 </div>

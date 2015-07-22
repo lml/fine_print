@@ -88,7 +88,14 @@ module FinePrint
   def self.unsigned_contracts_for(user, conditions = {})
     contracts = latest_published_contracts(conditions)
     signed_contracts = signed_contracts_for(user, conditions)
-    contracts - signed_contracts
+    unsigned_contracts = contracts - signed_contracts
+
+    # Reject proxy-signed contracts and lazily store automatic signatures for
+    # proxy-signed contracts so that they no longer show up in this unsigned
+    # list.
+    unsigned_contracts.reject do |contract|
+      contract.is_signed_by_proxy? && sign_contract(user, contract)
+    end
   end
 
 end

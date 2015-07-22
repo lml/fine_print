@@ -31,7 +31,10 @@
     <%= f.label :content, class: 'fine_print' %>
     <%= f.text_area :content, cols: 56, class: 'fine_print text_area' %>
   </div>
-
+  <div class='field'>
+    <%= f.label :is_signed_by_proxy, class: 'fine_print' %>
+    <%= f.check_box :is_signed_by_proxy, class: 'fine_print check_box' %>
+  </div>
   <br>
 
   <div class='actions'>
