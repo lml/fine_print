@@ -67,5 +67,23 @@ module FinePrint
       new_version.publish
       expect(new_version.version).to eq 1
     end
+
+    it 'calls the contract_published_proc after publish' do
+      original_proc = FinePrint.config.contract_published_proc
+
+      begin
+        FinePrint.config.contract_published_proc = lambda do |contract|
+          contract.name = 'Deep Thought'
+        end
+        contract = FactoryGirl.create(:fine_print_contract, name: '42')
+        contract.publish
+        expect(contract.name).to eq 'Deep Thought'
+      rescue
+        fail
+      ensure
+        FinePrint.config.contract_published_proc = original_proc
+      end
+    end
+
   end
 end

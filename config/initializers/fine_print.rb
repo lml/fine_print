@@ -57,4 +57,8 @@ FinePrint.configure do |config|
     )
   }
 
+  # Proc called whenever a contract is published, useful if the application
+  # needs to hook into this event and take some action
+  config.contract_published_proc = lambda { |contract| }
+
 end

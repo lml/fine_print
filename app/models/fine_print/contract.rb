@@ -36,7 +36,10 @@ module FinePrint
       return false unless errors.empty?
 
       self.version = (same_name.published.first.try(:version) || 0) + 1
-      save
+
+      save.tap do |success|
+        instance_exec(self, &FinePrint.config.contract_published_proc) if success
+      end
     end
 
     def unpublish
