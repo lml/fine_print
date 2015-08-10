@@ -62,9 +62,8 @@ module FinePrint
 
     contract = get_contract(contract)
     
-    binding.pry
     contract.same_name.joins(:signatures).where(
-      signatures: { user_id: user.id, user_type: user.class.name }
+      fine_print_signatures: { user_id: user.id, user_type: user.class.name }
     ).exists?
   end
 
@@ -82,9 +81,8 @@ module FinePrint
     return [] if user.nil?
 
     contracts = latest_published_contracts(conditions)
-    binding.pry
     contracts.joins(:signatures).where(
-      signatures: { user_id: user.id, user_type: user.class.name }
+      fine_print_signatures: { user_id: user.id, user_type: user.class.name }
     )
   end
 
