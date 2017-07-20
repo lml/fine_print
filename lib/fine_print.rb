@@ -33,12 +33,20 @@ module FinePrint
   #   - is_implicit - if true, the signature is implicit/assumed/indirectly-acquired
   #                   if false, the signature was obtained directly from the user
   def self.sign_contract(user, contract, is_implicit = SIGNATURE_IS_EXPLICIT)
-    contract = get_contract(contract)
+    begin
+      Signature.transaction(requires_new: true) do
+        contract = get_contract(contract)
 
-    Signature.create do |signature|
-      signature.user = user
-      signature.contract = contract
-      signature.is_implicit = is_implicit
+        Signature.create do |signature|
+          signature.user = user
+          signature.contract = contract
+          signature.is_implicit = is_implicit
+        end
+      end
+    rescue ActiveRecord::RecordNotUnique
+      # Simply retry as in https://apidock.com/rails/v4.0.2/ActiveRecord/Relation/find_or_create_by
+      # If it already exists, the validations should catch it this time
+      retry
     end
   end
 
