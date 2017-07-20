@@ -13,13 +13,13 @@
 
 ActiveRecord::Schema.define(version: 1000) do
 
-  create_table "dummy_users", force: true do |t|
+  create_table "dummy_users", force: :cascade do |t|
     t.boolean  "is_admin",   default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "fine_print_contracts", force: true do |t|
+  create_table "fine_print_contracts", force: :cascade do |t|
     t.string   "name",       null: false
     t.integer  "version"
     t.string   "title",      null: false
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 1000) do
 
   add_index "fine_print_contracts", ["name", "version"], name: "index_fine_print_contracts_on_name_and_version", unique: true
 
-  create_table "fine_print_signatures", force: true do |t|
+  create_table "fine_print_signatures", force: :cascade do |t|
     t.integer  "contract_id",                 null: false
     t.integer  "user_id",                     null: false
     t.string   "user_type",                   null: false

@@ -24,6 +24,7 @@
 
   <div class='actions'>
     <%= f.submit t('fine_print.signature.actions.sign'),
-                 class: 'fine_print submit' %>
+                 class: 'fine_print submit',
+                 data: { disable_with: 'Please wait...' } %>
   </div>
 <% end %>
