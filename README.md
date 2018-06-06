@@ -80,11 +80,11 @@ this proc to return `true` for your admins.
 ## Usage
 
 You can choose to check if users signed contracts either
-as a before_filter or inside your controller actions.
+as a before_action or inside your controller actions.
 
-### Option 1 - As a before_filter
+### Option 1 - As a before_action
 
-If you choose to have FinePrint work like a before_filter, you can user the following class methods, which are automatically added to your controllers:
+If you choose to have FinePrint work like a before_action, you can user the following class methods, which are automatically added to your controllers:
 
 ```rb
 fine_print_require(contract_names..., options_hash)
@@ -100,7 +100,7 @@ These methods take a list of contract names to check, along with an options hash
 If no contract names are provided, or if :all is passed to one of the methods,
 ALL existing contracts will be required or skipped.
 
-The options hash can include any options you could pass to a `before_filter`,
+The options hash can include any options you could pass to a `before_action`,
 e.g. `only` and `except`, plus the FinePrint-specific option
 `redirect_to_contracts_proc`, which is a proc that controls
 where users are redirected to in order to sign contracts.
@@ -142,7 +142,7 @@ fine_print_require(contract_names..., options_hash)
 fine_print_return
 ```
 
-- `fine_print_require` works just like the before_filter version and will
+- `fine_print_require` works just like the before_action version and will
   redirect the user if they haven't signed one or more of the given contracts
 - `fine_print_return` can be used to return from a redirect
   made by `fine_print_require`
@@ -177,7 +177,7 @@ If you require more explanation about these methods and their arguments, check t
 
 ### Redirecting users back
 
-Regardless if you use the class before_filter or instance methods,
+Regardless if you use the class before_action or instance methods,
 after your contract is signed you can use the `fine_print_return` controller
 instance method to send the user back to the place where they came from.
 

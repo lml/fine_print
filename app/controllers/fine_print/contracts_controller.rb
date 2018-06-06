@@ -2,7 +2,7 @@ module FinePrint
   class ContractsController < FinePrint::ApplicationController
     include FinePrint::ApplicationHelper
 
-    before_filter :get_contract, except: [:index, :new, :create]
+    before_action :get_contract, except: [:index, :new, :create]
 
     def index
       @contracts = Contract.includes(:signatures).all.to_a.group_by(&:name)

@@ -29,7 +29,7 @@ FinePrint.configure do |config|
   # potentially call the redirect_to_contracts_proc with the user as argument.
   # If it returns false, renders or redirects, FinePrint will stop its checks.
   # Note that returning false will allow the user to proceed without signing
-  # contracts, unless another before_filter renders or redirects (to a login
+  # contracts, unless another before_action renders or redirects (to a login
   # page, for example). The default renders 401 Unauthorized for nil users and
   # checks all others for contracts to be signed.
   # Default: lambda { |user| !user.nil? || head(:unauthorized) }

@@ -2,10 +2,10 @@ module FinePrint
   class SignaturesController < FinePrint::ApplicationController
     include FinePrint::ApplicationHelper
 
-    skip_before_filter :can_manage, only: [:new, :create]
+    skip_before_action :can_manage, only: [:new, :create]
     fine_print_skip only: [:new, :create]
-    before_filter :can_sign, only: [:new, :create]
-    before_filter :get_contract, only: [:index, :new, :create]
+    before_action :can_sign, only: [:new, :create]
+    before_action :get_contract, only: [:index, :new, :create]
 
     def index
       @signatures = @contract.signatures

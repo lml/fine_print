@@ -4,7 +4,7 @@ module FinePrint
   class ApplicationController < ::ActionController::Base
     respond_to :html
 
-    before_filter :get_user, :can_manage
+    before_action :get_user, :can_manage
 
     layout FinePrint.config.layout
 

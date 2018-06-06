@@ -16,11 +16,11 @@ module FinePrint
                                       case_sensitive: false},
                         allow_nil: true
 
-    default_scope lambda { order{[name.asc, version.desc]} }
+    default_scope lambda { ordering{[name.asc, version.desc]} }
 
-    scope :published, lambda { where{version != nil} }
-    scope :latest, lambda { joins(:same_name).group{id}
-                              .having{version == max(same_name.version)} }
+    scope :published, lambda { where.has{version != nil} }
+    scope :latest, lambda { joins(:same_name).grouping{id}
+                              .when_having{version == max(same_name.version)} }
 
     def is_published?
       !version.nil?
