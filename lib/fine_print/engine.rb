@@ -1,5 +1,5 @@
 require 'action_interceptor'
-require 'squeel'
+require 'baby_squeel'
 require 'fine_print/action_controller/base'
 
 module FinePrint
