@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', '>= 3.1'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'action_interceptor', '>= 1.0'
-  s.add_dependency 'squeel'
+  s.add_dependency 'baby_squeel'
   s.add_dependency 'responders'
 
   s.add_development_dependency 'sqlite3'
