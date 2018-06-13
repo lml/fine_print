@@ -5,7 +5,7 @@ Coveralls.wear!('rails')
 
 require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 require 'rspec/rails'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'faker'
 
 Rails.backtrace_cleaner.remove_silencers!

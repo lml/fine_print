@@ -8,7 +8,7 @@ module FinePrint
       setup_controller_spec
     end
 
-    let!(:signature) { FactoryGirl.create(:fine_print_signature) }
+    let!(:signature) { FactoryBot.create(:fine_print_signature) }
 
     it "won't get index unless authorized" do
       get :index, contract_id: signature.contract.id

@@ -7,16 +7,16 @@ module FinePrint
     isolate_namespace FinePrint
 
     initializer "fine_print.factories",
-                after: "factory_girl.set_factory_paths" do
-      FactoryGirl.definition_file_paths << File.join(
+                after: "factory_bot.set_factory_paths" do
+      FactoryBot.definition_file_paths << File.join(
         root, 'spec', 'factories', 'fine_print'
-      ) if defined?(FactoryGirl)
+      ) if defined?(FactoryBot)
     end
 
     # http://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl
     config.generators do |g|
       g.test_framework      :rspec,        fixture: false
-      g.fixture_replacement :factory_girl, dir: 'spec/factories'
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
       g.assets false
       g.helper false
     end
