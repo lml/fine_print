@@ -63,6 +63,7 @@ module FinePrint
     def no_signatures
       return if signatures.empty?
       errors.add(:base, I18n.t('fine_print.contract.errors.already_signed'))
+      throw(:abort)
       false
     end
 
