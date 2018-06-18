@@ -1,2 +1,2 @@
-class DummyUser < ActiveRecord::Base
+class DummyUser < ApplicationRecord
 end

@@ -8,4 +8,4 @@ gemspec
 gem 'jquery-rails'
 
 # To use debugger
-# gem 'byebug'
+gem 'byebug'

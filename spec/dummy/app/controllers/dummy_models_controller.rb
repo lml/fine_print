@@ -1,2 +1,2 @@
-class DummyModelsController < ActionController::Base
+class DummyModelsController < ApplicationController
 end

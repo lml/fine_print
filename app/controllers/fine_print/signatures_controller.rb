@@ -28,14 +28,14 @@ module FinePrint
 
       @signature.user = @user
       @signature.contract = @contract
-  
+
       if @signature.save
         fine_print_return
       else
         render action: 'new', alert: merge_errors_for(@signature)
       end
     end
-  
+
     def destroy
       @signature = Signature.find(params[:id])
 
