@@ -19,12 +19,13 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', '>= 3.1'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'action_interceptor', '>= 1.0'
-  s.add_dependency 'squeel'
+  s.add_dependency 'baby_squeel'
   s.add_dependency 'responders'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'factory_girl_rails'
+  s.add_development_dependency 'factory_bot_rails'
+  s.add_development_dependency 'rails-controller-testing'
   s.add_development_dependency 'faker'
   s.add_development_dependency 'coveralls'
 end

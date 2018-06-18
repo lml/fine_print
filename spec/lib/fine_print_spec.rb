@@ -2,15 +2,15 @@ require 'spec_helper'
 
 describe FinePrint, type: :lib do
   before :each do
-    @alpha_1 = FactoryGirl.create(:fine_print_contract, :published,
+    @alpha_1 = FactoryBot.create(:fine_print_contract, :published,
                                                         name: 'alpha')
-    @beta_1 = FactoryGirl.create(:fine_print_contract, :published,
+    @beta_1 = FactoryBot.create(:fine_print_contract, :published,
                                                        name: 'beta')
 
     @user = DummyUser.create
-    @alpha_1_sig = FactoryGirl.create(:fine_print_signature, contract: @alpha_1,
+    @alpha_1_sig = FactoryBot.create(:fine_print_signature, contract: @alpha_1,
                                                              user: @user)
-    @beta_1_sig = FactoryGirl.create(:fine_print_signature, contract: @beta_1,
+    @beta_1_sig = FactoryBot.create(:fine_print_signature, contract: @beta_1,
                                                             user: @user)
 
     @alpha_2 = @alpha_1.new_version

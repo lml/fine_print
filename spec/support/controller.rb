@@ -5,7 +5,7 @@ end
 def setup_controller_spec
   class_eval { include ApplicationHelper }
   sign_out
-  @user = FactoryGirl.create(:user)
-  @admin = FactoryGirl.create(:user)
+  @user = FactoryBot.create(:user)
+  @admin = FactoryBot.create(:user)
   @admin.is_admin = true
 end

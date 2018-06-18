@@ -8,7 +8,7 @@ module FinePrint
       setup_controller_spec
     end
 
-    let!(:contract) { FactoryGirl.create(:fine_print_contract) }
+    let!(:contract) { FactoryBot.create(:fine_print_contract) }
 
     it "won't get index unless authorized" do
       get :index
@@ -46,12 +46,12 @@ module FinePrint
       attributes[:title] = 'Some title'
       attributes[:content] = 'Some content'
 
-      post :create, contract: :attributes
+      post :create, params: { contract: :attributes }
       expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
       
       sign_in @user
-      post :create, contract: :attributes
+      post :create, params: { contract: :attributes }
       expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
     end
@@ -63,7 +63,7 @@ module FinePrint
       attributes[:title] = 'Some title'
       attributes[:content] = 'Some content'
       
-      post :create, contract: attributes
+      post :create, params: { contract: attributes }
       expect(response).to redirect_to assigns(:contract)
       expect(assigns(:contract).errors).to be_empty
       expect(assigns(:contract).name).to eq 'some_name'
@@ -72,17 +72,17 @@ module FinePrint
     end
     
     it "won't edit unless authorized" do
-      get :edit, id: contract.id
+      get :edit, params: { id: contract.id }
       expect(response.status).to eq 403
       
       sign_in @user
-      get :edit, id: contract.id
+      get :edit, params: { id: contract.id }
       expect(response.status).to eq 403
     end
     
     it 'must edit if authorized' do
       sign_in @admin
-      get :edit, id: contract.id
+      get :edit, params: { id: contract.id }
       expect(response.status).to eq 200
     end
     
@@ -95,7 +95,7 @@ module FinePrint
       title = contract.title
       content = contract.content
       
-      put :update, id: contract.id, contract: attributes
+      put :update, params: { id: contract.id, contract: attributes }
       expect(response.status).to eq 403
       contract.reload
       expect(contract.name).to eq name
@@ -103,7 +103,7 @@ module FinePrint
       expect(contract.content).to eq content
       
       sign_in @user
-      put :update, id: contract.id, contract: attributes
+      put :update, params: { id: contract.id, contract: attributes }
       expect(response.status).to eq 403
       contract.reload
       expect(contract.name).to eq name
@@ -118,7 +118,7 @@ module FinePrint
       attributes[:content] = 'Another content'
 
       sign_in @admin
-      put :update, id: contract.id, contract: attributes
+      put :update, params: { id: contract.id, contract: attributes }
       expect(response).to redirect_to contract
       contract.reload
       expect(contract.errors).to be_empty
@@ -128,32 +128,32 @@ module FinePrint
     end
 
     it "won't destroy unless authorized" do
-      delete :destroy, id: contract.id
+      delete :destroy, params: { id: contract.id }
       expect(response.status).to eq 403
       expect(Contract.find(contract.id)).to eq contract
       
       sign_in @user
-      delete :destroy, id: contract.id
+      delete :destroy, params: { id: contract.id }
       expect(response.status).to eq 403
       expect(Contract.find(contract.id)).to eq contract
     end
     
     it 'must destroy if authorized' do
       sign_in @admin
-      delete :destroy, id: contract.id
+      delete :destroy, params: { id: contract.id }
       expect(response).to redirect_to contracts_path
       expect(Contract.find_by_id(contract.id)).to be_nil
     end
 
     it "won't publish unless authorized" do
       expect(contract.is_published?).to eq false
-      put :publish, id: contract.id
+      put :publish, params: { id: contract.id }
       expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq false
       
       sign_in @user
-      put :publish, id: contract.id
+      put :publish, params: { id: contract.id }
       expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq false
@@ -163,7 +163,7 @@ module FinePrint
       expect(contract.is_published?).to eq false
       sign_in @admin
 
-      put :publish, id: contract.id
+      put :publish, params: { id: contract.id }
       expect(response).to redirect_to contracts_path
       contract.reload
       expect(contract.is_published?).to eq true
@@ -172,13 +172,13 @@ module FinePrint
     it "won't unpublish unless authorized" do
       contract.publish
       expect(contract.is_published?).to eq true
-      put :unpublish, id: contract.id
+      put :unpublish, params: { id: contract.id }
       expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq true
       
       sign_in @user
-      put :unpublish, id: contract.id
+      put :unpublish, params: { id: contract.id }
       expect(response.status).to eq 403
       contract.reload
       expect(contract.is_published?).to eq true
@@ -189,7 +189,7 @@ module FinePrint
       expect(contract.is_published?).to eq true
 
       sign_in @admin
-      put :unpublish, id: contract.id
+      put :unpublish, params: { id: contract.id }
       expect(response).to redirect_to contracts_path
       contract.reload
       expect(contract.is_published?).to eq false
@@ -199,12 +199,12 @@ module FinePrint
       contract.publish
       expect(contract.is_published?).to eq true
       
-      post :new_version, id: contract.id
+      post :new_version, params: { id: contract.id }
       expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
       
       sign_in @user
-      post :new_version, id: contract.id
+      post :new_version, params: { id: contract.id }
       expect(response.status).to eq 403
       expect(assigns(:contract)).to be_nil
     end
@@ -214,7 +214,7 @@ module FinePrint
       expect(contract.is_published?).to eq true
 
       sign_in @admin
-      post :new_version, id: contract.id
+      post :new_version, params: { id: contract.id }
       expect(response.status).to eq 200
       expect(assigns(:contract)).not_to be_nil
     end

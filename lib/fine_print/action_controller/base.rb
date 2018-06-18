@@ -67,10 +67,10 @@ module FinePrint
 
       module ClassMethods
         # Accepts an array of contract names and an options hash
-        # Adds a before_filter to the current controller that will check if the
+        # Adds a before_action to the current controller that will check if the
         # current user has signed the given contracts and call the sign_proc if appropriate
         # Options relevant to FinePrint are passed to fine_print_sign, while
-        # other options are passed to the before_filter
+        # other options are passed to the before_action
         def fine_print_require(*names)
           options = names.last.is_a?(Hash) ? names.pop : {}
           f_opts = options.except(*FinePrint::Configuration::CONTROLLER_OPTIONS)
@@ -80,7 +80,7 @@ module FinePrint
           contract_names = ['all'] if contract_names.empty?
 
           class_exec do
-            before_filter(f_opts) do |controller|
+            before_action(f_opts) do |controller|
               skipped_contract_names = fine_print_skipped_contract_names
               next if skipped_contract_names.include?('all')
               contract_names = FinePrint::Contract.all.to_a.collect{|c| c.name}
@@ -95,7 +95,7 @@ module FinePrint
         # Accepts an array of contract names and an options hash
         # Excludes the given contracts from the `fine_print_require`
         # check for this controller and subclasses
-        # Options are passed to prepend_before_filter
+        # Options are passed to prepend_before_action
         def fine_print_skip(*names)
           options = names.last.is_a?(Hash) ? names.pop : {}
 
@@ -104,7 +104,7 @@ module FinePrint
           contract_names = ['all'] if contract_names.empty?
 
           class_exec do
-            prepend_before_filter(options) do |controller|
+            prepend_before_action(options) do |controller|
               controller.fine_print_skipped_contract_names.push(*contract_names)
             end
           end

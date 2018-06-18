@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :fine_print_contract, class: FinePrint::Contract do
     name { Faker::Lorem.words.join('_') }
     title { Faker::Lorem.words.join(' ').capitalize }
@@ -15,7 +15,7 @@ FactoryGirl.define do
                                     .first.try(:version) || 0) + 1
 
         evaluator.signatures_count.times do 
-          contract.signatures << FactoryGirl.build(
+          contract.signatures << FactoryBot.build(
                                    :fine_print_signature,
                                    user_factory: evaluator.user_factory
                                  )
