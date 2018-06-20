@@ -23,8 +23,7 @@ module FinePrint
     return Contract.find(num) if num
     contract = Contract.where(name: reference.to_s).published.first
     return contract if contract
-    raise ActiveRecord::RecordNotFound,
-          "Couldn't find Contract with 'name'=#{reference.to_s}"
+    raise ActiveRecord::RecordNotFound, "Couldn't find Contract with 'name'=#{reference.to_s}"
   end
 
   # Records that the given user has signed the given contract
@@ -32,13 +31,26 @@ module FinePrint
   #   - contract - can be a Contract object, its ID, or its name (String/Symbol)
   #   - is_implicit - if true, the signature is implicit/assumed/indirectly-acquired
   #                   if false, the signature was obtained directly from the user
-  def self.sign_contract(user, contract, is_implicit = SIGNATURE_IS_EXPLICIT)
-    contract = get_contract(contract)
+  def self.sign_contract(user, contract, is_implicit = SIGNATURE_IS_EXPLICIT, max_attempts = 3)
+    attempts = 0
 
-    Signature.create do |signature|
-      signature.user = user
-      signature.contract = contract
-      signature.is_implicit = is_implicit
+    begin
+      Signature.transaction(requires_new: true) do
+        contract = get_contract(contract)
+
+        Signature.create do |signature|
+          signature.user = user
+          signature.contract = contract
+          signature.is_implicit = is_implicit
+        end
+      end
+    rescue ActiveRecord::RecordNotUnique => exception
+      attempts += 1
+      raise exception if attempts >= max_attempts
+
+      # Simply retry as in https://apidock.com/rails/v4.0.2/ActiveRecord/Relation/find_or_create_by
+      # If it already exists, the validations should catch it this time
+      retry
     end
   end
 
@@ -50,8 +62,7 @@ module FinePrint
 
     contract = get_contract(contract)
 
-    contract.signatures.where(user_id: user.id,
-                              user_type: user.class.name).exists?
+    contract.signatures.where(user_id: user.id, user_type: user.class.name).exists?
   end
 
   # Returns true iff the given user has signed any version of the given contract
@@ -61,7 +72,7 @@ module FinePrint
     return false if user.nil?
 
     contract = get_contract(contract)
-    
+
     contract.same_name.joins(:signatures).where(
       fine_print_signatures: { user_id: user.id, user_type: user.class.name }
     ).exists?
