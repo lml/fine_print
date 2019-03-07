@@ -9,3 +9,6 @@ gem 'jquery-rails'
 
 # To use debugger
 gem 'byebug'
+
+# Active Directry 5.2.2 can'y handle sqlite3 1.4.0
+gem 'sqlite3', ' ~> 1.3.6'
