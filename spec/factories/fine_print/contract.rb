@@ -6,8 +6,8 @@ FactoryBot.define do
 
     trait :published do
       transient do
-        user_factory :user
-        signatures_count 0
+        user_factory { :user }
+        signatures_count { 0 }
       end
 
       after(:build) do |contract, evaluator|
