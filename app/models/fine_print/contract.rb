@@ -12,15 +12,17 @@ module FinePrint
     validates :name, presence: true, format: /\A[\w-]+\z/
     validates :title, presence: true
     validates :content, presence: true
-    validates :version, uniqueness: { scope: :name,
-                                      case_sensitive: false},
+    validates :version, uniqueness: { scope: :name, case_sensitive: false },
                         allow_nil: true
 
-    default_scope lambda { ordering{[name.asc, version.desc]} }
+    default_scope -> { order(:name, version: :desc) }
 
-    scope :published, lambda { where.has{version != nil} }
-    scope :latest, lambda { joins(:same_name).grouping{id}
-                              .when_having{version == max(same_name.version)} }
+    scope :published, -> { where.not(version: nil) }
+    scope :latest, -> do
+      fpc = arel_table
+      sn = Arel::Table.new(:same_names_fine_print_contracts)
+      joins(:same_name).group(:id).having(fpc[:version].eq(sn[:version].maximum))
+    end
 
     def is_published?
       !version.nil?
@@ -63,8 +65,7 @@ module FinePrint
     def no_signatures
       return if signatures.empty?
       errors.add(:base, I18n.t('fine_print.contract.errors.already_signed'))
-      throw(:abort)
-      false
+      throw :abort
     end
 
     protected
