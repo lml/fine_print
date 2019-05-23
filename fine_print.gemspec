@@ -16,12 +16,12 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md']
   s.test_files = Dir['spec/**/*']
 
-  s.add_dependency 'rails', '>= 4.2', '< 5.2.1'
+  s.add_dependency 'rails'
   s.add_dependency 'jquery-rails'
-  s.add_dependency 'action_interceptor', '>= 1.0'
+  s.add_dependency 'action_interceptor'
   s.add_dependency 'responders'
 
-  s.add_development_dependency 'sqlite3', '~> 1.3.6'
+  s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'rails-controller-testing'
