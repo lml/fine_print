@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module FinePrint
-  describe Signature, type: :model do
+  RSpec.describe Signature, type: :model do
     it "can't be associated with unpublished contracts" do
       contract = FactoryBot.create(:fine_print_contract)
       expect(contract.is_published?).to eq false

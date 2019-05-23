@@ -23,6 +23,14 @@ module FinePrint
       sn = Arel::Table.new(:same_names_fine_print_contracts)
       joins(:same_name).group(:id).having(fpc[:version].eq(sn[:version].maximum))
     end
+    scope :signed_by, ->(user) do
+      joins(:signatures).where(
+        # Originally this would be:
+        # signatures: { user_id: user.id, user_type: class_name_for(user) }
+        # This is broken in Rails 5 without a monkeypatch, so instead we use the following for now:
+        fine_print_signatures: { user_id: user.id, user_type: class_name_for(user) }
+      )
+    end
 
     def is_published?
       !version.nil?
@@ -30,6 +38,14 @@ module FinePrint
 
     def is_latest?
       is_published? && self == same_name.published.first
+    end
+
+    def signed_by?(user)
+      user_class_name = self.class.class_name_for(user)
+      signatures.loaded? ?
+        signatures.any? do |signature|
+          signature.user_id == user.id and signature.user_type == user_class_name
+        end : signatures.where(user_id: user.id, user_type: user_class_name).exists?
     end
 
     def publish
@@ -72,6 +88,10 @@ module FinePrint
 
     def downcase_name
       self.name = name.try(:downcase)
+    end
+
+    def self.class_name_for(user)
+      user.class.base_class.name
     end
   end
 end

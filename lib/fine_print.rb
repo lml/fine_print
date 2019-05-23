@@ -62,7 +62,7 @@ module FinePrint
 
     contract = get_contract(contract)
 
-    contract.signatures.where(user_id: user.id, user_type: user.class.base_class.name).exists?
+    contract.signed_by?(user)
   end
 
   # Returns true iff the given user has signed any version of the given contract
@@ -73,9 +73,7 @@ module FinePrint
 
     contract = get_contract(contract)
 
-    contract.same_name.joins(:signatures).where(
-      signatures: { user_id: user.id, user_type: user.class.base_class.name }
-    ).exists?
+    contract.same_name.signed_by(user).exists?
   end
 
   # Returns all the latest published contracts that match the given conditions.
@@ -91,10 +89,7 @@ module FinePrint
   def self.signed_contracts_for(user, conditions = {})
     return [] if user.nil?
 
-    contracts = latest_published_contracts(conditions)
-    contracts.joins(:signatures).where(
-      signatures: { user_id: user.id, user_type: user.class.base_class.name }
-    )
+    latest_published_contracts(conditions).signed_by(user)
   end
 
   # Returns all contracts matching the given conditions
