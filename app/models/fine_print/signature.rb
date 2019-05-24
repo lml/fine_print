@@ -28,7 +28,7 @@ module FinePrint
       errors.add(
         :contract, I18n.t('fine_print.signature.errors.contract.not_published')
       )
-      false
+      throw :abort
     end
   end
 end

@@ -16,10 +16,10 @@ module FinePrint
         fp_opts = options.slice(*FinePrint::Configuration::CONTROLLER_OPTIONS)
 
         # Convert names to an array of Strings
-        contract_names = names.flatten.collect{|c| c.to_s}
+        contract_names = names.flatten.map(&:to_s)
         contract_names = ['all'] if contract_names.empty?
-        contract_names = FinePrint::Contract.all.to_a.collect{|c| c.name}
-                           .uniq if contract_names.include?('all')
+        contract_names = FinePrint::Contract.all.to_a.map(&:name).uniq \
+          if contract_names.include?('all')
 
         user = instance_exec &FinePrint.config.current_user_proc
 

@@ -12,15 +12,25 @@ module FinePrint
     validates :name, presence: true, format: /\A[\w-]+\z/
     validates :title, presence: true
     validates :content, presence: true
-    validates :version, uniqueness: { scope: :name,
-                                      case_sensitive: false},
+    validates :version, uniqueness: { scope: :name, case_sensitive: false },
                         allow_nil: true
 
-    default_scope lambda { ordering{[name.asc, version.desc]} }
+    default_scope -> { order(:name, version: :desc) }
 
-    scope :published, lambda { where.has{version != nil} }
-    scope :latest, lambda { joins(:same_name).grouping{id}
-                              .when_having{version == max(same_name.version)} }
+    scope :published, -> { where.not(version: nil) }
+    scope :latest, -> do
+      fpc = arel_table
+      sn = Arel::Table.new(:same_names_fine_print_contracts)
+      joins(:same_name).group(:id).having(fpc[:version].eq(sn[:version].maximum))
+    end
+    scope :signed_by, ->(user) do
+      joins(:signatures).where(
+        # Originally this would be:
+        # signatures: { user_id: user.id, user_type: class_name_for(user) }
+        # This is broken in Rails 5 without a monkeypatch, so instead we use the following for now:
+        fine_print_signatures: { user_id: user.id, user_type: class_name_for(user) }
+      )
+    end
 
     def is_published?
       !version.nil?
@@ -28,6 +38,14 @@ module FinePrint
 
     def is_latest?
       is_published? && self == same_name.published.first
+    end
+
+    def signed_by?(user)
+      user_class_name = self.class.class_name_for(user)
+      signatures.loaded? ?
+        signatures.any? do |signature|
+          signature.user_id == user.id and signature.user_type == user_class_name
+        end : signatures.where(user_id: user.id, user_type: user_class_name).exists?
     end
 
     def publish
@@ -63,14 +81,17 @@ module FinePrint
     def no_signatures
       return if signatures.empty?
       errors.add(:base, I18n.t('fine_print.contract.errors.already_signed'))
-      throw(:abort)
-      false
+      throw :abort
     end
 
     protected
 
     def downcase_name
       self.name = name.try(:downcase)
+    end
+
+    def self.class_name_for(user)
+      user.class.base_class.name
     end
   end
 end

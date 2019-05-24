@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module FinePrint
-  describe Contract, type: :model do
+  RSpec.describe Contract, type: :model do
     it 'can be published and unpublished' do
       contract = FactoryBot.create(:fine_print_contract)
       expect(contract.is_published?).to eq false

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 module FinePrint
   module ActionController
-    describe Base, type: :lib do
-      let!(:controller)            { ::ActionController::Base.new }
-      let!(:dummy_controller)      { DummyModelsController.new }
+    RSpec.describe Base, type: :lib do
+      let!(:controller)       { ::ActionController::Base.new }
+      let!(:dummy_controller) { DummyModelsController.new }
 
       it 'must add fine_print_sign to ActionController instances' do
         expect(controller).to respond_to(:fine_print_require)
