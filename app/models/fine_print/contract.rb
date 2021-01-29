@@ -24,12 +24,7 @@ module FinePrint
       joins(:same_name).group(:id).having(fpc[:version].eq(sn[:version].maximum))
     end
     scope :signed_by, ->(user) do
-      joins(:signatures).where(
-        # Originally this would be:
-        # signatures: { user_id: user.id, user_type: class_name_for(user) }
-        # This is broken in Rails 5 without a monkeypatch, so instead we use the following for now:
-        fine_print_signatures: { user_id: user.id, user_type: class_name_for(user) }
-      )
+      joins(:signatures).where(signatures: { user_id: user.id, user_type: class_name_for(user) })
     end
 
     def is_published?
