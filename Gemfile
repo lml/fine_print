@@ -5,7 +5,7 @@ source 'http://rubygems.org'
 gemspec
 
 # jquery-rails is used by the dummy application
-gem 'jquery-rails'
+# gem 'jquery-rails'
 
 # To use debugger
-gem 'byebug'
+# gem 'byebug'
