@@ -10,6 +10,10 @@ module FinePrint
 
     helper FinePrint.config.helpers
 
+    FinePrint.config.concerns.each do |concern|
+      include concern
+    end
+
     protected
 
     def get_user

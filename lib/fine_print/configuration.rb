@@ -9,7 +9,8 @@ module FinePrint
       :authenticate_user_proc,
       :authenticate_manager_proc,
       :current_user_proc,
-      :contract_published_proc
+      :contract_published_proc,
+      :concerns
     ]
 
     # Can be set in initializer or passed as an argument
