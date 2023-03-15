@@ -5,7 +5,14 @@ module FinePrint
     before_action :get_contract, except: [:index, :new, :create]
 
     def index
-      @contracts = Contract.includes(:signatures).all.to_a.group_by(&:name)
+      @contracts = Contract.select(
+        <<~EOS
+          "fine_print_contracts".*, (
+            SELECT COUNT(*) FROM "fine_print_signatures"
+            WHERE "fine_print_signatures"."contract_id" = "fine_print_contracts"."id"
+          ) AS "signatures_count"
+        EOS
+      ).all.to_a.group_by(&:name)
     end
 
     def new
@@ -17,7 +24,7 @@ module FinePrint
       @contract.name = params[:contract][:name]
       @contract.title = params[:contract][:title]
       @contract.content = params[:contract][:content]
-  
+
       if @contract.save
         redirect_to @contract, notice: t('fine_print.contract.notices.created')
       else
