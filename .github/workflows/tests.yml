@@ -7,21 +7,14 @@ on:
 jobs:
   tests:
     timeout-minutes: 30
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.6
-      - uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+          ruby-version: 3.0
+          bundler-cache: true
       - name: Setup
-        run: |
-          bundle install
-          bundle exec rake --trace db:create db:schema:load db:seed
+        run: bundle exec rake --trace db:create db:schema:load db:seed
       - name: Test
         run: bundle exec rake spec
