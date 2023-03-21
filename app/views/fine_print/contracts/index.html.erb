@@ -9,7 +9,7 @@
 
     <ul class='fine_print'>
       <li><%= name %></li>
-      
+
         <ul class='fine_print'>
           <% contracts.each do |contract| %>
             <li><%= link_to contract.title, contract, class: 'fine_print link' %>
@@ -17,7 +17,7 @@
                    t('fine_print.contract.status.draft') : \
                    t('fine_print.contract.status.version',
                      version: contract.version.to_s) %>)
-              <% if contract.signatures.empty? %>
+              <% if contract.signatures_count == 0 %>
                 [<%= link_to t('fine_print.contract.actions.edit'),
                              edit_contract_path(contract),
                              class: 'fine_print link' %>]
@@ -63,7 +63,7 @@
             </li>
           <% end %>
         </ul>
-      
+
     </ul>
 
   <% end %>
